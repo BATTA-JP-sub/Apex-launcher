@@ -673,7 +673,7 @@
         }
         // 保存データの確認（名前保存キーの調査用）
         document.getElementById('dbgBtn').addEventListener('click', () => {
-            const box = document.getElementById('dbgOut'), out = ['origin: ' + location.origin];
+            const box = document.getElementById('dbgOut'), out = ['origin: ' + location.origin, 'build: ' + BUILD, 'patchLog: ' + (localStorage.getItem('BattaLauncher_PatchLog') || '(none)')];
             [['localStorage', localStorage], ['sessionStorage', sessionStorage]].forEach(([nm, st]) => {
                 try {
                     out.push('--- ' + nm + ' (' + st.length + ') ---');
@@ -693,6 +693,45 @@
         });
         try { applyBg(JSON.parse(localStorage.getItem('BattaLauncher_Bg'))); } catch (e) { applyBg(null); }
         setLang(LANG);
+
+        // ゲームのプロフィール（_eaglercraftX.p）の名前部分だけを書き換える
+        const BUILD = 'b3';
+        async function patchProfileName(name) {
+            const logs = [];
+            const save = () => { try { localStorage.setItem('BattaLauncher_PatchLog', logs.join(' / ')); } catch (e) {} };
+            try {
+                const clean = name.replace(/[^A-Za-z0-9_]/g, '').slice(0, 16);
+                if (clean.length < 3) { logs.push('name invalid: ' + name); return; }
+                const keys = [];
+                for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+                const targets = keys.filter(k => /^_eaglercraft.*\.p$/.test(k));
+                logs.push('name=' + clean + ' targets=' + targets.length);
+                for (const k of targets) {
+                    try {
+                        const orig = localStorage.getItem(k);
+                        const bin = Uint8Array.from(atob(orig), c => c.charCodeAt(0));
+                        const u = new Uint8Array(await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+                        const key = [0x08, 0x00, 0x08].concat(Array.from('username').map(c => c.charCodeAt(0)));
+                        let at = -1;
+                        for (let j = 0; j + key.length + 2 <= u.length && at < 0; j++) if (key.every((b, n) => u[j + n] === b)) at = j;
+                        if (u[0] !== 0x0a || at < 0) { logs.push('skip ' + k + ' (format)'); continue; }
+                        const p = at + key.length, oldLen = (u[p] << 8) | u[p + 1];
+                        const nb = Array.from(clean).map(c => c.charCodeAt(0));
+                        const out = new Uint8Array(p + 2 + nb.length + (u.length - p - 2 - oldLen));
+                        out.set(u.subarray(0, p));
+                        out[p] = nb.length >> 8; out[p + 1] = nb.length & 255;
+                        out.set(nb, p + 2);
+                        out.set(u.subarray(p + 2 + oldLen), p + 2 + nb.length);
+                        const gz = new Uint8Array(await new Response(new Blob([out]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+                        let str = ''; gz.forEach(b => { str += String.fromCharCode(b); });
+                        if (!localStorage.getItem('BattaLauncher_ProfileBackup')) localStorage.setItem('BattaLauncher_ProfileBackup', orig);
+                        localStorage.setItem(k, btoa(str));
+                        logs.push('ok ' + k);
+                    } catch (e) { logs.push('error ' + k + ': ' + e); }
+                }
+            } catch (e) { logs.push('fatal: ' + e); }
+            finally { save(); }
+        }
 
         // 起動・名前同期処理
         function launchGame() {
@@ -723,9 +762,9 @@
             btn.style.borderBottomColor = '#444';
             btn.disabled = true;
 
-            setTimeout(() => {
-                window.location.href = targetHtml;
-            }, 1000);
+            patchProfileName(username).finally(() => {
+                setTimeout(() => { window.location.href = targetHtml; }, 1000);
+            });
         }
     </script>
 </body>
