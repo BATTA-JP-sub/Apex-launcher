@@ -35,14 +35,18 @@
 </head>
 <body>
     <div class="launcher-container">
-        <div class="main-content">
+              <div class="main-content">
+            
+            <!-- 左側ナビゲーション（「カスタムクライアント」タブを新設） -->
             <div class="sidebar">
                 <div class="nav-item active" id="tab-home">BATTA-Launcher</div>
+                <div class="nav-item" id="tab-client" style="color: #ffaa00; font-weight: bold;">⚡ クライアント</div>
                 <div class="nav-item" id="tab-skin">スキン管理</div>
                 <div class="nav-item" id="tab-server">サーバーリスト</div>
                 <div style="margin-top: auto;" class="nav-item" id="tab-settings">設定</div>
             </div>
-            
+
+            <!-- 中央画面：ホーム（BATTA-Launcher） -->
             <div class="content-body" id="page-home">
                 <div class="logo-area">
                     <img src="https://wikimedia.org" alt="Minecraft">
@@ -54,7 +58,37 @@
                 </div>
             </div>
 
-            <!-- ★ここに【第2弾】をまるごと貼り付けます★ -->
+            <!-- 中央画面：カスタムクライアント専用選択画面（新設・縦スクロール対応） -->
+            <div class="content-body" id="page-client" style="display: none; overflow-y: auto; max-height: 100%;">
+                <div class="logo-area">
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); color: #ffaa00;">カスタムクライアント</h1>
+                    <div class="launcher-sub-title" style="color: #ffffff;">専用のPVP・軽量化・高機能クライアントを直接起動できます</div>
+                </div>
+                <div class="grid-container" style="margin-top: 20px; padding-bottom: 20px;">
+                    <!-- 各種クライアントの一発起動カード -->
+                    <div class="list-card"><div style="flex:1;"><h2>Aero Client JS</h2><p style="color:#aaaaaa;">⚡ PVP・軽量化クライアント</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Aero Client JS.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>WurstX</h2><p style="color:#ff5555;">🔥 高機能・ハッククライアント</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='WurstX.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Eclipse Client</h2><p style="color:#aaaaaa;">⚡ PVP向け軽量カスタム</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Eclipse Client.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>PixelClient 1.8.8 JS</h2><p style="color:#aaaaaa;">⚡ 定番PVPクライアント</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='PixelClient 1.8.8 JS.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Prism-Client</h2><p style="color:#aaaaaa;">💎 スタイリッシュUI</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Prism-Client.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Water Client</h2><p style="color:#aaaaaa;">💧 FPSブースト・軽量化</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Water Client.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Mega Client-JS</h2><p style="color:#aaaaaa;">🛠️ 各種設定拡張版</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Mega Client-JS.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Huzzium-Client</h2><p style="color:#ff5555;">🔥 チート・ユーティリティ</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Huzzium-Client.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>EB Client Nextgen CU4</h2><p style="color:#aaaaaa;">🚀 次世代型多機能仕様</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='EB Client Nextgen CU4.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>N0VA CLIENT</h2><p style="color:#aaaaaa;">✨ 鮮やかなエフェクト</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='N0VA CLIENT.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Tuff_Client_WASM</h2><p style="color:#aaaaaa;">⚙️ WASM動作・安定化版</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Tuff_Client_WASM.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Myven-Client-WASM</h2><p style="color:#aaaaaa;">⚙️ 低スペックPC向け</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Myven-Client-WASM.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Novix_26.1.2</h2><p style="color:#aaaaaa;">🌟 最新ベースカスタム</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Novix_26.1.2.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Koneclient-1.8.8</h2><p style="color:#aaaaaa;">⚔️ PVPコンボ特化</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Koneclient-1.8.8.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Precision</h2><p style="color:#aaaaaa;">🎯 ズーム・ヒットボックス微調整</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Precision.html'; launchGame();">起動する</button></div>
+                </div>
+            </div>
+
+            <!-- 中央画面：スキン管理 -->
+            <div class="content-body" id="page-skin" style="display: none; overflow-y: auto; max-height: 100%;">
+                <div class="logo-area"><h1 style="font-size: 24px;">スキン管理</h1></div>
+                <div class="news-card"><h2>カスタムスキンについて</h2><p>ここに用意したスキンパスやURLを、起動後のゲーム内スキン設定（Custom Skin URLなど）に貼り付けて適用させましょう！</p></div>
+            </div>
             <!-- 中央画面：サーバーリスト（30大サーバーの正しいアドレスを格納） -->
             <div class="content-body" id="page-server" style="display: none; overflow-y: auto; max-height: 100%;">
                 <div class="logo-area">
