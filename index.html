@@ -414,41 +414,49 @@
     </div>
 
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedName = localStorage.getItem('BattaLauncher_LastUsername');
-            if (savedName) {
-                document.getElementById('playerNameInput').value = savedName;
-            }
+          window.addEventListener('DOMContentLoaded', () => {
+        const savedName = localStorage.getItem('BattaLauncher_LastUsername');
+        if (savedName) {
+            document.getElementById('playerNameInput').value = savedName;
+        }
+    });
+
+    function launchGame() {
+        const selectEl = document.getElementById('versionSelect');
+        const targetHtml = selectEl.value;
+
+        let username = document.getElementById('playerNameInput').value.trim();
+        if (!username) username = "Player";
+
+        // ランチャー側に入力を記憶
+        localStorage.setItem('BattaLauncher_LastUsername', username);
+
+        // 【最強設定】ありとあらゆるWeb版マイクラのユーザー名キーに強制書き込み
+        const keys = [
+            'username', 'profile_username', 'eagler_username', 'wispcraft_username',
+            'player_username', 'playerName', 'player', 'name', 'nick', 'nickname',
+            'mcl_username', 'user', 'saved_username', 'cached_username'
+        ];
+        
+        keys.forEach(key => {
+            try {
+                localStorage.setItem(key, username);
+                sessionStorage.setItem(key, username);
+            } catch(e) {}
         });
 
-        function launchGame() {
-            const selectEl = document.getElementById('versionSelect');
-            const targetHtml = selectEl.value;
+        // 起動ボタンのアニメーション
+        const btn = document.querySelector('.play-button');
+        btn.innerText = '起動中...';
+        btn.style.backgroundColor = '#666';
+        btn.style.borderBottomColor = '#444';
+        btn.disabled = true;
 
-            let username = document.getElementById('playerNameInput').value.trim();
-            if (!username) username = "Player";
-
-            localStorage.setItem('BattaLauncher_LastUsername', username);
-
-            try {
-                localStorage.setItem('profile_username', username);
-                localStorage.setItem('username', username);
-                localStorage.setItem('eagler_username', username);
-                localStorage.setItem('wispcraft_username', username);
-            } catch (e) {
-                console.error("名前データの書き込みに失敗しました:", e);
-            }
-
-            const btn = document.querySelector('.play-button');
-            btn.innerText = '起動中...';
-            btn.style.backgroundColor = '#666';
-            btn.style.borderBottomColor = '#444';
-            btn.disabled = true;
-
-            setTimeout(() => {
-                window.location.href = targetHtml;
-            }, 1000);
-        }
+        // 1秒後にゲームに移動
+        setTimeout(() => {
+            window.location.href = targetHtml;
+        }, 1000);
+    }
     </script>
 </body>
 </html>
