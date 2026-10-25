@@ -659,6 +659,18 @@
             };
             img.src = url; e.target.value = '';
         });
+        // 圧縮保存されたプロフィールの中身を表示（調査用）
+        async function decodeKey(k) {
+            const v = localStorage.getItem(k);
+            if (!v) return k + ': (none)';
+            try {
+                const bin = Uint8Array.from(atob(v), c => c.charCodeAt(0));
+                const buf = await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+                const u = new Uint8Array(buf);
+                return k + ' full=' + v + '\n hex=' + Array.from(u).map(b => b.toString(16).padStart(2, '0')).join(' ') +
+                    '\n txt=' + Array.from(u).map(b => (b >= 32 && b < 127) ? String.fromCharCode(b) : '.').join('');
+            } catch (e) { return k + ': decode error ' + e; }
+        }
         // 保存データの確認（名前保存キーの調査用）
         document.getElementById('dbgBtn').addEventListener('click', () => {
             const box = document.getElementById('dbgOut'), out = ['origin: ' + location.origin];
@@ -671,7 +683,7 @@
                     }
                 } catch (e) { out.push(nm + ': error'); }
             });
-            const done = () => { box.value = out.join('\n'); };
+            const done = () => { decodeKey('_eaglercraftX.p').then(r => { out.push('--- decode ---'); out.push(r); box.value = out.join('\n'); }); };
             if (indexedDB.databases) {
                 indexedDB.databases().then(l => { out.push('--- IndexedDB ---'); l.forEach(d => out.push(d.name + ' v' + d.version)); done(); }).catch(done);
             } else { done(); }
