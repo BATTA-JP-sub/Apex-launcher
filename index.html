@@ -37,11 +37,11 @@
             border: 1px solid #3c3c3c;
         }
 
-        /* メインコンテンツエリア（サイドバー ＋ 画面） */
+        /* メインコンテンツエリア */
         .main-content {
             display: flex;
             flex: 1;
-            height: calc(100% - 80px); /* プレイバーの分を引く */
+            height: calc(100% - 80px);
         }
 
         /* サイドナビゲーション */
@@ -79,7 +79,7 @@
             padding-left: 11px;
         }
 
-        /* 中央のダッシュボード（ニュースなど） */
+        /* 中央のダッシュボード */
         .content-body {
             flex: 1;
             background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('https://unsplash.com') center/cover;
@@ -118,7 +118,7 @@
             line-height: 1.5;
         }
 
-        /* 下部のプレイバー（起動オプション、プレイボタン） */
+        /* 下部のプレイバー */
         .play-bar {
             height: 80px;
             background-color: #232323;
@@ -142,7 +142,9 @@
             font-weight: bold;
             cursor: pointer;
             outline: none;
-            min-width: 200px;
+            width: 280px;
+            max-width: 280px;
+            text-overflow: ellipsis;
         }
 
         .version-selector:hover {
@@ -150,7 +152,7 @@
             border-color: #555555;
         }
 
-        /* 圧倒的マイクラ風プレイボタン */
+        /* プレイボタン */
         .play-button {
             background-color: #3c8527;
             border: none;
@@ -177,13 +179,15 @@
             background-color: #347322;
         }
 
-        /* ユーザープロファイル（簡易表示） */
+        /* ユーザープロファイル */
         .user-profile {
             display: flex;
             align-items: center;
             gap: 10px;
             font-size: 14px;
             font-weight: 600;
+            width: 150px;
+            justify-content: flex-end;
         }
 
         .avatar {
@@ -192,7 +196,6 @@
             background-color: #555555;
             border-radius: 4px;
             border: 2px solid #888888;
-            /* スティーブの顔URL（ダミー） */
             background-image: url('https://minotar.net');
             background-size: cover;
         }
@@ -202,69 +205,68 @@
 
     <div class="launcher-container">
         
-        <!-- メイン画面（サイドバーとコンテンツ） -->
         <div class="main-content">
             
-            <!-- 左側ナビゲーション -->
             <div class="sidebar">
-                <div class="nav-item active">Eaglercraft Version</div>
-                <div class="nav-item">Minecraft for Windows</div>
-                <div class="nav-item">Minecraft Dungeons</div>
+                <div class="nav-item active">MINECRAFT: Web Edition</div>
+                <div class="nav-item">スキン管理</div>
+                <div class="nav-item">サーバーリスト</div>
                 <div style="margin-top: auto;" class="nav-item">設定</div>
             </div>
 
-            <!-- 中央メイン画面（背景画像付き） -->
             <div class="content-body">
                 <div class="logo-area">
-                    <!-- Java Editionのロゴイメージ -->
-                    <img src="https://wikimedia.org" alt="Minecraft Java Edition">
+                    <img src="https://wikimedia.org" alt="Minecraft">
                 </div>
 
+                <div class="news-card">
+                    <h2>Webクライアント・セレクター</h2>
+                    <p>ドロップダウンメニューから起動したいマインクラフト（Eaglercraft / 各種クライアント）のバージョンを選択し、「プレイ」ボタンを押してください。</p>
+                </div>
             </div>
 
         </div>
 
-        <!-- 下部固定の起動・プレイバー -->
         <div class="play-bar">
             
-            <!-- バージョン選択 -->
-            <select class="version-selector">
-                <option>最新のリリース (1.21.x)</option>
-                <option>最新のスナップショット</option>
-                <option>Forge - 1.20.1</option>
-                <option>Fabric - 1.21</option>
-            </select>
-
-            <!-- プレイボタン -->
-            <button class="play-button" onclick="launchGame()">プレイ</button>
-
-            <!-- プレイヤー情報 -->
-            <div class="user-profile">
-                <div class="avatar"></div>
-                <span>Player_Steve</span>
-            </div>
-
-        </div>
-
-    </div>
-
-    <script>
-        function launchGame() {
-            const btn = document.querySelector('.play-button');
-            btn.innerText = '準備中...';
-            btn.style.backgroundColor = '#666';
-            btn.style.borderBottomColor = '#444';
-            btn.disabled = true;
-
-            setTimeout(() => {
-                alert('マインクラフトを起動しています...');
-                btn.innerText = 'プレイ';
-                btn.style.backgroundColor = '#3c8527';
-                btn.style.borderBottomColor = '#275419';
-                btn.disabled = false;
-            }, 1500);
-        }
-    </script>
-</body>
-</html>
-
+            <!-- バージョン選択（value属性に対応するHTMLファイル名を指定） -->
+            <select class="version-selector" id="versionSelect">
+                <option value="1.5.2.html">1.5.2</option>
+                <option value="Aero Client JS.html">Aero Client JS</option>
+                <option value="Alpha 1.0.1_01-JS.html">Alpha 1.0.1_01-JS</option>
+                <option value="Alpha 1.0.4-JS.html">Alpha 1.0.4-JS</option>
+                <option value="Beta-1.6.4.html">Beta-1.6.4</option>
+                <option value="Beta_1.7.3.html">Beta_1.7.3</option>
+                <option value="Classic 0.0.11a-JS.html">Classic 0.0.11a-JS</option>
+                <option value="Classic 0.0.11a-WASM.html">Classic 0.0.11a-WASM</option>
+                <option value="Classic 0.0.12a_3-JS.html">Classic 0.0.12a_3-JS</option>
+                <option value="Classic 0.0.12a_3-WASM.html">Classic 0.0.12a_3-WASM</option>
+                <option value="Classic 0.0.13a_3-JS.html">Classic 0.0.13a_3-JS</option>
+                <option value="Classic 0.0.13a_3-WASM.html">Classic 0.0.13a_3-WASM</option>
+                <option value="Classic 0.0.14a_8-JS.html">Classic 0.0.14a_8-JS</option>
+                <option value="Classic 0.0.14a_8-WASM.html">Classic 0.0.14a_8-WASM</option>
+                <option value="Classic 0.0.15a-JS.html">Classic 0.0.15a-JS</option>
+                <option value="Classic 0.0.15a-WASM.html">Classic 0.0.15a-WASM</option>
+                <option value="Classic 0.0.16a_2-JS.html">Classic 0.0.16a_2-JS</option>
+                <option value="Classic 0.0.16a_2-WASM.html">Classic 0.0.16a_2-WASM</option>
+                <option value="Classic 0.0.17a-JS.html">Classic 0.0.17a-JS</option>
+                <option value="Classic 0.0.17a-WASM.html">Classic 0.0.17a-WASM</option>
+                <option value="Classic 0.0.18a_2-JS.html">Classic 0.0.18a_2-JS</option>
+                <option value="Classic 0.0.18a_2-WASM.html">Classic 0.0.18a_2-WASM</option>
+                <option value="Classic 0.0.19a_6-JS.html">Classic 0.0.19a_6-JS</option>
+                <option value="Classic 0.0.19a_6-WASM.html">Classic 0.0.19a_6-WASM</option>
+                <option value="Classic 0.0.20_2-JS.html">Classic 0.0.20_2-JS</option>
+                <option value="Classic 0.0.20_2-WASM.html">Classic 0.0.20_2-WASM</option>
+                <option value="Classic 0.0.21a-JS.html">Classic 0.0.21a-JS</option>
+                <option value="Classic 0.0.21a-WASM.html">Classic 0.0.21a-WASM</option>
+                <option value="Classic 0.0.22a_5-JS.html">Classic 0.0.22a_5-JS</option>
+                <option value="Classic 0.0.22a_5-WASM.html">Classic 0.0.22a_5-WASM</option>
+                <option value="Classic 0.0.23a_01-JS.html">Classic 0.0.23a_01-JS</option>
+                <option value="Classic 0.0.23a_01-WASM.html">Classic 0.0.23a_01-WASM</option>
+                <option value="Classic 0.24_3-JS.html">Classic 0.24_3-JS</option>
+                <option value="Classic 0.24_3-WASM.html">Classic 0.24_3-WASM</option>
+                <option value="Classic 0.25_5-JS.html">Classic 0.25_5-JS</option>
+                <option value="Classic 0.25_5-WASM.html">Classic 0.25_5-WASM</option>
+                <option value="Classic 0.30-JS.html">Classic 0.30-JS</option>
+                <option value="EB Client Nextgen CU4.html">EB Client Nextgen CU4</option>
+                <option value="Eaglercraft 1.13.2-WASM.html">Eaglercraft 1.13.2-WASM</option>
