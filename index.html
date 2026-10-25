@@ -13,7 +13,7 @@
         .nav-item { display: flex; align-items: center; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; color: #aaaaaa; transition: background 0.2s, color 0.2s; }
         .nav-item:hover { background-color: #2a2a2a; color: #ffffff; }
         .nav-item.active { background-color: #383838; color: #ffffff; border-left: 4px solid #4caf50; padding-left: 11px; }
-        .content-body { flex: 1; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), radial-gradient(circle at 30% 20%, #2f4f2a, #101810) center/cover; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .content-body { flex: 1; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), var(--bg-img) center/cover; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
         .logo-area { display: flex; flex-direction: column; gap: 5px; }
         .logo-area img { width: 320px; height: auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7)); }
         .logo-text { font-size: 44px; letter-spacing: 2px; color: #ffffff; text-shadow: 3px 3px 8px rgba(0,0,0,0.8); }
@@ -37,6 +37,16 @@
         .skin-card { background-color: rgba(20,20,20,0.85); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .skin-card canvas { image-rendering: pixelated; cursor: pointer; }
         .skin-name { font-size: 13px; font-weight: bold; }
+        :root { --bg-img: radial-gradient(circle at 30% 20%, #2f4f2a, #101810); }
+        .setting-card { background-color: rgba(20,20,20,0.85); padding: 20px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); max-width: 520px; display: flex; flex-direction: column; gap: 10px; margin: 20px 0; flex-shrink: 0; }
+        .setting-card h2 { font-size: 16px; }
+        .setting-select { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 8px 12px; border-radius: 4px; font-size: 14px; width: 200px; outline: none; }
+        .swatches, .bg-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .swatch { width: 40px; height: 40px; border-radius: 6px; border: 2px solid #555555; cursor: pointer; }
+        .swatch.sel { border-color: #4caf50; }
+        .setting-card .copy-btn { display: inline-block; padding: 8px 14px; }
+        .hint { font-size: 12px; color: #aaaaaa; line-height: 1.5; }
+        .news-card { flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -46,10 +56,10 @@
             <!-- 左側ナビゲーション（「カスタムクライアント」タブを新設） -->
             <div class="sidebar">
                 <div class="nav-item active" id="tab-home">BATTA-Launcher</div>
-                <div class="nav-item" id="tab-client" style="color: #ffaa00; font-weight: bold;">⚡ クライアント</div>
-                <div class="nav-item" id="tab-skin">スキン管理</div>
-                <div class="nav-item" id="tab-server">サーバーリスト</div>
-                <div style="margin-top: auto;" class="nav-item" id="tab-settings">設定</div>
+                <div class="nav-item" id="tab-client" style="color: #ffaa00; font-weight: bold;" data-i18n="nav_client">⚡ クライアント</div>
+                <div class="nav-item" id="tab-skin" data-i18n="nav_skin">スキン管理</div>
+                <div class="nav-item" id="tab-server" data-i18n="nav_server">サーバーリスト</div>
+                <div style="margin-top: auto;" class="nav-item" id="tab-settings" data-i18n="nav_settings">設定</div>
             </div>
 
             <!-- 中央画面：ホーム（BATTA-Launcher） -->
@@ -59,89 +69,102 @@
                     <div class="launcher-sub-title">BATTA-Launcher Edition</div>
                 </div>
                 <div class="news-card">
-                    <h2>BATTA-Launcher へようこそ</h2>
-                    <p>プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！</p>
+                    <h2 data-i18n="home_h">BATTA-Launcher へようこそ</h2>
+                    <p data-i18n="home_p">プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！</p>
                 </div>
             </div>
 
             <!-- 中央画面：カスタムクライアント専用選択画面（新設・縦スクロール対応） -->
             <div class="content-body" id="page-client" style="display: none; overflow-y: auto; max-height: 100%;">
                 <div class="logo-area">
-                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); color: #ffaa00;">カスタムクライアント</h1>
-                    <div class="launcher-sub-title" style="color: #ffffff;">専用のPVP・軽量化・高機能クライアントを直接起動できます</div>
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); color: #ffaa00;" data-i18n="cl_h">カスタムクライアント</h1>
+                    <div class="launcher-sub-title" style="color: #ffffff;" data-i18n="cl_s">専用のPVP・軽量化・高機能クライアントを直接起動できます</div>
                 </div>
                 <div class="grid-container" style="margin-top: 20px; padding-bottom: 20px;">
                     <!-- 各種クライアントの一発起動カード -->
-                    <div class="list-card"><div style="flex:1;"><h2>Aero Client JS</h2><p style="color:#aaaaaa;">⚡ PVP・軽量化クライアント</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Aero Client JS.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>WurstX</h2><p style="color:#ff5555;">🔥 高機能・ハッククライアント</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='WurstX.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Eclipse Client</h2><p style="color:#aaaaaa;">⚡ PVP向け軽量カスタム</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Eclipse Client.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>PixelClient 1.8.8 JS</h2><p style="color:#aaaaaa;">⚡ 定番PVPクライアント</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='PixelClient 1.8.8 JS.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Prism-Client</h2><p style="color:#aaaaaa;">💎 スタイリッシュUI</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Prism-Client.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Water Client</h2><p style="color:#aaaaaa;">💧 FPSブースト・軽量化</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Water Client.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Mega Client-JS</h2><p style="color:#aaaaaa;">🛠️ 各種設定拡張版</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Mega Client-JS.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Huzzium-Client</h2><p style="color:#ff5555;">🔥 チート・ユーティリティ</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Huzzium-Client.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>EB Client Nextgen CU4</h2><p style="color:#aaaaaa;">🚀 次世代型多機能仕様</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='EB Client Nextgen CU4.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>N0VA CLIENT</h2><p style="color:#aaaaaa;">✨ 鮮やかなエフェクト</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='N0VA CLIENT.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Tuff_Client_WASM</h2><p style="color:#aaaaaa;">⚙️ WASM動作・安定化版</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Tuff_Client_WASM.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Myven-Client-WASM</h2><p style="color:#aaaaaa;">⚙️ 低スペックPC向け</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Myven-Client-WASM.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Novix_26.1.2</h2><p style="color:#aaaaaa;">🌟 最新ベースカスタム</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Novix_26.1.2.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Koneclient-1.8.8</h2><p style="color:#aaaaaa;">⚔️ PVPコンボ特化</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Koneclient-1.8.8.html'; launchGame();">起動する</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Precision</h2><p style="color:#aaaaaa;">🎯 ズーム・ヒットボックス微調整</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Precision.html'; launchGame();">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Aero Client JS</h2><p style="color:#aaaaaa;">⚡ PVP・軽量化クライアント</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Aero Client JS.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>WurstX</h2><p style="color:#ff5555;">🔥 高機能・ハッククライアント</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='WurstX.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Eclipse Client</h2><p style="color:#aaaaaa;">⚡ PVP向け軽量カスタム</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Eclipse Client.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>PixelClient 1.8.8 JS</h2><p style="color:#aaaaaa;">⚡ 定番PVPクライアント</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='PixelClient 1.8.8 JS.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Prism-Client</h2><p style="color:#aaaaaa;">💎 スタイリッシュUI</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Prism-Client.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Water Client</h2><p style="color:#aaaaaa;">💧 FPSブースト・軽量化</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Water Client.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Mega Client-JS</h2><p style="color:#aaaaaa;">🛠️ 各種設定拡張版</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Mega Client-JS.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Huzzium-Client</h2><p style="color:#ff5555;">🔥 チート・ユーティリティ</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Huzzium-Client.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>EB Client Nextgen CU4</h2><p style="color:#aaaaaa;">🚀 次世代型多機能仕様</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='EB Client Nextgen CU4.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>N0VA CLIENT</h2><p style="color:#aaaaaa;">✨ 鮮やかなエフェクト</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='N0VA CLIENT.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Tuff_Client_WASM</h2><p style="color:#aaaaaa;">⚙️ WASM動作・安定化版</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Tuff_Client_WASM.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Myven-Client-WASM</h2><p style="color:#aaaaaa;">⚙️ 低スペックPC向け</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Myven-Client-WASM.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Novix_26.1.2</h2><p style="color:#aaaaaa;">🌟 最新ベースカスタム</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Novix_26.1.2.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Koneclient-1.8.8</h2><p style="color:#aaaaaa;">⚔️ PVPコンボ特化</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Koneclient-1.8.8.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Precision</h2><p style="color:#aaaaaa;">🎯 ズーム・ヒットボックス微調整</p></div><button class="copy-btn" style="background:#ffaa00;" onclick="document.getElementById('versionSelect').value='Precision.html'; launchGame();" data-i18n="btn_launch">起動する</button></div>
                 </div>
             </div>
 
             <!-- 中央画面：スキン管理 -->
             <div class="content-body" id="page-skin" style="display: none; overflow-y: auto; max-height: 100%;">
                 <div class="logo-area">
-                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">スキン管理（50種）</h1>
-                    <div class="launcher-sub-title" style="color: #ffffff;">画像をクリックで前後切替。PNGを保存して、ゲーム内のスキン設定からアップロードしてください</div>
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="sk_h">スキン管理（50種）</h1>
+                    <div class="launcher-sub-title" style="color: #ffffff;" data-i18n="sk_s">画像をクリックで前後切替。PNGを保存して、ゲーム内のスキン設定からアップロードしてください</div>
                 </div>
                 <div class="skin-grid" id="skinGrid"></div>
             </div>
             <!-- 中央画面：サーバーリスト（30大サーバーの正しいアドレスを格納） -->
             <div class="content-body" id="page-server" style="display: none; overflow-y: auto; max-height: 100%;">
                 <div class="logo-area">
-                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">マルチサーバーリスト (30選)</h1>
-                    <div class="launcher-sub-title" style="color: #4caf50;">アドレスをコピーしてゲーム内のMultiplayer設定で追加してください</div>
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="sv_h">マルチサーバーリスト (30選)</h1>
+                    <div class="launcher-sub-title" style="color: #4caf50;" data-i18n="sv_s">アドレスをコピーしてゲーム内のMultiplayer設定で追加してください</div>
                 </div>
                 <div class="grid-container">
-                    <div class="list-card"><div style="flex:1;"><h2>ArchMC</h2><p style="color:#4caf50;">👑 定番ミニゲーム鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://web.archmc.net')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Meadows</h2><p style="color:#4caf50;">🏕️ 生活・サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://sl.asphodel.club')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>CentumRealm</h2><p style="color:#4caf50;">💰 経済・トレード鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://play.centumrealm.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>ZenithMC</h2><p style="color:#4caf50;">⚡ 24時間ミニゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://join.zenithmc.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Sandbox Anarchy</h2><p style="color:#ff5555;">⚔️ ルール無用無法地帯</p></div><button class="copy-btn" onclick="copyAddr('wss://legendary-sandbox.com')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>VanillaMC</h2><p style="color:#4caf50;">🌲 純バニラサバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://play.vanillamc.net')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>CraftRise Web</h2><p style="color:#4caf50;">👑 巨大ロビーサーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://eagler.craftrise.net')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>DeltaMC</h2><p style="color:#4caf50;">🏹 BedWars特化鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.delta-mc.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>HyperNetwork</h2><p style="color:#4caf50;">⚔️ PVP練習・対戦</p></div><button class="copy-btn" onclick="copyAddr('wss://play.hyper-network.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>ComradeMC</h2><p style="color:#4caf50;">🎨 クリエイティブ建築</p></div><button class="copy-btn" onclick="copyAddr('wss://eagler.comrademc.club')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Eagler PvP</h2><p style="color:#ffaa00;">⚔️ 1v1ガチ対戦鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://pvp.eaglercraft.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Arch BedWars</h2><p style="color:#ffaa00;">🏹 専用アリーナ</p></div><button class="copy-btn" onclick="copyAddr('wss://bw.archmc.net')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>ComboMC</h2><p style="color:#ffaa00;">⚔️ KBエイム練習鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://combomc.org/eagler')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Vortex Network</h2><p style="color:#ffaa00;">☁️ スカイブロック</p></div><button class="copy-btn" onclick="copyAddr('wss://play.vortexmc.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>AresPVP</h2><p style="color:#ffaa00;">⚔️ 大会向け競技PVP</p></div><button class="copy-btn" onclick="copyAddr('wss://arespvp.com')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>RivalMC</h2><p style="color:#ffaa00;">⚡ ド派手ミニゲーム鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.rivalmc.net')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Nexus Network</h2><p style="color:#ffaa00;">🎮 特製カスタムゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://nexus-eagler.com')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>FuriousPVP</h2><p style="color:#ffaa00;">⚔️ 派閥争い拠点破壊</p></div><button class="copy-btn" onclick="copyAddr('wss://web.furiouspvp.net')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>PixelPVP</h2><p style="color:#ffaa00;">⚔️ カジュアル戦闘鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://play.pixelpvp.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>StrikeMC</h2><p style="color:#ffaa00;">🔫 マイクラ銃撃戦鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://strike-mc.com')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Eagler Anarchy</h2><p style="color:#ff5555;">⚔️ 公式無法アナーキー</p></div><button class="copy-btn" onclick="copyAddr('wss://anarchy.eaglercraft.net')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Centum SMP</h2><p style="color:#55ff55;">🌲 建築中心の生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://smp.centumrealm.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>PrismMC</h2><p style="color:#55ff55;">🌲 まったり農業街開拓</p></div><button class="copy-btn" onclick="copyAddr('wss://play.prismmc.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Economy</h2><p style="color:#55ff55;">🌲 貿易システム経済鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://eco.asphodel.club')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Aurora SMP</h2><p style="color:#55ff55;">🌲 初心者歓迎生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://aurora.craftmc.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>9b9t Web</h2><p style="color:#ff5555;">⚔️ 完全チート不問破壊</p></div><button class="copy-btn" onclick="copyAddr('wss://9b9t.eagler.club')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Aether SMP</h2><p style="color:#55ff55;">🌲 天空サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://play.aether-smp.net')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Wild SMP</h2><p style="color:#ff5555;">⚔️ 無法開拓サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://web.wild-smp.net')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Oasis Network</h2><p style="color:#55ff55;">🌲 建国システム経済鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.oasis-mc.xyz')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Legacy SMP</h2><p style="color:#55ff55;">🌲 古き良き生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://legacy-smp.com')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ArchMC</h2><p style="color:#4caf50;">👑 定番ミニゲーム鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://web.archmc.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Meadows</h2><p style="color:#4caf50;">🏕️ 生活・サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://sl.asphodel.club')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>CentumRealm</h2><p style="color:#4caf50;">💰 経済・トレード鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://play.centumrealm.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ZenithMC</h2><p style="color:#4caf50;">⚡ 24時間ミニゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://join.zenithmc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Sandbox Anarchy</h2><p style="color:#ff5555;">⚔️ ルール無用無法地帯</p></div><button class="copy-btn" onclick="copyAddr('wss://legendary-sandbox.com')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>VanillaMC</h2><p style="color:#4caf50;">🌲 純バニラサバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://play.vanillamc.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>CraftRise Web</h2><p style="color:#4caf50;">👑 巨大ロビーサーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://eagler.craftrise.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>DeltaMC</h2><p style="color:#4caf50;">🏹 BedWars特化鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.delta-mc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>HyperNetwork</h2><p style="color:#4caf50;">⚔️ PVP練習・対戦</p></div><button class="copy-btn" onclick="copyAddr('wss://play.hyper-network.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ComradeMC</h2><p style="color:#4caf50;">🎨 クリエイティブ建築</p></div><button class="copy-btn" onclick="copyAddr('wss://eagler.comrademc.club')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Eagler PvP</h2><p style="color:#ffaa00;">⚔️ 1v1ガチ対戦鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://pvp.eaglercraft.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Arch BedWars</h2><p style="color:#ffaa00;">🏹 専用アリーナ</p></div><button class="copy-btn" onclick="copyAddr('wss://bw.archmc.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ComboMC</h2><p style="color:#ffaa00;">⚔️ KBエイム練習鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://combomc.org/eagler')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Vortex Network</h2><p style="color:#ffaa00;">☁️ スカイブロック</p></div><button class="copy-btn" onclick="copyAddr('wss://play.vortexmc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>AresPVP</h2><p style="color:#ffaa00;">⚔️ 大会向け競技PVP</p></div><button class="copy-btn" onclick="copyAddr('wss://arespvp.com')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>RivalMC</h2><p style="color:#ffaa00;">⚡ ド派手ミニゲーム鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.rivalmc.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Nexus Network</h2><p style="color:#ffaa00;">🎮 特製カスタムゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://nexus-eagler.com')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>FuriousPVP</h2><p style="color:#ffaa00;">⚔️ 派閥争い拠点破壊</p></div><button class="copy-btn" onclick="copyAddr('wss://web.furiouspvp.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>PixelPVP</h2><p style="color:#ffaa00;">⚔️ カジュアル戦闘鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://play.pixelpvp.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>StrikeMC</h2><p style="color:#ffaa00;">🔫 マイクラ銃撃戦鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://strike-mc.com')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Eagler Anarchy</h2><p style="color:#ff5555;">⚔️ 公式無法アナーキー</p></div><button class="copy-btn" onclick="copyAddr('wss://anarchy.eaglercraft.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Centum SMP</h2><p style="color:#55ff55;">🌲 建築中心の生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://smp.centumrealm.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>PrismMC</h2><p style="color:#55ff55;">🌲 まったり農業街開拓</p></div><button class="copy-btn" onclick="copyAddr('wss://play.prismmc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Economy</h2><p style="color:#55ff55;">🌲 貿易システム経済鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://eco.asphodel.club')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Aurora SMP</h2><p style="color:#55ff55;">🌲 初心者歓迎生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://aurora.craftmc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>9b9t Web</h2><p style="color:#ff5555;">⚔️ 完全チート不問破壊</p></div><button class="copy-btn" onclick="copyAddr('wss://9b9t.eagler.club')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Aether SMP</h2><p style="color:#55ff55;">🌲 天空サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://play.aether-smp.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Wild SMP</h2><p style="color:#ff5555;">⚔️ 無法開拓サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://web.wild-smp.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Oasis Network</h2><p style="color:#55ff55;">🌲 建国システム経済鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.oasis-mc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Legacy SMP</h2><p style="color:#55ff55;">🌲 古き良き生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://legacy-smp.com')" data-i18n="btn_copy">アドレスコピー</button></div>
                 </div>
             </div>
 
             <!-- 中央画面：設定 -->
-            <div class="content-body" id="page-settings" style="display: none;">
-                <div class="logo-area"><h1 style="font-size:28px;">ランチャー設定</h1><div class="launcher-sub-title">システム設定</div></div>
-                <div class="news-card"><h2>Version 1.0.0</h2><p>BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
+            <div class="content-body" id="page-settings" style="display: none; overflow-y: auto; max-height: 100%;">
+                <div class="logo-area"><h1 style="font-size:28px;" data-i18n="set_h">ランチャー設定</h1><div class="launcher-sub-title" data-i18n="set_s">システム設定</div></div>
+                <div class="setting-card">
+                    <h2 data-i18n="lang_h">言語設定</h2>
+                    <select id="langSelect" class="setting-select"><option value="ja">日本語</option><option value="en">English</option></select>
+                    <p class="hint" data-i18n="lang_note">ランチャーの表示言語を切り替えます。ゲーム内の言語はゲーム側の設定で変更してください。</p>
+                    <h2 data-i18n="bg_h">背景設定</h2>
+                    <div class="swatches" id="bgSwatches"></div>
+                    <div class="bg-row">
+                        <label class="copy-btn" for="bgFile" data-i18n="bg_upload">画像を選ぶ</label>
+                        <input type="file" id="bgFile" accept="image/*" hidden>
+                        <button class="copy-btn" id="bgReset" style="background:#555;" data-i18n="bg_reset">リセット</button>
+                    </div>
+                    <p class="hint" data-i18n="bg_hint">色を選ぶか、好きな画像を設定できます（このブラウザに保存されます）。</p>
+                </div>
+                <div class="news-card"><h2>Version 1.0.0</h2><p data-i18n="ver_p">BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
             </div>
         </div>
 
@@ -328,11 +351,11 @@
                 </select>
             </div>
 
-            <button class="play-button" onclick="launchGame()">プレイ</button>
+            <button class="play-button" onclick="launchGame()" data-i18n="play">プレイ</button>
 
             <div class="user-profile">
                 <div class="avatar"></div>
-                <input type="text" class="name-input" id="playerNameInput" value="BATTA_Player" placeholder="名前を入力...">
+                <input type="text" class="name-input" id="playerNameInput" value="BATTA_Player" data-i18n-ph="name_ph" placeholder="名前を入力...">
             </div>
         </div>
     </div>
@@ -366,13 +389,13 @@
 
         // アドレスコピー（成功時のみ通知）
         function copyAddr(addr) {
-            const done = () => alert('コピーしました！');
+            const done = () => alert(t('copied'));
             const fallback = () => {
                 const ta = document.createElement('textarea');
                 ta.value = addr; ta.style.position = 'fixed'; ta.style.opacity = '0';
                 document.body.appendChild(ta); ta.select();
-                try { document.execCommand('copy') ? done() : alert('コピーに失敗しました'); }
-                catch (e) { alert('コピーに失敗しました'); }
+                try { document.execCommand('copy') ? done() : alert(t('copy_fail')); }
+                catch (e) { alert(t('copy_fail')); }
                 document.body.removeChild(ta);
             };
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -390,7 +413,7 @@
         // 戻るボタンで戻ってきたときにプレイボタンを復元
         window.addEventListener('pageshow', () => {
             const btn = document.querySelector('.play-button');
-            btn.innerText = 'プレイ';
+            btn.innerText = t('play');
             btn.style.backgroundColor = '';
             btn.style.borderBottomColor = '';
             btn.disabled = false;
@@ -525,11 +548,11 @@
             const grid = document.getElementById('skinGrid');
             SKINS.forEach(sk => {
                 const tex = makeSkin(sk), card = document.createElement('div'), cv = document.createElement('canvas');
-                card.className = 'skin-card'; cv.width = 64; cv.height = 128; cv.title = 'クリックで前後を切替';
+                card.className = 'skin-card'; cv.width = 64; cv.height = 128; cv.setAttribute('data-i18n-title', 'sk_tip');
                 let back = false; drawPreview(tex, cv, back);
                 cv.addEventListener('click', () => { back = !back; drawPreview(tex, cv, back); });
                 const nm = document.createElement('div'); nm.className = 'skin-name'; nm.textContent = sk[0];
-                const bt = document.createElement('button'); bt.className = 'copy-btn'; bt.textContent = 'ダウンロード';
+                const bt = document.createElement('button'); bt.className = 'copy-btn'; bt.setAttribute('data-i18n', 'btn_download'); bt.textContent = 'ダウンロード';
                 bt.addEventListener('click', () => tex.toBlob(b => {
                     const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = sk[0] + '.png'; a.click();
                     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
@@ -537,6 +560,89 @@
                 card.append(cv, nm, bt); grid.appendChild(card);
             });
         })();
+
+        // ===== 言語・背景設定 =====
+        const I18N = {
+            ja: {
+                nav_client:'⚡ クライアント', nav_skin:'スキン管理', nav_server:'サーバーリスト', nav_settings:'設定',
+                home_h:'BATTA-Launcher へようこそ', home_p:'プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！',
+                cl_h:'カスタムクライアント', cl_s:'専用のPVP・軽量化・高機能クライアントを直接起動できます', btn_launch:'起動する',
+                sk_h:'スキン管理（50種）', sk_s:'画像をクリックで前後切替。PNGを保存して、ゲーム内のスキン設定からアップロードしてください', btn_download:'ダウンロード', sk_tip:'クリックで前後を切替',
+                sv_h:'マルチサーバーリスト (30選)', sv_s:'アドレスをコピーしてゲーム内のMultiplayer設定で追加してください', btn_copy:'アドレスコピー', copied:'コピーしました！', copy_fail:'コピーに失敗しました',
+                set_h:'ランチャー設定', set_s:'システム設定', lang_h:'言語設定', lang_note:'ランチャーの表示言語を切り替えます。ゲーム内の言語はゲーム側の設定で変更してください。',
+                bg_h:'背景設定', bg_upload:'画像を選ぶ', bg_reset:'リセット', bg_hint:'色を選ぶか、好きな画像を設定できます（このブラウザに保存されます）。', bg_fail:'画像が大きすぎて保存できませんでした（今回のみ適用）',
+                ver_p:'BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。',
+                play:'プレイ', launching:'起動中...', name_ph:'名前を入力...'
+            },
+            en: {
+                nav_client:'⚡ Clients', nav_skin:'Skins', nav_server:'Server List', nav_settings:'Settings',
+                home_h:'Welcome to BATTA-Launcher', home_p:'Enter your player name, pick a file from the list, then press "Play"!',
+                cl_h:'Custom Clients', cl_s:'Launch PVP, lightweight and feature-rich clients directly', btn_launch:'Launch',
+                sk_h:'Skins (50)', sk_s:'Click a preview to flip it. Save the PNG and upload it from the in-game skin settings.', btn_download:'Download', sk_tip:'Click to flip front/back',
+                sv_h:'Multiplayer Server List (30)', sv_s:'Copy an address and add it in the in-game Multiplayer menu', btn_copy:'Copy address', copied:'Copied!', copy_fail:'Copy failed',
+                set_h:'Launcher Settings', set_s:'System settings', lang_h:'Language', lang_note:'Changes the launcher display language. The in-game language is set inside the game.',
+                bg_h:'Background', bg_upload:'Choose image', bg_reset:'Reset', bg_hint:'Pick a color or set your own image (saved in this browser).', bg_fail:'The image was too large to save (applied for this session only)',
+                ver_p:'BATTA-Launcher is a personal custom launcher for organizing and quickly playing web-based Minecraft HTML files.',
+                play:'Play', launching:'Launching...', name_ph:'Enter name...'
+            }
+        };
+        let LANG = 'ja';
+        try { LANG = localStorage.getItem('BattaLauncher_Lang') || 'ja'; } catch (e) {}
+        if (!I18N[LANG]) LANG = 'ja';
+        function t(k) { return I18N[LANG][k] || I18N.ja[k] || k; }
+        function setLang(l) {
+            LANG = I18N[l] ? l : 'ja';
+            try { localStorage.setItem('BattaLauncher_Lang', LANG); } catch (e) {}
+            document.documentElement.lang = LANG;
+            document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+            document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+            document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+            document.getElementById('langSelect').value = LANG;
+        }
+        document.getElementById('langSelect').addEventListener('change', e => setLang(e.target.value));
+
+        const BG_PRESETS = [
+            { id: 'green',  css: 'radial-gradient(circle at 30% 20%, #2f4f2a, #101810)' },
+            { id: 'blue',   css: 'radial-gradient(circle at 30% 20%, #264a7a, #0c1424)' },
+            { id: 'purple', css: 'radial-gradient(circle at 30% 20%, #3d2a6a, #140c24)' },
+            { id: 'red',    css: 'radial-gradient(circle at 30% 20%, #7a2a2a, #240c0c)' },
+            { id: 'sunset', css: 'linear-gradient(135deg, #ff7e5f, #6a2a5a, #1a1030)' },
+            { id: 'dark',   css: 'linear-gradient(#2a2a2a, #0e0e0e)' }
+        ];
+        const swatchBox = document.getElementById('bgSwatches');
+        BG_PRESETS.forEach(p => {
+            const d = document.createElement('div');
+            d.className = 'swatch'; d.dataset.id = p.id; d.style.background = p.css;
+            d.addEventListener('click', () => setBg({ type: 'preset', id: p.id }));
+            swatchBox.appendChild(d);
+        });
+        function applyBg(b) {
+            let css = BG_PRESETS[0].css, sel = 'green';
+            if (b && b.type === 'image' && b.data) { css = 'url("' + b.data + '")'; sel = ''; }
+            else if (b && b.type === 'preset') { const p = BG_PRESETS.find(x => x.id === b.id); if (p) { css = p.css; sel = p.id; } }
+            document.documentElement.style.setProperty('--bg-img', css);
+            swatchBox.querySelectorAll('.swatch').forEach(s => s.classList.toggle('sel', s.dataset.id === sel));
+        }
+        function setBg(b) {
+            applyBg(b);
+            try { localStorage.setItem('BattaLauncher_Bg', JSON.stringify(b)); }
+            catch (e) { alert(t('bg_fail')); }
+        }
+        document.getElementById('bgReset').addEventListener('click', () => setBg({ type: 'preset', id: 'green' }));
+        document.getElementById('bgFile').addEventListener('change', e => {
+            const f = e.target.files[0]; if (!f) return;
+            const img = new Image(), url = URL.createObjectURL(f);
+            img.onload = () => {
+                const sc = Math.min(1, 1280 / img.width), c = document.createElement('canvas');
+                c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+                c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                URL.revokeObjectURL(url);
+                setBg({ type: 'image', data: c.toDataURL('image/jpeg', 0.8) });
+            };
+            img.src = url; e.target.value = '';
+        });
+        try { applyBg(JSON.parse(localStorage.getItem('BattaLauncher_Bg'))); } catch (e) { applyBg(null); }
+        setLang(LANG);
 
         // 起動・名前同期処理
         function launchGame() {
@@ -562,7 +668,7 @@
             });
 
             const btn = document.querySelector('.play-button');
-            btn.innerText = '起動中...';
+            btn.innerText = t('launching');
             btn.style.backgroundColor = '#666';
             btn.style.borderBottomColor = '#444';
             btn.disabled = true;
