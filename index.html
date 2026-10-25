@@ -7,15 +7,17 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background-color: #1a1a1a; color: #f5f5f5; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .launcher-container { width: 1000px; height: 620px; background-color: #2c2c2c; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); display: flex; flex-direction: column; border: 1px solid #3c3c3c; }
+        .launcher-container { width: 1000px; max-width: 100vw; height: 620px; max-height: 100vh; overflow: hidden; background-color: #2c2c2c; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); display: flex; flex-direction: column; border: 1px solid #3c3c3c; }
         .main-content { display: flex; flex: 1; height: calc(100% - 80px); }
         .sidebar { width: 220px; background-color: #141414; padding: 20px 10px; display: flex; flex-direction: column; gap: 8px; border-top-left-radius: 8px; }
         .nav-item { display: flex; align-items: center; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; color: #aaaaaa; transition: background 0.2s, color 0.2s; }
         .nav-item:hover { background-color: #2a2a2a; color: #ffffff; }
         .nav-item.active { background-color: #383838; color: #ffffff; border-left: 4px solid #4caf50; padding-left: 11px; }
-        .content-body { flex: 1; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('https://unsplash.com') center/cover; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .content-body { flex: 1; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), radial-gradient(circle at 30% 20%, #2f4f2a, #101810) center/cover; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
         .logo-area { display: flex; flex-direction: column; gap: 5px; }
         .logo-area img { width: 320px; height: auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7)); }
+        .logo-text { font-size: 44px; letter-spacing: 2px; color: #ffffff; text-shadow: 3px 3px 8px rgba(0,0,0,0.8); }
+        .list-card h2 { font-size: 16px; }
         .launcher-sub-title { font-size: 16px; font-weight: bold; color: #4caf50; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
         .news-card { background-color: rgba(20, 20, 20, 0.85); padding: 20px; border-radius: 6px; max-width: 450px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
         .news-card h2 { font-size: 18px; margin-bottom: 8px; color: #ffffff; }
@@ -26,7 +28,7 @@
         .play-button { background-color: #3c8527; border: none; border-bottom: 4px solid #275419; color: #ffffff; padding: 12px 50px; font-size: 20px; font-weight: bold; text-transform: uppercase; border-radius: 4px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-shadow: 1px 1px 2px rgba(0,0,0,0.8); flex-shrink: 0; }
         .user-profile { display: flex; align-items: center; gap: 10px; width: 220px; justify-content: flex-end; margin-left: auto; flex-shrink: 0; }
         .name-input { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 8px 12px; border-radius: 4px; font-size: 14px; font-weight: 600; width: 140px; outline: none; user-select: text; }
-        .avatar { width: 32px; height: 32px; background-color: #555555; border-radius: 4px; border: 2px solid #888888; background-image: url('https://minotar.net'); background-size: cover; flex-shrink: 0; }
+        .avatar { width: 32px; height: 32px; background-color: #555555; border-radius: 4px; border: 2px solid #888888; background-size: cover; flex-shrink: 0; }
         .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; padding-bottom: 20px; }
         .list-card { background-color: rgba(20, 20, 20, 0.85); padding: 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 15px; max-width: 100%; }
         .copy-btn { padding: 6px 12px; background: #3c8527; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; flex-shrink: 0; }
@@ -49,7 +51,7 @@
             <!-- 中央画面：ホーム（BATTA-Launcher） -->
             <div class="content-body" id="page-home">
                 <div class="logo-area">
-                    <img src="https://wikimedia.org" alt="Minecraft">
+                    <h1 class="logo-text">BATTA-Launcher</h1>
                     <div class="launcher-sub-title">BATTA-Launcher Edition</div>
                 </div>
                 <div class="news-card">
@@ -96,36 +98,36 @@
                     <div class="launcher-sub-title" style="color: #4caf50;">アドレスをコピーしてゲーム内のMultiplayer設定で追加してください</div>
                 </div>
                 <div class="grid-container">
-                    <div class="list-card"><div style="flex:1;"><h2>ArchMC</h2><p style="color:#4caf50;">👑 定番ミニゲーム鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://web.archmc.net');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Meadows</h2><p style="color:#4caf50;">🏕️ 生活・サバイバル</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://sl.asphodel.club');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>CentumRealm</h2><p style="color:#4caf50;">💰 経済・トレード鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://play.centumrealm.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>ZenithMC</h2><p style="color:#4caf50;">⚡ 24時間ミニゲーム</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://join.zenithmc.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Sandbox Anarchy</h2><p style="color:#ff5555;">⚔️ ルール無用無法地帯</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://://legendary-sandbox.com');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>VanillaMC</h2><p style="color:#4caf50;">🌲 純バニラサバイバル</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://play.vanillamc.net');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>CraftRise Web</h2><p style="color:#4caf50;">👑 巨大ロビーサーバー</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://eagler.craftrise.net');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>DeltaMC</h2><p style="color:#4caf50;">🏹 BedWars特化鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://join.delta-mc.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>HyperNetwork</h2><p style="color:#4caf50;">⚔️ PVP練習・対戦</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://play.hyper-network.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>ComradeMC</h2><p style="color:#4caf50;">🎨 クリエイティブ建築</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://eagler.comrademc.club');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Eagler PvP</h2><p style="color:#ffaa00;">⚔️ 1v1ガチ対戦鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://pvp.eaglercraft.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Arch BedWars</h2><p style="color:#ffaa00;">🏹 専用アリーナ</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://bw.archmc.net');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>ComboMC</h2><p style="color:#ffaa00;">⚔️ KBエイム練習鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://combomc.org/eagler');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Vortex Network</h2><p style="color:#ffaa00;">☁️ スカイブロック</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://play.vortexmc.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>AresPVP</h2><p style="color:#ffaa00;">⚔️ 大会向け競技PVP</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://://arespvp.com');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>RivalMC</h2><p style="color:#ffaa00;">⚡ ド派手ミニゲーム鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://join.rivalmc.net');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Nexus Network</h2><p style="color:#ffaa00;">🎮 特製カスタムゲーム</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://://nexus-eagler.com');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>FuriousPVP</h2><p style="color:#ffaa00;">⚔️ 派閥争い拠点破壊</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://web.furiouspvp.net');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>PixelPVP</h2><p style="color:#ffaa00;">⚔️ カジュアル戦闘鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://play.pixelpvp.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>StrikeMC</h2><p style="color:#ffaa00;">🔫 マイクラ銃撃戦鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://://strike-mc.com');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Eagler Anarchy</h2><p style="color:#ff5555;">⚔️ 公式無法アナーキー</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://anarchy.eaglercraft.net');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Centum SMP</h2><p style="color:#55ff55;">🌲 建築中心の生活鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://smp.centumrealm.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>PrismMC</h2><p style="color:#55ff55;">🌲 まったり農業街開拓</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://play.prismmc.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Economy</h2><p style="color:#55ff55;">🌲 貿易システム経済鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://eco.asphodel.club');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Aurora SMP</h2><p style="color:#55ff55;">🌲 初心者歓迎生活鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://aurora.craftmc.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>9b9t Web</h2><p style="color:#ff5555;">⚔️ 完全チート不問破壊</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://9b9t.eagler.club');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Aether SMP</h2><p style="color:#55ff55;">🌲 天空サバイバル</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://play.aether-smp.net');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Wild SMP</h2><p style="color:#ff5555;">⚔️ 無法開拓サバイバル</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://web.wild-smp.net');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Oasis Network</h2><p style="color:#55ff55;">🌲 建国システム経済鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://join.oasis-mc.xyz');alert('コピーしました！')">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Legacy SMP</h2><p style="color:#55ff55;">🌲 古き良き生活鯖</p></div><button class="copy-btn" onclick="navigator.clipboard.writeText('wss://://legacy-smp.com');alert('コピーしました！')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ArchMC</h2><p style="color:#4caf50;">👑 定番ミニゲーム鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://web.archmc.net')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Meadows</h2><p style="color:#4caf50;">🏕️ 生活・サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://sl.asphodel.club')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>CentumRealm</h2><p style="color:#4caf50;">💰 経済・トレード鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://play.centumrealm.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ZenithMC</h2><p style="color:#4caf50;">⚡ 24時間ミニゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://join.zenithmc.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Sandbox Anarchy</h2><p style="color:#ff5555;">⚔️ ルール無用無法地帯</p></div><button class="copy-btn" onclick="copyAddr('wss://legendary-sandbox.com')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>VanillaMC</h2><p style="color:#4caf50;">🌲 純バニラサバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://play.vanillamc.net')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>CraftRise Web</h2><p style="color:#4caf50;">👑 巨大ロビーサーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://eagler.craftrise.net')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>DeltaMC</h2><p style="color:#4caf50;">🏹 BedWars特化鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.delta-mc.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>HyperNetwork</h2><p style="color:#4caf50;">⚔️ PVP練習・対戦</p></div><button class="copy-btn" onclick="copyAddr('wss://play.hyper-network.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ComradeMC</h2><p style="color:#4caf50;">🎨 クリエイティブ建築</p></div><button class="copy-btn" onclick="copyAddr('wss://eagler.comrademc.club')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Eagler PvP</h2><p style="color:#ffaa00;">⚔️ 1v1ガチ対戦鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://pvp.eaglercraft.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Arch BedWars</h2><p style="color:#ffaa00;">🏹 専用アリーナ</p></div><button class="copy-btn" onclick="copyAddr('wss://bw.archmc.net')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ComboMC</h2><p style="color:#ffaa00;">⚔️ KBエイム練習鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://combomc.org/eagler')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Vortex Network</h2><p style="color:#ffaa00;">☁️ スカイブロック</p></div><button class="copy-btn" onclick="copyAddr('wss://play.vortexmc.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>AresPVP</h2><p style="color:#ffaa00;">⚔️ 大会向け競技PVP</p></div><button class="copy-btn" onclick="copyAddr('wss://arespvp.com')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>RivalMC</h2><p style="color:#ffaa00;">⚡ ド派手ミニゲーム鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.rivalmc.net')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Nexus Network</h2><p style="color:#ffaa00;">🎮 特製カスタムゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://nexus-eagler.com')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>FuriousPVP</h2><p style="color:#ffaa00;">⚔️ 派閥争い拠点破壊</p></div><button class="copy-btn" onclick="copyAddr('wss://web.furiouspvp.net')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>PixelPVP</h2><p style="color:#ffaa00;">⚔️ カジュアル戦闘鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://play.pixelpvp.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>StrikeMC</h2><p style="color:#ffaa00;">🔫 マイクラ銃撃戦鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://strike-mc.com')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Eagler Anarchy</h2><p style="color:#ff5555;">⚔️ 公式無法アナーキー</p></div><button class="copy-btn" onclick="copyAddr('wss://anarchy.eaglercraft.net')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Centum SMP</h2><p style="color:#55ff55;">🌲 建築中心の生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://smp.centumrealm.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>PrismMC</h2><p style="color:#55ff55;">🌲 まったり農業街開拓</p></div><button class="copy-btn" onclick="copyAddr('wss://play.prismmc.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Economy</h2><p style="color:#55ff55;">🌲 貿易システム経済鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://eco.asphodel.club')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Aurora SMP</h2><p style="color:#55ff55;">🌲 初心者歓迎生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://aurora.craftmc.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>9b9t Web</h2><p style="color:#ff5555;">⚔️ 完全チート不問破壊</p></div><button class="copy-btn" onclick="copyAddr('wss://9b9t.eagler.club')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Aether SMP</h2><p style="color:#55ff55;">🌲 天空サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://play.aether-smp.net')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Wild SMP</h2><p style="color:#ff5555;">⚔️ 無法開拓サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://web.wild-smp.net')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Oasis Network</h2><p style="color:#55ff55;">🌲 建国システム経済鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.oasis-mc.xyz')">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Legacy SMP</h2><p style="color:#55ff55;">🌲 古き良き生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://legacy-smp.com')">アドレスコピー</button></div>
                 </div>
             </div>
 
@@ -330,7 +332,7 @@
 
     <script>
         // タブ切り替えのシステム
-        const tabs = ['home', 'skin', 'server', 'settings'];
+        const tabs = ['home', 'client', 'skin', 'server', 'settings'];
         tabs.forEach(tab => {
             const tabBtn = document.getElementById(`tab-${tab}`);
             const page = document.getElementById(`page-${tab}`);
@@ -352,6 +354,39 @@
             if (savedName) {
                 document.getElementById('playerNameInput').value = savedName;
             }
+            updateAvatar();
+        });
+
+        // アドレスコピー（成功時のみ通知）
+        function copyAddr(addr) {
+            const done = () => alert('コピーしました！');
+            const fallback = () => {
+                const ta = document.createElement('textarea');
+                ta.value = addr; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy') ? done() : alert('コピーに失敗しました'); }
+                catch (e) { alert('コピーに失敗しました'); }
+                document.body.removeChild(ta);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(addr).then(done, fallback);
+            } else { fallback(); }
+        }
+
+        // アバターをプレイヤー名から更新
+        function updateAvatar() {
+            const n = document.getElementById('playerNameInput').value.trim() || 'Steve';
+            document.querySelector('.avatar').style.backgroundImage = "url('https://minotar.net/avatar/" + encodeURIComponent(n) + "/32')";
+        }
+        document.getElementById('playerNameInput').addEventListener('input', updateAvatar);
+
+        // 戻るボタンで戻ってきたときにプレイボタンを復元
+        window.addEventListener('pageshow', () => {
+            const btn = document.querySelector('.play-button');
+            btn.innerText = 'プレイ';
+            btn.style.backgroundColor = '';
+            btn.style.borderBottomColor = '';
+            btn.disabled = false;
         });
 
         // 起動・名前同期処理
