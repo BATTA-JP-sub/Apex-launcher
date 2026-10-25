@@ -45,6 +45,7 @@
         .swatch { width: 40px; height: 40px; border-radius: 6px; border: 2px solid #555555; cursor: pointer; }
         .swatch.sel { border-color: #4caf50; }
         .setting-card .copy-btn { display: inline-block; padding: 8px 14px; }
+        .dbg-out { width: 100%; background: #1a1a1a; color: #dddddd; border: 1px solid #444444; border-radius: 4px; padding: 8px; font: 11px monospace; user-select: text; resize: vertical; }
         .hint { font-size: 12px; color: #aaaaaa; line-height: 1.5; }
         .news-card { flex-shrink: 0; }
     </style>
@@ -163,6 +164,13 @@
                         <button class="copy-btn" id="bgReset" style="background:#555;" data-i18n="bg_reset">リセット</button>
                     </div>
                     <p class="hint" data-i18n="bg_hint">色を選ぶか、好きな画像を設定できます（このブラウザに保存されます）。</p>
+                    <h2 data-i18n="dbg_h">保存データの確認</h2>
+                    <p class="hint" data-i18n="dbg_note">ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。</p>
+                    <div class="bg-row">
+                        <button class="copy-btn" id="dbgBtn" data-i18n="dbg_btn">確認する</button>
+                        <button class="copy-btn" id="dbgCopy" style="background:#555;" data-i18n="dbg_copy">コピー</button>
+                    </div>
+                    <textarea id="dbgOut" class="dbg-out" readonly rows="8"></textarea>
                 </div>
                 <div class="news-card"><h2>Version 1.0.0</h2><p data-i18n="ver_p">BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
             </div>
@@ -572,7 +580,8 @@
                 set_h:'ランチャー設定', set_s:'システム設定', lang_h:'言語設定', lang_note:'ランチャーの表示言語を切り替えます。ゲーム内の言語はゲーム側の設定で変更してください。',
                 bg_h:'背景設定', bg_upload:'画像を選ぶ', bg_reset:'リセット', bg_hint:'色を選ぶか、好きな画像を設定できます（このブラウザに保存されます）。', bg_fail:'画像が大きすぎて保存できませんでした（今回のみ適用）',
                 ver_p:'BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。',
-                play:'プレイ', launching:'起動中...', name_ph:'名前を入力...'
+                play:'プレイ', launching:'起動中...', name_ph:'名前を入力...',
+                dbg_h:'保存データの確認', dbg_note:'ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。', dbg_btn:'確認する', dbg_copy:'コピー'
             },
             en: {
                 nav_client:'⚡ Clients', nav_skin:'Skins', nav_server:'Server List', nav_settings:'Settings',
@@ -583,7 +592,8 @@
                 set_h:'Launcher Settings', set_s:'System settings', lang_h:'Language', lang_note:'Changes the launcher display language. The in-game language is set inside the game.',
                 bg_h:'Background', bg_upload:'Choose image', bg_reset:'Reset', bg_hint:'Pick a color or set your own image (saved in this browser).', bg_fail:'The image was too large to save (applied for this session only)',
                 ver_p:'BATTA-Launcher is a personal custom launcher for organizing and quickly playing web-based Minecraft HTML files.',
-                play:'Play', launching:'Launching...', name_ph:'Enter name...'
+                play:'Play', launching:'Launching...', name_ph:'Enter name...',
+                dbg_h:'Saved Data Check', dbg_note:'Press this right after changing your name in the game. Only key names, lengths and the first 60 characters are shown.', dbg_btn:'Check', dbg_copy:'Copy'
             }
         };
         const SKIN_EN = ["Knight", "Ninja", "Robot", "Pirate", "Wizard", "Farmer", "Astronaut", "Zombie", "Skeleton", "Doctor", "Chef", "Explorer", "Cyber", "Dragon Warrior", "Cat", "Panda", "Santa", "King", "Vampire", "Ghost", "Police Officer", "Firefighter", "Pilot", "Samurai", "Elf", "Dwarf", "Witch", "Hunter", "Ice Warrior", "Fire Warrior", "White Ninja", "Red Robot", "Student", "Soccer Player", "Diver", "Musician", "Cowboy", "Warrior", "Mummy", "Alien", "Scientist", "Carpenter", "Prince", "Snowman", "Pumpkin", "Idol", "Racer", "Camo", "Stealth", "Gold"];
@@ -648,6 +658,26 @@
                 setBg({ type: 'image', data: c.toDataURL('image/jpeg', 0.8) });
             };
             img.src = url; e.target.value = '';
+        });
+        // 保存データの確認（名前保存キーの調査用）
+        document.getElementById('dbgBtn').addEventListener('click', () => {
+            const box = document.getElementById('dbgOut'), out = ['origin: ' + location.origin];
+            [['localStorage', localStorage], ['sessionStorage', sessionStorage]].forEach(([nm, st]) => {
+                try {
+                    out.push('--- ' + nm + ' (' + st.length + ') ---');
+                    for (let i = 0; i < st.length; i++) {
+                        const k = st.key(i), v = st.getItem(k) || '';
+                        out.push(k + ' | len=' + v.length + ' | ' + v.slice(0, 60).replace(/\s+/g, ' '));
+                    }
+                } catch (e) { out.push(nm + ': error'); }
+            });
+            const done = () => { box.value = out.join('\n'); };
+            if (indexedDB.databases) {
+                indexedDB.databases().then(l => { out.push('--- IndexedDB ---'); l.forEach(d => out.push(d.name + ' v' + d.version)); done(); }).catch(done);
+            } else { done(); }
+        });
+        document.getElementById('dbgCopy').addEventListener('click', () => {
+            const v = document.getElementById('dbgOut').value; if (v) copyAddr(v);
         });
         try { applyBg(JSON.parse(localStorage.getItem('BattaLauncher_Bg'))); } catch (e) { applyBg(null); }
         setLang(LANG);
