@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BATTA-Launcher</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .launcher-container {
+            width: 1000px;
+            height: 620px;
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #3c3c3c;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            height: calc(100% - 80px);
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #141414;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-top-left-radius: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #aaaaaa;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .nav-item.active {
+            background-color: #383838;
+            color: #ffffff;
+            border-left: 4px solid #4caf50;
+            padding-left: 11px;
+        }
+
+        .content-body {
+            flex: 1;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200&auto=format&fit=crop') center/cover;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .logo-area {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .logo-area img {
+            width: 320px;
+            height: auto;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
+        }
+
+        .launcher-sub-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4caf50;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            margin-left: 5px;
+            letter-spacing: 1px;
+        }
+
+        .news-card {
+            background-color: rgba(20, 20, 20, 0.85);
+            padding: 20px;
+            border-radius: 6px;
+            max-width: 450px;
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+
+        .news-card h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .news-card p {
+            font-size: 13px;
+            color: #cccccc;
+            line-height: 1.5;
+        }
+
+        .play-bar {
+            height: 80px;
+            background-color: #1e1e1e;
+            border-top: 1px solid #2d2d2d;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .version-selector {
+            background-color: #2b2b2b;
+            border: 1px solid #444444;
+            color: #ffffff;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+            width: 260px;
+            max-width: 260px;
+        }
+
+        .version-selector:hover {
+            background-color: #363636;
+            border-color: #555555;
+        }
+
+        .play-button {
+            background-color: #3c8527;
+            border: none;
+            border-bottom: 4px solid #275419;
+            color: #ffffff;
+            padding: 12px 50px;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            transition: background 0.1s, transform 0.1s;
+        }
+
+        .play-button:hover {
+            background-color: #469b2e;
+        }
+
+        .play-button:active {
+            border-bottom-width: 0px;
+            margin-top: 4px;
+            background-color: #347322;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 220px;
+            justify-content: flex-end;
+        }
+
+        .name-input {
+            background-color: #2b2b2b;
+            border: 1px solid #444444;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            width: 140px;
+            outline: none;
+            user-select: text;
+        }
+
+        .name-input:focus {
+            border-color: #4caf50;
+            background-color: #333333;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background-color: #555555;
+            border-radius: 4px;
+            border: 2px solid #888888;
+            background-image: url('https://minotar.net/avatar/char/32');
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="launcher-container">
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="nav-item active">BATTA-Launcher</div>
+                <div class="nav-item">スキン管理</div>
+                <div class="nav-item">サーバーリスト</div>
+                <div style="margin-top: auto;" class="nav-item">設定</div>
+            </div>
+
+            <div class="content-body">
+                <div class="logo-area">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Minecraft_logo_with_Java_Edition_text.png" alt="Minecraft">
+                    <div class="launcher-sub-title">BATTA-Launcher Edition</div>
+                </div>
+
+                <div class="news-card">
+                    <h2>BATTA-Launcher へようこそ</h2>
+                    <p>右下でゲーム内での【プレイヤー名】を入力し、リストからファイルを選択したら「プレイ」ボタンを押してください！</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="play-bar">
+            <select class="version-selector" id="versionSelect">
+                <option value="eaglercraft-26.3.html">eaglercraft-26.3.html</option>
+                <option value="eaglercraft-26.2-wispcraft.html">eaglercraft-26.2-wispcraft.html</option>
+                <option value="eaglercraft-26.2.html">eaglercraft-26.2.html</option>
+                <option value="eaglercraft-26.1.2-WASM_Novix.html">eaglercraft-26.1.2-WASM_Novix.html</option>
+                <option value="Novix_26.1.2.html">Novix_26.1.2.html</option>
+                <option value="Eaglercraft 1.21.11 WASM.html">Eaglercraft 1.21.11 WASM.html</option>
+                <option value="Eaglercraft-1-21-11_wasm.html">Eaglercraft-1-21-11_wasm.html</option>
+                <option value="Eaglercraft_1.20.6_WASM-GC.html">Eaglercraft_1.20.6_WASM-GC.html</option>
+                <option value="eaglercraft-1.17-wasm_gc.html">eaglercraft-1.17-wasm_gc.html</option>
+                <option value="Eaglercraft 1.16.5 WASM.html">Eaglercraft 1.16.5 WASM.html</option>
+                <option value="eaglercraft-1.16.5-wasm-gc.html">eaglercraft-1.16.5-wasm-gc.html</option>
+                <option value="Eaglercraft-1.15.2-JS.html">Eaglercraft-1.15.2-JS.html</option>
+                <option value="Eaglercraft-1.15.2-WASM_GC.html">Eaglercraft-1.15.2-WASM_GC.html</option>
+                <option value="Eaglercraft_1.14.4_WASM-GC.html">Eaglercraft_1.14.4_WASM-GC.html</option>
+                <option value="Eaglercraft_1.14.4_WASM-GC_U1.html">Eaglercraft_1.14.4_WASM-GC_U1.html</option>
+                <option value="Eaglercraft 1.13.2-WASM.html">Eaglercraft 1.13.2-WASM.html</option>
+                <option value="Eaglercraft-1.13.2-JS.html">Eaglercraft-1.13.2-JS.html</option>
+                <option value="wispcraft-Eaglercraft_1.12.2-WASM-GC.html">wispcraft-Eaglercraft_1.12.2-WASM-GC.html</option>
+                <option value="Eaglercraft_1.12.2-WASM-GC.html">Eaglercraft_1.12.2-WASM-GC.html</option>
+                <option value="wispcraft-Eaglercraft-1.12.html">wispcraft-Eaglercraft-1.12.html</option>
+                <option value="Eaglercraft-1.12.html">Eaglercraft-1.12.html</option>
+                <option value="Eaglercraft_1.12_Javascript.html">Eaglercraft_1.12_Javascript.html</option>
+                <option value="Eaglercraft-1.11.2.html">Eaglercraft-1.11.2.html</option>
+                <option value="wispcraft-Eaglercraft 1.8.8 .html">wispcraft-Eaglercraft 1.8.8 .html</option>
+                <option value="Eaglercraft 1.8.8 .html">Eaglercraft 1.8.8 .html</option>
+                <option value="wispcraft-EaglercraftX_1.8_WASM-GC.html">wispcraft-EaglercraftX_1.8_WASM-GC.html</option>
+                <option value="EaglercraftX_1.8_WASM-GC.html">EaglercraftX_1.8_WASM-GC.html</option>
+                <option value="Koneclient-1.8.8.html">Koneclient-1.8.8.html</option>
+                <option value="PixelClient 1.8.8 JS.html">PixelClient 1.8.8 JS.html</option>
+                <option value="Eaglercraft 1.7.10-Javascript.html">Eaglercraft 1.7.10-Javascript.html</option>
+                <option value="Eaglercraft-1.7-wasm.html">Eaglercraft-1.7-wasm.html</option>
+                <option value="Eaglercraft 1.6.4.html">Eaglercraft 1.6.4.html</option>
+                <option value="Eaglercraft-1.6.4-Forge-WASM.html">Eaglercraft-1.6.4-Forge-WASM.html</option>
+                <option value="Eaglercraft-1.6.4-Forge.html">Eaglercraft-1.6.4-Forge.html</option>
+                <option value="1.5.2.html">1.5.2.html</option>
+                <option value="Eaglercraft-1.5.2.html">Eaglercraft-1.5.2.html</option>
+                <option value="Eaglercraft-1.5.2-WASM-GC.html">Eaglercraft-1.5.2-WASM-GC.html</option>
+                <option value="Eaglercraft_1.4.7-JS.html">Eaglercraft_1.4.7-JS.html</option>
+                <option value="Eaglercraft_1.4.7-WASM.html">Eaglercraft_1.4.7-WASM.html</option>
+                <option value="Eaglercraft_1_3_2.html">Eaglercraft_1_3_2.html</option>
+                <option value="Eaglercraft_1.2.5_JS.html">Eaglercraft_1.2.5_JS.html</option>
+                <option value="Eaglercraft_1.2.5_wasm.html">Eaglercraft_1.2.5_wasm.html</option>
+                <option value="Eaglercraft_1.2.3_JS.html">Eaglercraft_1.2.3_JS.html</option>
+                <option value="Eaglercraft_1.2.3_WASM-GC.html">Eaglercraft_1.2.3_WASM-GC.html</option>
+                <option value="Eaglercraft_1.1.html">Eaglercraft_1.1.html</option>
+                <option value="Eaglercraft-1.0.html">Eaglercraft-1.0.html</option>
+                <option value="Eaglercraft-1.0-WASM-GC.html">Eaglercraft-1.0-WASM-GC.html</option>
+                <option value="Eaglercraft_1_0_0.html">Eaglercraft_1_0_0.html</option>
+                <option value="Eaglercraft_Beta_1.9_pre_5.html">Eaglercraft_Beta_1.9_pre_5.html</option>
+                <option value="Eaglercraft_Beta_1.9_pre_5_WASM.html">Eaglercraft_Beta_1.9_pre_5_WASM.html</option>
+                <option value="Eaglercraft_beta 1.8.1_WASM.html">Eaglercraft_beta 1.8.1_WASM.html</option>
+                <option value="Eaglercraft beta 1.8.1.html">Eaglercraft beta 1.8.1.html</option>
+                <option value="Beta_1.7.3.html">Beta_1.7.3.html</option>
+                <option value="Beta-1.6.4.html">Beta-1.6.4.html</option>
+                <option value="Eaglercraft beta 1.6-tb3-wasm.html">Eaglercraft beta 1.6-tb3-wasm.html</option>
+                <option value="Eaglercraft beta 1.6-tb3.html">Eaglercraft beta 1.6-tb3.html</option>
+                <option value="Eaglercraft Beta 1.5_01.html">Eaglercraft Beta 1.5_01.html</option>
+                <option value="Eaglercraft Beta 1.4.html">Eaglercraft Beta 1.4.html</option>
+                <option value="Eaglercraft_Beta_1.4_01.html">Eaglercraft_Beta_1.4_01.html</option>
+                <option value="Eaglercraft-Beta-1.3-JS.html">Eaglercraft-Beta-1.3-JS.html</option>
+                <option value="Eaglercraft-Beta-1.3-WASM.html">Eaglercraft-Beta-1.3-WASM.html</option>
+                <option value="eaglercraft-beta-1.3.html">eaglercraft-beta-1.3.html</option>
+                <option value="Eaglercraft_Beta-1.2_02.html">Eaglercraft_Beta-1.2_02.html</option>
+                <option value="Eaglercraft_Beta_1.1_02-JAVS.html">Eaglercraft_Beta_1.1_02-JAVS.html</option>
+                <option value="Eaglercraft_Beta_1.0.2.html">Eaglercraft_Beta_1.0.2.html</option>
+                <option value="Eaglercraft_b1.1.html">Eaglercraft_b1.1.html</option>
+                <option value="eaglercraft-alpha-1.2.6-WASM.html">eaglercraft-alpha-1.2.6-WASM.html</option>
+                <option value="eaglercraft-alpha-1.2.6.html">eaglercraft-alpha-1.2.6.html</option>
+                <option value="Eaglercraft alpha 1.0.16_02-JS.html">Eaglercraft alpha 1.0.16_02-JS.html</option>
+                <option value="Eaglercraft alpha 1.0.16_02-WASM.html">Eaglercraft alpha 1.0.16_02-WASM.html</option>
+                <option value="Eaglercraft_Alpha_1.1.2_01.html">Eaglercraft_Alpha_1.1.2_01.html</option>
+                <option value="Eaglercraft Alpha 1.0.6_03.html">Eaglercraft Alpha 1.0.6_03.html</option>
+                <option value="Alpha 1.0.4-JS.html">Alpha 1.0.4-JS.html</option>
+                <option value="Alpha 1.0.1_01-JS.html">Alpha 1.0.1_01-JS.html</option>
+                <option value="infdev-wasm-gc.html">infdev-wasm-gc.html</option>
+                <option value="eagler-indev.html">eagler-indev.html</option>
+                <option value="Eaglercraft Indev 20100219-JS.html">Eaglercraft Indev 20100219-JS.html</option>
+                <option value="Eaglercraft Indev 20100219-WASM.html">Eaglercraft Indev 20100219-WASM.html</option>
+                <option value="Eaglercraft_indev 20100223_JS.html">Eaglercraft_indev 20100223_JS.html</option>
+                <option value="Eaglercraft_indev 20100223_WASM.html">Eaglercraft_indev 20100223_WASM.html</option>
+                <option value="Eaglercraft_indev_20100233-wasm.html">Eaglercraft_indev_20100233-wasm.html</option>
+                <option value="Eaglercraft_indev_20100233.html">Eaglercraft_indev_20100233.html</option>
+                <option value="Indev_20100214_JS.html">Indev_20100214_JS.html</option>
+                <option value="Indev_20100214_WASM-GC.html">Indev_20100214_WASM-GC.html</option>
+                <option value="Classic 0.30-JS.html">Classic 0.30-JS.html</option>
+                <option value="classic-0.30_WASM.html">classic-0.30_WASM.html</option>
+                <option value="Classic 0.25_5-JS.html">Classic 0.25_5-JS.html</option>
+                <option value="Classic 0.25_5-WASM.html">Classic 0.25_5-WASM.html</option>
+                <option value="Classic 0.24_3-JS.html">Classic 0.24_3-JS.html</option>
+                <option value="Classic 0.24_3-WASM.html">Classic 0.24_3-WASM.html</option>
+                <option value="Classic 0.0.23a_01-JS.html">Classic 0.0.23a_01-JS.html</option>
+                <option value="Classic 0.0.23a_01-WASM.html">Classic 0.0.23a_01-WASM.html</option>
+                <option value="Classic 0.0.22a_5-JS.html">Classic 0.0.22a_5-JS.html</option>
+                <option value="Classic 0.0.22a_5-WASM.html">Classic 0.0.22a_5-WASM.html</option>
+                <option value="Classic 0.0.21a-JS.html">Classic 0.0.21a-JS.html</option>
+                <option value="Classic 0.0.21a-WASM.html">Classic 0.0.21a-WASM.html</option>
+                <option value="Classic 0.0.20_2-JS.html">Classic 0.0.20_2-JS.html</option>
+                <option value="Classic 0.0.20_2-WASM.html">Classic 0.0.20_2-WASM.html</option>
+                <option value="Classic 0.0.19a_6-JS.html">Classic 0.0.19a_6-JS.html</option>
+                <option value="Classic 0.0.19a_6-WASM.html">Classic 0.0.19a_6-WASM.html</option>
+                <option value="Classic 0.0.18a_2-JS.html">Classic 0.0.18a_2-JS.html</option>
+                <option value="Classic 0.0.18a_2-WASM.html">Classic 0.0.18a_2-WASM.html</option>
+                <option value="Classic 0.0.17a-JS.html">Classic 0.0.17a-JS.html</option>
+                <option value="Classic 0.0.17a-WASM.html">Classic 0.0.17a-WASM.html</option>
+                <option value="Classic 0.0.16a_2-JS.html">Classic 0.0.16a_2-JS.html</option>
+                <option value="Classic 0.0.16a_2-WASM.html">Classic 0.0.16a_2-WASM.html</option>
+                <option value="Classic 0.0.15a-JS.html">Classic 0.0.15a-JS.html</option>
+                <option value="Classic 0.0.15a-WASM.html">Classic 0.0.15a-WASM.html</option>
+                <option value="Classic 0.0.14a_8-JS.html">Classic 0.0.14a_8-JS.html</option>
+                <option value="Classic 0.0.14a_8-WASM.html">Classic 0.0.14a_8-WASM.html</option>
+                <option value="Classic 0.0.13a_3-JS.html">Classic 0.0.13a_3-JS.html</option>
+                <option value="Classic 0.0.13a_3-WASM.html">Classic 0.0.13a_3-WASM.html</option>
+                <option value="Classic 0.0.12a_3-JS.html">Classic 0.0.12a_3-JS.html</option>
+                <option value="Classic 0.0.12a_3-WASM.html">Classic 0.0.12a_3-WASM.html</option>
+                <option value="Classic 0.0.11a-JS.html">Classic 0.0.11a-JS.html</option>
+                <option value="Classic 0.0.11a-WASM.html">Classic 0.0.11a-WASM.html</option>
+                <option value="pre-release-160052.html">pre-release-160052.html</option>
+                <option value="rd-161348-JS.html">rd-161348-JS.html</option>
+                <option value="rd-161348-WASM.html">rd-161348-WASM.html</option>
+                <option value="rd-160052-JS.html">rd-160052-JS.html</option>
+                <option value="rd-132328-JS.html">rd-132328-JS.html</option>
+                <option value="rd-132328-WASM.html">rd-132328-WASM.html</option>
+                <option value="rd-132211-JS.html">rd-132211-JS.html</option>
+                <option value="rd-132211-WASM.html">rd-132211-WASM.html</option>
+                <option value="rd-131655-JS.html">rd-131655-JS.html</option>
+                <option value="rd-131655-WASM.html">rd-131655-WASM.html</option>
+                <option value="Aero Client JS.html">Aero Client JS.html</option>
+                <option value="EB Client Nextgen CU4.html">EB Client Nextgen CU4.html</option>
+                <option value="Eaglercraft Mobile.html">Eaglercraft Mobile.html</option>
+                <option value="Eaglercraft Scratch.html">Eaglercraft Scratch.html</option>
+                <option value="Eaglercraft-Scratch.html">Eaglercraft-Scratch.html</option>
+                <option value="EaglercraftZ.html">EaglercraftZ.html</option>
+                <option value="eaglercraftx-194.html">eaglercraftx-194.html</option>
+                <option value="Eaglet.html">Eaglet.html</option>
+                <option value="EagletWithNormalResources.html">EagletWithNormalResources.html</option>
+                <option value="EaglyMC.html">EaglyMC.html</option>
+                <option value="Eclipse Client.html">Eclipse Client.html</option>
+                <option value="Huzzium-Client.html">Huzzium-Client.html</option>
+                <option value="Mega Client-JS.html">Mega Client-JS.html</option>
+                <option value="Minicraft.html">Minicraft.html</option>
+                <option value="Myven-Client-WASM.html">Myven-Client-WASM.html</option>
+                <option value="N0VA CLIENT.html">N0VA CLIENT.html</option>
+                <option value="Precision.html">Precision.html</option>
+                <option value="Prism-Client.html">Prism-Client.html</option>
+                <option value="Tuff_Client_WASM.html">Tuff_Client_WASM.html</option>
+                <option value="Water Client.html">Water Client.html</option>
+                <option value="WurstX.html">WurstX.html</option>
+                <option value="eaglercraft-forge-1.0-js.html">eaglercraft-forge-1.0-js.html</option>
+                <option value="eaglercraft-forge-1.0-wasm.html">eaglercraft-forge-1.0-wasm.html</option>
+                <option value="injector.html">injector.html</option>
+                <option value="mc4k.html">mc4k.html</option>
+                <option value="Eaglercraft-4k-JS.html">Eaglercraft-4k-JS.html</option>
+            </select>
+
+            <button class="play-button" onclick="launchGame()">プレイ</button>
+
+            <div class="user-profile">
+                <div class="avatar"></div>
+                <input type="text" class="name-input" id="playerNameInput" value="BATTA_Player" placeholder="名前を入力...">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('BattaLauncher_LastUsername');
+            if (savedName) {
+                document.getElementById('playerNameInput').value = savedName;
+            }
+        });
+
+        function launchGame() {
+            const selectEl = document.getElementById('versionSelect');
+            const targetHtml = selectEl.value;
+
+            let username = document.getElementById('playerNameInput').value.trim();
+            if (!username) username = "Player";
+
+            localStorage.setItem('BattaLauncher_LastUsername', username);
+
+            try {
+                localStorage.setItem('profile_username', username);
+                localStorage.setItem('username', username);
+                localStorage.setItem('eagler_username', username);
+                localStorage.setItem('wispcraft_username', username);
+            } catch (e) {
+                console.error("名前データの書き込みに失敗しました:", e);
+            }
+
+            const btn = document.querySelector('.play-button');
+            btn.innerText = '起動中...';
+            btn.style.backgroundColor = '#666';
+            btn.style.borderBottomColor = '#444';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                window.location.href = targetHtml;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
