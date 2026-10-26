@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BATTA-Launcher</title>
+    <title>Apex-Launcher</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; user-select: none; }
         body { background-color: #1a1a1a; color: #f5f5f5; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
@@ -96,7 +96,7 @@
             
             <!-- 左側ナビゲーション（「カスタムクライアント」タブを新設） -->
             <div class="sidebar">
-                <div class="nav-item active" id="tab-home">BATTA-Launcher</div>
+                <div class="nav-item active" id="tab-home">Apex-Launcher</div>
                 <div class="nav-item" id="tab-client" data-i18n="nav_client">クライアント</div>
                 <div class="nav-item" id="tab-skin" data-i18n="nav_skin">スキン管理</div>
                 <div class="nav-item" id="tab-server" data-i18n="nav_server">サーバーリスト</div>
@@ -107,11 +107,11 @@
             <!-- 中央画面：ホーム（BATTA-Launcher） -->
             <div class="content-body" id="page-home">
                 <div class="logo-area">
-                    <h1 class="logo-text">BATTA-Launcher</h1>
-                    <div class="launcher-sub-title">BATTA-Launcher Edition</div>
+                    <h1 class="logo-text">Apex-Launcher</h1>
+                    <div class="launcher-sub-title">Apex-Launcher Edition</div>
                 </div>
                 <div class="news-card">
-                    <h2 data-i18n="home_h">BATTA-Launcher へようこそ</h2>
+                    <h2 data-i18n="home_h">Apex-Launcher へようこそ</h2>
                     <p data-i18n="home_p">プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！</p>
                 </div>
             </div>
@@ -241,7 +241,7 @@
                     </div>
                     <textarea id="dbgOut" class="dbg-out" readonly rows="8"></textarea>
                 </div>
-                <div class="news-card"><h2>Version 1.0.0</h2><p data-i18n="ver_p">BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
+                <div class="news-card"><h2>Version 1.0.0</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
             </div>
         </div>
 
@@ -439,7 +439,7 @@
 
             <div class="user-profile">
                 <div class="avatar"></div>
-                <input type="text" class="name-input" id="playerNameInput" value="BATTA_Player" data-i18n-ph="name_ph" placeholder="名前を入力...">
+                <input type="text" class="name-input" id="playerNameInput" value="Player_name" data-i18n-ph="name_ph" placeholder="名前を入力...">
             </div>
         </div>
     </div>
@@ -667,13 +667,13 @@
         const I18N = {
             ja: {
                 nav_client:'クライアント', nav_skin:'スキン管理', nav_server:'サーバーリスト', nav_settings:'設定',
-                home_h:'BATTA-Launcher へようこそ', home_p:'プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！',
+                home_h:'Apex-Launcher へようこそ', home_p:'プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！',
                 cl_h:'カスタムクライアント', cl_s:'専用のPVP・軽量化・高機能クライアントを直接起動できます', btn_launch:'起動する',
                 sk_h:'スキン管理（50種）', sk_s:'画像をクリックで3D表示。PNGを保存して、ゲーム内のスキン設定からアップロードしてください', btn_download:'ダウンロード', sk_tip:'クリックで3D表示',
                 sv_h:'マルチサーバーリスト (17選)', sv_s:'アドレスをコピーしてゲーム内のMultiplayer設定で追加してください', btn_copy:'アドレスコピー', copied:'コピーしました！', copy_fail:'コピーに失敗しました',
                 set_h:'ランチャー設定', set_s:'システム設定', lang_h:'言語設定', lang_note:'ランチャーの表示言語を切り替えます。ゲーム内の言語はゲーム側の設定で変更してください。',
                 bg_h:'背景設定', bg_upload:'画像を選ぶ', bg_reset:'リセット', bg_hint:'色を選ぶか、好きな画像を設定できます（このブラウザに保存されます）。', bg_fail:'画像が大きすぎて保存できませんでした（今回のみ適用）',
-                ver_p:'BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。',
+                ver_p:'Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。',
                 play:'プレイ', launching:'起動中...', name_ph:'名前を入力...',
                 dbg_h:'保存データの確認', dbg_note:'ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。', dbg_btn:'確認する', dbg_copy:'コピー',
                 nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人', sv_f_connect:'接続できません', sv_f_noresp:'応答がありません', sv_f_format:'形式が違います', sv_s_ok:'取得成功', sv_auto_on:'自動更新（5秒）: ON', sv_auto_off:'自動更新（5秒）: OFF', sv_ver_label:'対応:', sv_ver_unknown:'未確認', sv_note:'ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8（ランチャーの「1.8.8」や「1.8」）が、多くのサーバーで使えます。1.12.2 や 1.5.2 は、サーバーが対応している場合だけ入れます。カード内の「対応」は、公開リストに載っていたサーバー側のバージョンです。',
@@ -682,13 +682,13 @@
             },
             en: {
                 nav_client:'Clients', nav_skin:'Skins', nav_server:'Server List', nav_settings:'Settings',
-                home_h:'Welcome to BATTA-Launcher', home_p:'Enter your player name, pick a file from the list, then press "Play"!',
+                home_h:'Welcome to Apex-Launcher', home_p:'Enter your player name, pick a file from the list, then press "Play"!',
                 cl_h:'Custom Clients', cl_s:'Launch PVP, lightweight and feature-rich clients directly', btn_launch:'Launch',
                 sk_h:'Skins (50)', sk_s:'Click a preview to view it in 3D. Save the PNG and upload it from the in-game skin settings.', btn_download:'Download', sk_tip:'Click to view in 3D',
                 sv_h:'Multiplayer Server List (17)', sv_s:'Copy an address and add it in the in-game Multiplayer menu', btn_copy:'Copy address', copied:'Copied!', copy_fail:'Copy failed',
                 set_h:'Launcher Settings', set_s:'System settings', lang_h:'Language', lang_note:'Changes the launcher display language. The in-game language is set inside the game.',
                 bg_h:'Background', bg_upload:'Choose image', bg_reset:'Reset', bg_hint:'Pick a color or set your own image (saved in this browser).', bg_fail:'The image was too large to save (applied for this session only)',
-                ver_p:'BATTA-Launcher is a personal custom launcher for organizing and quickly playing web-based Minecraft HTML files.',
+                ver_p:'Apex-Launcher is a personal custom launcher for organizing and quickly playing web-based Minecraft HTML files.',
                 play:'Play', launching:'Launching...', name_ph:'Enter name...',
                 dbg_h:'Saved Data Check', dbg_note:'Press this right after changing your name in the game. Only key names, lengths and the first 60 characters are shown.', dbg_btn:'Check', dbg_copy:'Copy',
                 nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players', sv_f_connect:'Cannot connect', sv_f_noresp:'No response', sv_f_format:'Unknown format', sv_s_ok:'OK', sv_auto_on:'Auto refresh (5s): ON', sv_auto_off:'Auto refresh (5s): OFF', sv_ver_label:'Versions:', sv_ver_unknown:'Unverified', sv_note:'Rule of thumb for the browser (Eaglercraft) client: EaglercraftX 1.8 ("1.8.8" or "1.8" in the launcher) works on most servers. 1.12.2 and 1.5.2 only work if the server supports them. "Versions" on each card is the server-side version from public listings.',
