@@ -158,41 +158,29 @@
             <!-- 中央画面：サーバーリスト（30大サーバーの正しいアドレスを格納） -->
             <div class="content-body" id="page-server" style="display: none; overflow-y: auto; max-height: 100%;">
                 <div class="logo-area">
-                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="sv_h">マルチサーバーリスト (30選)</h1>
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="sv_h">マルチサーバーリスト (17選)</h1>
                     <div class="launcher-sub-title" style="color: #4caf50;" data-i18n="sv_s">アドレスをコピーしてゲーム内のMultiplayer設定で追加してください</div>
                 </div>
                 <div class="bg-row" style="margin-top: 14px;"><button class="copy-btn" id="svRefresh" data-i18n="sv_refresh">更新</button></div>
+                <p class="hint" id="svSummary"></p>
                 <div class="grid-container">
-                    <div class="list-card"><div style="flex:1;"><h2>ArchMC</h2><p class="tr" style="color:#4caf50;">👑 定番ミニゲーム鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://web.archmc.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Meadows</h2><p class="tr" style="color:#4caf50;">🏕️ 生活・サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://sl.asphodel.club')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>CentumRealm</h2><p class="tr" style="color:#4caf50;">💰 経済・トレード鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://play.centumrealm.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>ZenithMC</h2><p class="tr" style="color:#4caf50;">⚡ 24時間ミニゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://join.zenithmc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Sandbox Anarchy</h2><p class="tr" style="color:#ff5555;">⚔️ ルール無用無法地帯</p></div><button class="copy-btn" onclick="copyAddr('wss://legendary-sandbox.com')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>VanillaMC</h2><p class="tr" style="color:#4caf50;">🌲 純バニラサバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://play.vanillamc.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>CraftRise Web</h2><p class="tr" style="color:#4caf50;">👑 巨大ロビーサーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://eagler.craftrise.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>DeltaMC</h2><p class="tr" style="color:#4caf50;">🏹 BedWars特化鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.delta-mc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>HyperNetwork</h2><p class="tr" style="color:#4caf50;">⚔️ PVP練習・対戦</p></div><button class="copy-btn" onclick="copyAddr('wss://play.hyper-network.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>ComradeMC</h2><p class="tr" style="color:#4caf50;">🎨 クリエイティブ建築</p></div><button class="copy-btn" onclick="copyAddr('wss://eagler.comrademc.club')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Eagler PvP</h2><p class="tr" style="color:#ffaa00;">⚔️ 1v1ガチ対戦鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://pvp.eaglercraft.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Arch BedWars</h2><p class="tr" style="color:#ffaa00;">🏹 専用アリーナ</p></div><button class="copy-btn" onclick="copyAddr('wss://bw.archmc.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>ComboMC</h2><p class="tr" style="color:#ffaa00;">⚔️ KBエイム練習鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://combomc.org/eagler')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Vortex Network</h2><p class="tr" style="color:#ffaa00;">☁️ スカイブロック</p></div><button class="copy-btn" onclick="copyAddr('wss://play.vortexmc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>AresPVP</h2><p class="tr" style="color:#ffaa00;">⚔️ 大会向け競技PVP</p></div><button class="copy-btn" onclick="copyAddr('wss://arespvp.com')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>RivalMC</h2><p class="tr" style="color:#ffaa00;">⚡ ド派手ミニゲーム鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.rivalmc.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Nexus Network</h2><p class="tr" style="color:#ffaa00;">🎮 特製カスタムゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://nexus-eagler.com')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>FuriousPVP</h2><p class="tr" style="color:#ffaa00;">⚔️ 派閥争い拠点破壊</p></div><button class="copy-btn" onclick="copyAddr('wss://web.furiouspvp.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>PixelPVP</h2><p class="tr" style="color:#ffaa00;">⚔️ カジュアル戦闘鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://play.pixelpvp.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>StrikeMC</h2><p class="tr" style="color:#ffaa00;">🔫 マイクラ銃撃戦鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://strike-mc.com')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Eagler Anarchy</h2><p class="tr" style="color:#ff5555;">⚔️ 公式無法アナーキー</p></div><button class="copy-btn" onclick="copyAddr('wss://anarchy.eaglercraft.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Centum SMP</h2><p class="tr" style="color:#55ff55;">🌲 建築中心の生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://smp.centumrealm.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>PrismMC</h2><p class="tr" style="color:#55ff55;">🌲 まったり農業街開拓</p></div><button class="copy-btn" onclick="copyAddr('wss://play.prismmc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Asphodel Economy</h2><p class="tr" style="color:#55ff55;">🌲 貿易システム経済鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://eco.asphodel.club')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Aurora SMP</h2><p class="tr" style="color:#55ff55;">🌲 初心者歓迎生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://aurora.craftmc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>9b9t Web</h2><p class="tr" style="color:#ff5555;">⚔️ 完全チート不問破壊</p></div><button class="copy-btn" onclick="copyAddr('wss://9b9t.eagler.club')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Aether SMP</h2><p class="tr" style="color:#55ff55;">🌲 天空サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://play.aether-smp.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Wild SMP</h2><p class="tr" style="color:#ff5555;">⚔️ 無法開拓サバイバル</p></div><button class="copy-btn" onclick="copyAddr('wss://web.wild-smp.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Oasis Network</h2><p class="tr" style="color:#55ff55;">🌲 建国システム経済鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://join.oasis-mc.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Legacy SMP</h2><p class="tr" style="color:#55ff55;">🌲 古き良き生活鯖</p></div><button class="copy-btn" onclick="copyAddr('wss://legacy-smp.com')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ArchMC</h2><p class="tr" style="color:#4caf50;">👑 大規模サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.arch.lol')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Zentic</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://zentic.cc')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Jonarchy</h2><p class="tr" style="color:#4caf50;">⚔️ アナーキー系</p></div><button class="copy-btn" onclick="copyAddr('wss://8b4t.org')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Beaglecraft</h2><p class="tr" style="color:#4caf50;">🎮 Java・Bedrockも対応</p></div><button class="copy-btn" onclick="copyAddr('wss://eaglercraft.beaglecraft.online')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Clever Teaching</h2><p class="tr" style="color:#4caf50;">🌲 サバイバル・ミニゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://clever-teaching.com')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>mc.zyth.me</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.zyth.me')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>play.webmc.fun</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://play.webmc.fun')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>asianf4rmer</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://asianf4rmer.minecraft.pe')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>shhnowisnottheti</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://sus.shhnowisnottheti.me')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Aeon Network</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://aeon-network.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>adderall.ir</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://adderall.ir')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Lamp Lifesteal</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.lamplifesteal.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>VanillaMC</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://vanillamc.org')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Voidsent</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.voidsent.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>mc.dssx.uk</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.dssx.uk')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>xena.wtf</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://xena.wtf')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>tuff.ws</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://tuff.ws')" data-i18n="btn_copy">アドレスコピー</button></div>
                 </div>
             </div>
 
@@ -652,13 +640,13 @@
                 home_h:'BATTA-Launcher へようこそ', home_p:'プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！',
                 cl_h:'カスタムクライアント', cl_s:'専用のPVP・軽量化・高機能クライアントを直接起動できます', btn_launch:'起動する',
                 sk_h:'スキン管理（50種）', sk_s:'画像をクリックで3D表示。PNGを保存して、ゲーム内のスキン設定からアップロードしてください', btn_download:'ダウンロード', sk_tip:'クリックで3D表示',
-                sv_h:'マルチサーバーリスト (30選)', sv_s:'アドレスをコピーしてゲーム内のMultiplayer設定で追加してください', btn_copy:'アドレスコピー', copied:'コピーしました！', copy_fail:'コピーに失敗しました',
+                sv_h:'マルチサーバーリスト (17選)', sv_s:'アドレスをコピーしてゲーム内のMultiplayer設定で追加してください', btn_copy:'アドレスコピー', copied:'コピーしました！', copy_fail:'コピーに失敗しました',
                 set_h:'ランチャー設定', set_s:'システム設定', lang_h:'言語設定', lang_note:'ランチャーの表示言語を切り替えます。ゲーム内の言語はゲーム側の設定で変更してください。',
                 bg_h:'背景設定', bg_upload:'画像を選ぶ', bg_reset:'リセット', bg_hint:'色を選ぶか、好きな画像を設定できます（このブラウザに保存されます）。', bg_fail:'画像が大きすぎて保存できませんでした（今回のみ適用）',
                 ver_p:'BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。',
                 play:'プレイ', launching:'起動中...', name_ph:'名前を入力...',
                 dbg_h:'保存データの確認', dbg_note:'ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。', dbg_btn:'確認する', dbg_copy:'コピー',
-                nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人',
+                nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人', sv_f_connect:'接続できません', sv_f_noresp:'応答がありません', sv_f_format:'形式が違います', sv_s_ok:'取得成功',
                 sk_close:'閉じる', btn_3d:'3D表示', sk3d_hint:'ドラッグで回転できます', my_h:'マイスキン（自分で追加）', my_add:'PNGを追加', my_note:'NovaSkinなどのサイトから、自分でダウンロードしたPNG（64×64 または 64×32）を追加できます。このブラウザの中だけに保存され、サイトには公開されません。他の人のスキンは作者の作品なので、各サイトの利用規約に従って、個人で使ってください。', my_bad:'64×64 または 64×32 のPNGだけ追加できます', my_full:'保存容量がいっぱいで保存できませんでした', my_del:'削除',
                 sk_look_h:'ユーザー名でスキンを取得', sk_look_ph:'Minecraftのユーザー名', sk_look_btn:'取得', sk_look_loading:'取得中...', sk_look_fail:'スキンを取得できませんでした（サービスに接続できません）', sk_look_bad:'ユーザー名は英数字とアンダースコアの1〜16文字で入力してください', sk_look_note:'実在するプレイヤーのスキンを、Minotarというサービスから取得します。存在しない名前は初期スキンになります。他の人のスキンはその作者の作品なので、個人で使う範囲にしてください。'
             },
@@ -667,19 +655,19 @@
                 home_h:'Welcome to BATTA-Launcher', home_p:'Enter your player name, pick a file from the list, then press "Play"!',
                 cl_h:'Custom Clients', cl_s:'Launch PVP, lightweight and feature-rich clients directly', btn_launch:'Launch',
                 sk_h:'Skins (50)', sk_s:'Click a preview to view it in 3D. Save the PNG and upload it from the in-game skin settings.', btn_download:'Download', sk_tip:'Click to view in 3D',
-                sv_h:'Multiplayer Server List (30)', sv_s:'Copy an address and add it in the in-game Multiplayer menu', btn_copy:'Copy address', copied:'Copied!', copy_fail:'Copy failed',
+                sv_h:'Multiplayer Server List (17)', sv_s:'Copy an address and add it in the in-game Multiplayer menu', btn_copy:'Copy address', copied:'Copied!', copy_fail:'Copy failed',
                 set_h:'Launcher Settings', set_s:'System settings', lang_h:'Language', lang_note:'Changes the launcher display language. The in-game language is set inside the game.',
                 bg_h:'Background', bg_upload:'Choose image', bg_reset:'Reset', bg_hint:'Pick a color or set your own image (saved in this browser).', bg_fail:'The image was too large to save (applied for this session only)',
                 ver_p:'BATTA-Launcher is a personal custom launcher for organizing and quickly playing web-based Minecraft HTML files.',
                 play:'Play', launching:'Launching...', name_ph:'Enter name...',
                 dbg_h:'Saved Data Check', dbg_note:'Press this right after changing your name in the game. Only key names, lengths and the first 60 characters are shown.', dbg_btn:'Check', dbg_copy:'Copy',
-                nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players',
+                nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players', sv_f_connect:'Cannot connect', sv_f_noresp:'No response', sv_f_format:'Unknown format', sv_s_ok:'OK',
                 sk_close:'Close', btn_3d:'View 3D', sk3d_hint:'Drag to rotate', my_h:'My Skins (add your own)', my_add:'Add PNG', my_note:'Add PNG files (64x64 or 64x32) that you downloaded yourself from sites such as NovaSkin. They are stored only in this browser and are not published on the site. Other people\'s skins are their creators\' work, so follow each site\'s terms and keep it to personal use.', my_bad:'Only 64x64 or 64x32 PNG files can be added', my_full:'Storage is full, could not save', my_del:'Delete',
                 sk_look_h:'Get a skin by username', sk_look_ph:'Minecraft username', sk_look_btn:'Get', sk_look_loading:'Loading...', sk_look_fail:'Could not get the skin (cannot reach the service)', sk_look_bad:'Enter 1-16 letters, digits or underscores', sk_look_note:'Fetches the skin of a real player from a service called Minotar. Unknown names return a default skin. Other people\'s skins are their creators\' work, so keep it to personal use.'
             }
         };
         const SKIN_EN = ["Knight", "Ninja", "Robot", "Pirate", "Wizard", "Farmer", "Astronaut", "Zombie", "Skeleton", "Doctor", "Chef", "Explorer", "Cyber", "Dragon Warrior", "Cat", "Panda", "Santa", "King", "Vampire", "Ghost", "Police Officer", "Firefighter", "Pilot", "Samurai", "Elf", "Dwarf", "Witch", "Hunter", "Ice Warrior", "Fire Warrior", "White Ninja", "Red Robot", "Student", "Soccer Player", "Diver", "Musician", "Cowboy", "Warrior", "Mummy", "Alien", "Scientist", "Carpenter", "Prince", "Snowman", "Pumpkin", "Idol", "Racer", "Camo", "Stealth", "Gold"];
-        const TR_EN = {"PVP・軽量化クライアント": "PVP / lightweight client", "高機能・ハッククライアント": "Feature-rich / hacked client", "PVP向け軽量カスタム": "Lightweight PVP custom", "定番PVPクライアント": "Popular PVP client", "スタイリッシュUI": "Stylish UI", "FPSブースト・軽量化": "FPS boost & lightweight", "各種設定拡張版": "Extended settings edition", "チート・ユーティリティ": "Cheats & utilities", "次世代型多機能仕様": "Next-gen multi-feature build", "鮮やかなエフェクト": "Vivid effects", "WASM動作・安定化版": "WASM, stability build", "低スペックPC向け": "For low-spec PCs", "最新ベースカスタム": "Latest-base custom", "PVPコンボ特化": "Combo-PVP focused", "ズーム・ヒットボックス微調整": "Zoom & hitbox tweaks", "定番ミニゲーム鯖": "Classic minigames server", "生活・サバイバル": "Life & survival", "経済・トレード鯖": "Economy & trading", "24時間ミニゲーム": "24/7 minigames", "ルール無用無法地帯": "Lawless, no rules", "純バニラサバイバル": "Pure vanilla survival", "巨大ロビーサーバー": "Huge lobby server", "BedWars特化鯖": "BedWars specialist", "PVP練習・対戦": "PVP practice & matches", "クリエイティブ建築": "Creative building", "1v1ガチ対戦鯖": "Serious 1v1 duels", "専用アリーナ": "Dedicated arenas", "KBエイム練習鯖": "KB & aim practice", "スカイブロック": "Skyblock", "大会向け競技PVP": "Competitive tournament PVP", "ド派手ミニゲーム鯖": "Flashy minigames", "特製カスタムゲーム": "Custom-made games", "派閥争い拠点破壊": "Faction wars & base raiding", "カジュアル戦闘鯖": "Casual combat", "マイクラ銃撃戦鯖": "Gunfight server", "公式無法アナーキー": "Official anarchy", "建築中心の生活鯖": "Building-focused survival", "まったり農業街開拓": "Relaxed farming & towns", "貿易システム経済鯖": "Trade-system economy", "初心者歓迎生活鯖": "Beginner-friendly survival", "完全チート不問破壊": "Cheats allowed, total chaos", "天空サバイバル": "Sky survival", "無法開拓サバイバル": "Lawless frontier survival", "建国システム経済鯖": "Nation-building economy", "古き良き生活鯖": "Old-school survival"};
+        const TR_EN = {"PVP・軽量化クライアント": "PVP / lightweight client", "高機能・ハッククライアント": "Feature-rich / hacked client", "PVP向け軽量カスタム": "Lightweight PVP custom", "定番PVPクライアント": "Popular PVP client", "スタイリッシュUI": "Stylish UI", "FPSブースト・軽量化": "FPS boost & lightweight", "各種設定拡張版": "Extended settings edition", "チート・ユーティリティ": "Cheats & utilities", "次世代型多機能仕様": "Next-gen multi-feature build", "鮮やかなエフェクト": "Vivid effects", "WASM動作・安定化版": "WASM, stability build", "低スペックPC向け": "For low-spec PCs", "最新ベースカスタム": "Latest-base custom", "PVPコンボ特化": "Combo-PVP focused", "ズーム・ヒットボックス微調整": "Zoom & hitbox tweaks", "定番ミニゲーム鯖": "Classic minigames server", "生活・サバイバル": "Life & survival", "経済・トレード鯖": "Economy & trading", "24時間ミニゲーム": "24/7 minigames", "ルール無用無法地帯": "Lawless, no rules", "純バニラサバイバル": "Pure vanilla survival", "巨大ロビーサーバー": "Huge lobby server", "BedWars特化鯖": "BedWars specialist", "PVP練習・対戦": "PVP practice & matches", "クリエイティブ建築": "Creative building", "1v1ガチ対戦鯖": "Serious 1v1 duels", "専用アリーナ": "Dedicated arenas", "KBエイム練習鯖": "KB & aim practice", "スカイブロック": "Skyblock", "大会向け競技PVP": "Competitive tournament PVP", "ド派手ミニゲーム鯖": "Flashy minigames", "特製カスタムゲーム": "Custom-made games", "派閥争い拠点破壊": "Faction wars & base raiding", "カジュアル戦闘鯖": "Casual combat", "マイクラ銃撃戦鯖": "Gunfight server", "公式無法アナーキー": "Official anarchy", "建築中心の生活鯖": "Building-focused survival", "まったり農業街開拓": "Relaxed farming & towns", "貿易システム経済鯖": "Trade-system economy", "初心者歓迎生活鯖": "Beginner-friendly survival", "完全チート不問破壊": "Cheats allowed, total chaos", "天空サバイバル": "Sky survival", "無法開拓サバイバル": "Lawless frontier survival", "建国システム経済鯖": "Nation-building economy", "古き良き生活鯖": "Old-school survival", "大規模サーバー": "Large server", "公開サーバー": "Public server", "アナーキー系": "Anarchy", "Java・Bedrockも対応": "Java & Bedrock supported", "サバイバル・ミニゲーム": "Survival & minigames"};
         let LANG = 'ja';
         try { LANG = localStorage.getItem('BattaLauncher_Lang') || 'ja'; } catch (e) {}
         if (!I18N[LANG]) LANG = 'ja';
@@ -841,25 +829,29 @@
         // ===== サーバーの人数・アイコン取得（Eaglerの "Accept: MOTD" クエリ） =====
         function pingServer(addr, timeout) {
             return new Promise(resolve => {
-                let ws, done = false, info = null, timer;
-                const fin = r => { if (done) return; done = true; clearTimeout(timer); try { ws.close(); } catch (e) {} resolve(r); };
-                try { ws = new WebSocket(addr); } catch (e) { return resolve(null); }
+                let ws, done = false, info = null, opened = false, raw = null, timer;
+                const fin = () => {
+                    if (done) return; done = true; clearTimeout(timer); try { ws.close(); } catch (e) {}
+                    resolve(info ? { info: info } : { fail: !opened ? 'connect' : (raw !== null ? 'format' : 'noresp'), raw: raw });
+                };
+                try { ws = new WebSocket(addr); } catch (e) { return resolve({ fail: 'connect', raw: String(e) }); }
                 ws.binaryType = 'arraybuffer';
-                timer = setTimeout(() => fin(info), timeout || 7000);
-                ws.onopen = () => { try { ws.send('Accept: MOTD'); } catch (e) { fin(null); } };
-                ws.onerror = () => fin(info);
-                ws.onclose = () => fin(info);
+                timer = setTimeout(fin, timeout || 7000);
+                ws.onopen = () => { opened = true; try { ws.send('Accept: MOTD'); } catch (e) { fin(); } };
+                ws.onerror = fin; ws.onclose = fin;
                 ws.onmessage = ev => {
                     if (typeof ev.data === 'string') {
+                        if (raw === null) raw = ev.data.slice(0, 300);
                         try {
                             const d = (JSON.parse(ev.data).data) || {};
                             if (typeof d.online !== 'undefined') {
                                 info = { online: d.online, max: d.max, icon: null };
-                                if (d.icon) setTimeout(() => fin(info), 2500); else fin(info);
+                                if (d.icon) setTimeout(fin, 2500); else fin();
                             }
                         } catch (e) {}
-                    } else if (info && ev.data.byteLength === 16384) {
-                        info.icon = new Uint8ClampedArray(ev.data); fin(info);
+                    } else {
+                        if (raw === null) raw = '(binary ' + ev.data.byteLength + ' bytes)';
+                        if (info && ev.data.byteLength === 16384) { info.icon = new Uint8ClampedArray(ev.data); fin(); }
                     }
                 };
             });
@@ -878,23 +870,39 @@
                 card.insertBefore(cv, card.firstChild); card.firstElementChild.nextElementSibling.appendChild(stat);
                 return { addr: m[1], cv, stat };
             }).filter(Boolean);
+            const KEYS = { connect: 'sv_f_connect', noresp: 'sv_f_noresp', format: 'sv_f_format' };
             const render = el => {
                 const st = el.dataset.state;
                 if (st === 'ok') { el.textContent = '● ' + el.dataset.on + ' / ' + el.dataset.max + ' ' + t('sv_people'); el.style.color = '#4caf50'; }
-                else if (st === 'fail') { el.textContent = '● ' + t('sv_unavail'); el.style.color = '#888888'; }
+                else if (st === 'fail') { el.textContent = '● ' + t(KEYS[el.dataset.reason] || 'sv_unavail'); el.style.color = '#888888'; }
                 else { el.textContent = '… ' + t('sv_checking'); el.style.color = '#aaaaaa'; }
             };
-            window.updateSvStat = () => items.forEach(it => render(it.stat));
-            const refresh = () => items.forEach(it => {
-                it.stat.dataset.state = 'loading'; render(it.stat);
-                pingServer(it.addr).then(info => {
-                    if (info) {
-                        it.stat.dataset.state = 'ok'; it.stat.dataset.on = info.online; it.stat.dataset.max = info.max;
-                        if (info.icon) it.cv.getContext('2d').putImageData(new ImageData(info.icon, 64, 64), 0, 0);
-                    } else { it.stat.dataset.state = 'fail'; }
-                    render(it.stat);
-                });
-            });
+            let last = null;
+            const showSummary = () => {
+                const el = document.getElementById('svSummary');
+                if (!last) { el.textContent = ''; return; }
+                const c = last.c;
+                el.textContent = [t('sv_s_ok') + ' ' + c.ok, t('sv_f_connect') + ' ' + c.connect, t('sv_f_noresp') + ' ' + c.noresp, t('sv_f_format') + ' ' + c.format].join(' / ') +
+                    (last.sample ? ' | ' + last.sample.slice(0, 150) : '');
+            };
+            window.updateSvStat = () => { items.forEach(it => render(it.stat)); showSummary(); };
+            const refresh = () => {
+                last = null; showSummary();
+                const c = { ok: 0, connect: 0, noresp: 0, format: 0 }; let sample = '';
+                Promise.all(items.map(it => {
+                    it.stat.dataset.state = 'loading'; render(it.stat);
+                    return pingServer(it.addr).then(r => {
+                        if (r.info) {
+                            c.ok++; it.stat.dataset.state = 'ok'; it.stat.dataset.on = r.info.online; it.stat.dataset.max = r.info.max;
+                            if (r.info.icon) it.cv.getContext('2d').putImageData(new ImageData(r.info.icon, 64, 64), 0, 0);
+                        } else {
+                            c[r.fail]++; it.stat.dataset.state = 'fail'; it.stat.dataset.reason = r.fail; it.stat.title = r.raw || '';
+                            if (r.fail === 'format' && !sample) sample = r.raw || '';
+                        }
+                        render(it.stat);
+                    });
+                })).then(() => { last = { c: c, sample: sample }; showSummary(); });
+            };
             let loaded = false;
             document.getElementById('tab-server').addEventListener('click', () => { if (!loaded) { loaded = true; refresh(); } });
             document.getElementById('svRefresh').addEventListener('click', () => { loaded = true; refresh(); });
