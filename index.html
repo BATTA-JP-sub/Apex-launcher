@@ -83,6 +83,7 @@
         .pill { display: inline-block; font-size: 10px; font-weight: bold; line-height: 1; padding: 3px 8px; border-radius: 999px; color: #ffffff; flex-shrink: 0; }
         .k-wasm { background: #2e8b57; } .k-wasmgc { background: #16a085; } .k-js { background: #d68910; }
         .sv-ver { font-size: 11px; color: #aaaaaa; margin-top: 4px; line-height: 1.4; }
+        .copy-btn.off { background: #555555; }
         .sv-icon { width: 48px; height: 48px; image-rendering: pixelated; border-radius: 4px; flex-shrink: 0; background: #222222; }
         .sv-stat { font-size: 12px; margin-top: 4px; }
         .hint { font-size: 12px; color: #aaaaaa; line-height: 1.5; }
@@ -181,7 +182,8 @@
                     <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="sv_h">マルチサーバーリスト (17選)</h1>
                     <div class="launcher-sub-title" style="color: #4caf50;" data-i18n="sv_s">アドレスをコピーしてゲーム内のMultiplayer設定で追加してください</div>
                 </div>
-                <div class="bg-row" style="margin-top: 14px;"><button class="copy-btn" id="svRefresh" data-i18n="sv_refresh">更新</button></div>
+                <div class="bg-row" style="margin-top: 14px;"><button class="copy-btn" id="svRefresh" data-i18n="sv_refresh">更新</button>
+                    <button class="copy-btn" id="svAuto"></button></div>
                 <p class="hint" id="svSummary"></p>
                 <p class="hint" data-i18n="sv_note">ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8 が、多くのサーバーで使えます。</p>
                 <div class="grid-container">
@@ -674,7 +676,7 @@
                 ver_p:'BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。',
                 play:'プレイ', launching:'起動中...', name_ph:'名前を入力...',
                 dbg_h:'保存データの確認', dbg_note:'ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。', dbg_btn:'確認する', dbg_copy:'コピー',
-                nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人', sv_f_connect:'接続できません', sv_f_noresp:'応答がありません', sv_f_format:'形式が違います', sv_s_ok:'取得成功', sv_ver_label:'対応:', sv_ver_unknown:'未確認', sv_note:'ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8（ランチャーの「1.8.8」や「1.8」）が、多くのサーバーで使えます。1.12.2 や 1.5.2 は、サーバーが対応している場合だけ入れます。カード内の「対応」は、公開リストに載っていたサーバー側のバージョンです。',
+                nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人', sv_f_connect:'接続できません', sv_f_noresp:'応答がありません', sv_f_format:'形式が違います', sv_s_ok:'取得成功', sv_auto_on:'自動更新（5秒）: ON', sv_auto_off:'自動更新（5秒）: OFF', sv_ver_label:'対応:', sv_ver_unknown:'未確認', sv_note:'ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8（ランチャーの「1.8.8」や「1.8」）が、多くのサーバーで使えます。1.12.2 や 1.5.2 は、サーバーが対応している場合だけ入れます。カード内の「対応」は、公開リストに載っていたサーバー側のバージョンです。',
                 sk_close:'閉じる', btn_3d:'3D表示', sk3d_hint:'ドラッグで回転できます', my_h:'マイスキン（自分で追加）', my_add:'PNGを追加', my_note:'NovaSkinなどのサイトから、自分でダウンロードしたPNG（64×64 または 64×32）を追加できます。このブラウザの中だけに保存され、サイトには公開されません。他の人のスキンは作者の作品なので、各サイトの利用規約に従って、個人で使ってください。', my_bad:'64×64 または 64×32 のPNGだけ追加できます', my_full:'保存容量がいっぱいで保存できませんでした', my_del:'削除',
                 sk_look_h:'ユーザー名でスキンを取得', sk_look_ph:'Minecraftのユーザー名', sk_look_btn:'取得', sk_look_loading:'取得中...', sk_look_fail:'スキンを取得できませんでした（サービスに接続できません）', sk_look_bad:'ユーザー名は英数字とアンダースコアの1〜16文字で入力してください', sk_look_note:'実在するプレイヤーのスキンを、Minotarというサービスから取得します。存在しない名前は初期スキンになります。他の人のスキンはその作者の作品なので、個人で使う範囲にしてください。'
             },
@@ -689,7 +691,7 @@
                 ver_p:'BATTA-Launcher is a personal custom launcher for organizing and quickly playing web-based Minecraft HTML files.',
                 play:'Play', launching:'Launching...', name_ph:'Enter name...',
                 dbg_h:'Saved Data Check', dbg_note:'Press this right after changing your name in the game. Only key names, lengths and the first 60 characters are shown.', dbg_btn:'Check', dbg_copy:'Copy',
-                nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players', sv_f_connect:'Cannot connect', sv_f_noresp:'No response', sv_f_format:'Unknown format', sv_s_ok:'OK', sv_ver_label:'Versions:', sv_ver_unknown:'Unverified', sv_note:'Rule of thumb for the browser (Eaglercraft) client: EaglercraftX 1.8 ("1.8.8" or "1.8" in the launcher) works on most servers. 1.12.2 and 1.5.2 only work if the server supports them. "Versions" on each card is the server-side version from public listings.',
+                nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players', sv_f_connect:'Cannot connect', sv_f_noresp:'No response', sv_f_format:'Unknown format', sv_s_ok:'OK', sv_auto_on:'Auto refresh (5s): ON', sv_auto_off:'Auto refresh (5s): OFF', sv_ver_label:'Versions:', sv_ver_unknown:'Unverified', sv_note:'Rule of thumb for the browser (Eaglercraft) client: EaglercraftX 1.8 ("1.8.8" or "1.8" in the launcher) works on most servers. 1.12.2 and 1.5.2 only work if the server supports them. "Versions" on each card is the server-side version from public listings.',
                 sk_close:'Close', btn_3d:'View 3D', sk3d_hint:'Drag to rotate', my_h:'My Skins (add your own)', my_add:'Add PNG', my_note:'Add PNG files (64x64 or 64x32) that you downloaded yourself from sites such as NovaSkin. They are stored only in this browser and are not published on the site. Other people\'s skins are their creators\' work, so follow each site\'s terms and keep it to personal use.', my_bad:'Only 64x64 or 64x32 PNG files can be added', my_full:'Storage is full, could not save', my_del:'Delete',
                 sk_look_h:'Get a skin by username', sk_look_ph:'Minecraft username', sk_look_btn:'Get', sk_look_loading:'Loading...', sk_look_fail:'Could not get the skin (cannot reach the service)', sk_look_bad:'Enter 1-16 letters, digits or underscores', sk_look_note:'Fetches the skin of a real player from a service called Minotar. Unknown names return a default skin. Other people\'s skins are their creators\' work, so keep it to personal use.'
             }
@@ -911,16 +913,26 @@
                 const el = document.getElementById('svSummary');
                 if (!last) { el.textContent = ''; return; }
                 const c = last.c;
-                el.textContent = [t('sv_s_ok') + ' ' + c.ok, t('sv_f_connect') + ' ' + c.connect, t('sv_f_noresp') + ' ' + c.noresp, t('sv_f_format') + ' ' + c.format].join(' / ') +
+                el.textContent = last.time + '  ' + [t('sv_s_ok') + ' ' + c.ok, t('sv_f_connect') + ' ' + c.connect, t('sv_f_noresp') + ' ' + c.noresp, t('sv_f_format') + ' ' + c.format].join(' / ') +
                     (last.sample ? ' | ' + last.sample.slice(0, 150) : '');
             };
-            window.updateSvStat = () => { items.forEach(it => render(it.stat)); showSummary(); };
-            const refresh = () => {
-                last = null; showSummary();
+            let autoOn = true;
+            try { autoOn = localStorage.getItem('BattaLauncher_SvAuto') !== '0'; } catch (e) {}
+            window.updateSvStat = () => {
+                items.forEach(it => render(it.stat)); showSummary();
+                const b = document.getElementById('svAuto'); b.textContent = t(autoOn ? 'sv_auto_on' : 'sv_auto_off'); b.classList.toggle('off', !autoOn);
+            };
+            let busy = false;
+            const pad = n => String(n).padStart(2, '0');
+            // auto=true のときは「確認中...」に戻さず、前の表示を残したまま静かに更新する
+            const refresh = auto => {
+                if (busy) return;
+                busy = true;
+                if (!auto) { last = null; showSummary(); }
                 const c = { ok: 0, connect: 0, noresp: 0, format: 0 }; let sample = '';
                 Promise.all(items.map(it => {
-                    it.stat.dataset.state = 'loading'; render(it.stat);
-                    return pingServer(it.addr).then(r => {
+                    if (!auto) { it.stat.dataset.state = 'loading'; render(it.stat); }
+                    return pingServer(it.addr, auto ? 4500 : 7000).then(r => {
                         if (r.info) {
                             c.ok++; it.stat.dataset.state = 'ok'; it.stat.dataset.on = r.info.online; it.stat.dataset.max = r.info.max;
                             if (r.info.icon) it.cv.getContext('2d').putImageData(new ImageData(r.info.icon, 64, 64), 0, 0);
@@ -930,11 +942,24 @@
                         }
                         render(it.stat);
                     });
-                })).then(() => { last = { c: c, sample: sample }; showSummary(); });
+                })).then(() => {
+                    const d = new Date();
+                    last = { c: c, sample: sample, time: pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()) };
+                    showSummary(); busy = false;
+                });
             };
             let loaded = false;
-            document.getElementById('tab-server').addEventListener('click', () => { if (!loaded) { loaded = true; refresh(); } });
-            document.getElementById('svRefresh').addEventListener('click', () => { loaded = true; refresh(); });
+            document.getElementById('tab-server').addEventListener('click', () => { if (!loaded) { loaded = true; refresh(false); } });
+            document.getElementById('svRefresh').addEventListener('click', () => { loaded = true; refresh(false); });
+            document.getElementById('svAuto').addEventListener('click', () => {
+                autoOn = !autoOn;
+                try { localStorage.setItem('BattaLauncher_SvAuto', autoOn ? '1' : '0'); } catch (e) {}
+                window.updateSvStat();
+            });
+            // 5秒ごとに更新（サーバータブを開いていて、画面が見えているときだけ）
+            setInterval(() => {
+                if (autoOn && !document.hidden && document.getElementById('tab-server').classList.contains('active')) refresh(true);
+            }, 5000);
             window.updateSvStat();
             setLang(LANG);
         })();
