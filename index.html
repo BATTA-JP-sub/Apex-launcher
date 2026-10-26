@@ -63,6 +63,26 @@
         .sk3d-model { position: relative; width: 0; height: 0; transform-style: preserve-3d; }
         .sk3d-part { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
         .sk3d-face { position: absolute; backface-visibility: hidden; background-image: var(--skin); background-repeat: no-repeat; image-rendering: pixelated; }
+        .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+        .tag { display: inline-block; font-size: 10px; font-weight: bold; line-height: 1; padding: 3px 9px; border-radius: 999px; color: #ffffff; white-space: nowrap; }
+        .t-pvp { background: #c0392b; } .t-anarchy { background: #e67e22; } .t-semi { background: #b9770e; } .t-survival { background: #2e8b57; }
+        .t-minigame { background: #2980b9; } .t-large { background: #8e44ad; } .t-cross { background: #16a085; } .t-lifesteal { background: #d6336c; }
+        .t-vanilla { background: #6b8e23; } .t-unknown { background: #666666; }
+        .version-selector-container { position: relative; }
+        #versionSelect { display: none; }
+        .vs-btn { width: 100%; background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 10px 15px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; text-align: left; outline: none; }
+        .vs-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .vs-caret { margin-left: auto; font-size: 10px; color: #aaaaaa; }
+        .vs-pop { display: none; position: absolute; left: 0; bottom: calc(100% + 6px); width: 100%; min-width: 300px; background-color: #1e1e1e; border: 1px solid #444444; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,0.6); z-index: 50; flex-direction: column; padding: 8px; gap: 6px; }
+        .vs-pop.open { display: flex; }
+        .vs-search { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 6px 10px; border-radius: 4px; font-size: 13px; outline: none; user-select: text; }
+        .vs-list { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+        .vs-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+        .vs-item:hover { background-color: #2f2f2f; }
+        .vs-item.sel { background-color: #2a3d2a; }
+        .pill { display: inline-block; font-size: 10px; font-weight: bold; line-height: 1; padding: 3px 8px; border-radius: 999px; color: #ffffff; flex-shrink: 0; }
+        .k-wasm { background: #2e8b57; } .k-wasmgc { background: #16a085; } .k-js { background: #d68910; }
+        .sv-ver { font-size: 11px; color: #aaaaaa; margin-top: 4px; line-height: 1.4; }
         .sv-icon { width: 48px; height: 48px; image-rendering: pixelated; border-radius: 4px; flex-shrink: 0; background: #222222; }
         .sv-stat { font-size: 12px; margin-top: 4px; }
         .hint { font-size: 12px; color: #aaaaaa; line-height: 1.5; }
@@ -163,24 +183,25 @@
                 </div>
                 <div class="bg-row" style="margin-top: 14px;"><button class="copy-btn" id="svRefresh" data-i18n="sv_refresh">更新</button></div>
                 <p class="hint" id="svSummary"></p>
+                <p class="hint" data-i18n="sv_note">ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8 が、多くのサーバーで使えます。</p>
                 <div class="grid-container">
-                    <div class="list-card"><div style="flex:1;"><h2>ArchMC</h2><p class="tr" style="color:#4caf50;">👑 大規模サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.arch.lol')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Zentic</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://zentic.cc')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Jonarchy</h2><p class="tr" style="color:#4caf50;">⚔️ アナーキー系</p></div><button class="copy-btn" onclick="copyAddr('wss://8b4t.org')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Beaglecraft</h2><p class="tr" style="color:#4caf50;">🎮 Java・Bedrockも対応</p></div><button class="copy-btn" onclick="copyAddr('wss://eaglercraft.beaglecraft.online')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Clever Teaching</h2><p class="tr" style="color:#4caf50;">🌲 サバイバル・ミニゲーム</p></div><button class="copy-btn" onclick="copyAddr('wss://clever-teaching.com')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>mc.zyth.me</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.zyth.me')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>play.webmc.fun</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://play.webmc.fun')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>asianf4rmer</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://asianf4rmer.minecraft.pe')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>shhnowisnottheti</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://sus.shhnowisnottheti.me')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Aeon Network</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://aeon-network.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>adderall.ir</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://adderall.ir')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Lamp Lifesteal</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.lamplifesteal.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>VanillaMC</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://vanillamc.org')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>Voidsent</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.voidsent.net')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>mc.dssx.uk</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://mc.dssx.uk')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>xena.wtf</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://xena.wtf')" data-i18n="btn_copy">アドレスコピー</button></div>
-                    <div class="list-card"><div style="flex:1;"><h2>tuff.ws</h2><p class="tr" style="color:#4caf50;">🌐 公開サーバー</p></div><button class="copy-btn" onclick="copyAddr('wss://tuff.ws')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>ArchMC</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.arch.lol')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Zentic</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://zentic.cc')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Jonarchy</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://8b4t.org')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Beaglecraft</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://eaglercraft.beaglecraft.online')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Clever Teaching</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://clever-teaching.com')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>mc.zyth.me</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.zyth.me')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>play.webmc.fun</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://play.webmc.fun')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>asianf4rmer</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://asianf4rmer.minecraft.pe')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>shhnowisnottheti</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://sus.shhnowisnottheti.me')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Aeon Network</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://aeon-network.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>adderall.ir</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://adderall.ir')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Lamp Lifesteal</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.lamplifesteal.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>VanillaMC</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://vanillamc.org')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Voidsent</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.voidsent.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>mc.dssx.uk</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.dssx.uk')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>xena.wtf</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://xena.wtf')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>tuff.ws</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://tuff.ws')" data-i18n="btn_copy">アドレスコピー</button></div>
                 </div>
             </div>
 
@@ -403,6 +424,13 @@
                     <option value="mc4k.html">mc4k.html</option>
                     <option value="Eaglercraft-4k-JS.html">Eaglercraft-4k-JS.html</option>
                 </select>
+                <div class="vs" id="vs">
+                    <button type="button" class="vs-btn" id="vsBtn"><span class="vs-label" id="vsLabel"></span><span id="vsBadge"></span><span class="vs-caret">▲</span></button>
+                    <div class="vs-pop" id="vsPop">
+                        <input type="text" class="vs-search" id="vsSearch" data-i18n-ph="dl_ph" placeholder="ファイル名で検索...">
+                        <div class="vs-list" id="vsList"></div>
+                    </div>
+                </div>
             </div>
 
             <button class="play-button" onclick="launchGame()" data-i18n="play">プレイ</button>
@@ -646,7 +674,7 @@
                 ver_p:'BATTA-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。',
                 play:'プレイ', launching:'起動中...', name_ph:'名前を入力...',
                 dbg_h:'保存データの確認', dbg_note:'ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。', dbg_btn:'確認する', dbg_copy:'コピー',
-                nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人', sv_f_connect:'接続できません', sv_f_noresp:'応答がありません', sv_f_format:'形式が違います', sv_s_ok:'取得成功',
+                nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人', sv_f_connect:'接続できません', sv_f_noresp:'応答がありません', sv_f_format:'形式が違います', sv_s_ok:'取得成功', sv_ver_label:'対応:', sv_ver_unknown:'未確認', sv_note:'ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8（ランチャーの「1.8.8」や「1.8」）が、多くのサーバーで使えます。1.12.2 や 1.5.2 は、サーバーが対応している場合だけ入れます。カード内の「対応」は、公開リストに載っていたサーバー側のバージョンです。',
                 sk_close:'閉じる', btn_3d:'3D表示', sk3d_hint:'ドラッグで回転できます', my_h:'マイスキン（自分で追加）', my_add:'PNGを追加', my_note:'NovaSkinなどのサイトから、自分でダウンロードしたPNG（64×64 または 64×32）を追加できます。このブラウザの中だけに保存され、サイトには公開されません。他の人のスキンは作者の作品なので、各サイトの利用規約に従って、個人で使ってください。', my_bad:'64×64 または 64×32 のPNGだけ追加できます', my_full:'保存容量がいっぱいで保存できませんでした', my_del:'削除',
                 sk_look_h:'ユーザー名でスキンを取得', sk_look_ph:'Minecraftのユーザー名', sk_look_btn:'取得', sk_look_loading:'取得中...', sk_look_fail:'スキンを取得できませんでした（サービスに接続できません）', sk_look_bad:'ユーザー名は英数字とアンダースコアの1〜16文字で入力してください', sk_look_note:'実在するプレイヤーのスキンを、Minotarというサービスから取得します。存在しない名前は初期スキンになります。他の人のスキンはその作者の作品なので、個人で使う範囲にしてください。'
             },
@@ -661,7 +689,7 @@
                 ver_p:'BATTA-Launcher is a personal custom launcher for organizing and quickly playing web-based Minecraft HTML files.',
                 play:'Play', launching:'Launching...', name_ph:'Enter name...',
                 dbg_h:'Saved Data Check', dbg_note:'Press this right after changing your name in the game. Only key names, lengths and the first 60 characters are shown.', dbg_btn:'Check', dbg_copy:'Copy',
-                nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players', sv_f_connect:'Cannot connect', sv_f_noresp:'No response', sv_f_format:'Unknown format', sv_s_ok:'OK',
+                nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players', sv_f_connect:'Cannot connect', sv_f_noresp:'No response', sv_f_format:'Unknown format', sv_s_ok:'OK', sv_ver_label:'Versions:', sv_ver_unknown:'Unverified', sv_note:'Rule of thumb for the browser (Eaglercraft) client: EaglercraftX 1.8 ("1.8.8" or "1.8" in the launcher) works on most servers. 1.12.2 and 1.5.2 only work if the server supports them. "Versions" on each card is the server-side version from public listings.',
                 sk_close:'Close', btn_3d:'View 3D', sk3d_hint:'Drag to rotate', my_h:'My Skins (add your own)', my_add:'Add PNG', my_note:'Add PNG files (64x64 or 64x32) that you downloaded yourself from sites such as NovaSkin. They are stored only in this browser and are not published on the site. Other people\'s skins are their creators\' work, so follow each site\'s terms and keep it to personal use.', my_bad:'Only 64x64 or 64x32 PNG files can be added', my_full:'Storage is full, could not save', my_del:'Delete',
                 sk_look_h:'Get a skin by username', sk_look_ph:'Minecraft username', sk_look_btn:'Get', sk_look_loading:'Loading...', sk_look_fail:'Could not get the skin (cannot reach the service)', sk_look_bad:'Enter 1-16 letters, digits or underscores', sk_look_note:'Fetches the skin of a real player from a service called Minotar. Unknown names return a default skin. Other people\'s skins are their creators\' work, so keep it to personal use.'
             }
@@ -687,6 +715,7 @@
             });
             if (window.updateDlCount) window.updateDlCount();
             if (window.updateSvStat) window.updateSvStat();
+            if (window.updateSvTags) window.updateSvTags();
             document.getElementById('langSelect').value = LANG;
         }
         document.getElementById('langSelect').addEventListener('change', e => setLang(e.target.value));
@@ -1056,6 +1085,101 @@
                 file.value = '';
             });
             render();
+        })();
+
+        // ===== サーバーの種類タグ（ここを書き換えると表示が変わります） =====
+        (function buildServerTags() {
+            const TAGS = {
+                pvp: ['PVP', 'PVP'], anarchy: ['アナーキー', 'Anarchy'], semi: ['セミアナーキー', 'Semi-Anarchy'], survival: ['サバイバル', 'Survival'],
+                minigame: ['ミニゲーム', 'Minigames'], large: ['大規模', 'Large'], cross: ['Java・Bedrock対応', 'Java & Bedrock'],
+                lifesteal: ['ライフスティール', 'Lifesteal'], vanilla: ['バニラ', 'Vanilla'], unknown: ['未確認', 'Unverified']
+            };
+            const SV_TAGS = {
+                'wss://mc.arch.lol': ['large', 'minigame', 'survival'],
+                'wss://zentic.cc': ['pvp', 'minigame'],
+                'wss://8b4t.org': ['anarchy'],
+                'wss://eaglercraft.beaglecraft.online': ['survival', 'pvp', 'cross'],
+                'wss://clever-teaching.com': ['semi', 'survival', 'minigame', 'pvp'],
+                'wss://mc.lamplifesteal.xyz': ['lifesteal'],
+                'wss://vanillamc.org': ['vanilla']
+            };
+            // サーバー側が受け付けるバージョン（公開サーバーリストの記載。確認できたものだけ）
+            const SV_VERS = {
+                'wss://mc.arch.lol': ['Java 1.8.8〜1.21.4', 'Java 1.8.8-1.21.4'],
+                'wss://zentic.cc': ['Java 1.7.x〜1.21.x', 'Java 1.7.x-1.21.x'],
+                'wss://8b4t.org': ['1.5.2〜1.21.10（推奨 1.21.10）', '1.5.2-1.21.10 (recommended 1.21.10)'],
+                'wss://eaglercraft.beaglecraft.online': ['Paper 1.21.10', 'Paper 1.21.10'],
+                'wss://clever-teaching.com': ['1.17.1（説明文の記載）', '1.17.1 (from its description)']
+            };
+            const items = Array.from(document.querySelectorAll('#page-server .list-card')).map(card => {
+                const btn = card.querySelector('button'), m = btn && /copyAddr\('([^']*)'\)/.exec(btn.getAttribute('onclick') || ''), box = card.querySelector('.tags');
+                return m && box ? { addr: m[1], box: box } : null;
+            }).filter(Boolean);
+            window.updateSvTags = () => items.forEach(it => {
+                it.box.textContent = '';
+                (SV_TAGS[it.addr] || ['unknown']).forEach(k => {
+                    const sp = document.createElement('span'); sp.className = 'tag t-' + k; sp.textContent = TAGS[k][LANG === 'en' ? 1 : 0]; it.box.appendChild(sp);
+                });
+                let ver = it.box.nextElementSibling;
+                if (!ver || !ver.classList.contains('sv-ver')) { ver = document.createElement('div'); ver.className = 'sv-ver'; it.box.parentNode.insertBefore(ver, it.box.nextSibling); }
+                const v = SV_VERS[it.addr];
+                ver.textContent = t('sv_ver_label') + ' ' + (v ? v[LANG === 'en' ? 1 : 0] : t('sv_ver_unknown'));
+            });
+            window.updateSvTags();
+        })();
+
+        // ファイル名を短い表示名に直す（例: eaglercraft-26.3.html → 26.3）
+        function prettyVersion(file) {
+            const OV = { 'eaglercraftx-194.html': 'EaglercraftX 194', 'eagler-indev.html': 'Eagler Indev', 'Eaglercraft-4k-JS.html': 'Eaglercraft 4k' };
+            let n = file.replace(/\.html$/i, '').trim();
+            const sep = '(^|[\\s_\\-])', end = '(?=$|[\\s_\\-])';
+            const wasm = /wasm/i.test(n), gc = wasm && /wasm[\s_\-]?gc|[\s_\-]gc(?=$|[\s_\-])/i.test(n);
+            const js = !wasm && new RegExp(sep + '(js|javascript|javs)' + end, 'i').test(n);
+            const wisp = /wispcraft/i.test(n), eagler = /eaglercraft/i.test(n);
+            n = n.replace(/\d+(?:[_-]\d+){2,}/g, m => m.replace(/[_-]/g, '.'));
+            n = n.replace(new RegExp(sep + '(wasm[\\s_\\-]?gc|wasm|gc|js|javascript|javs)' + end, 'gi'), '$1');
+            n = n.replace(new RegExp(sep + '(eaglercraftx|eaglercraft|wispcraft)' + end, 'gi'), '$1');
+            n = n.replace(/(\d[a-z]?)_(\d)/gi, '$1\u0001$2').replace(/[_\s\-]+/g, ' ').replace(/\u0001/g, '_').trim();
+            n = n.replace(/\b(beta|alpha|indev|infdev|classic|forge|pre|release|mobile|scratch|client)\b/g, w => w[0].toUpperCase() + w.slice(1));
+            n = n.replace(/^rd (\d)/, 'rd-$1');
+            if (n && !/\d/.test(n) && eagler && !/^Eaglercraft/i.test(n)) n = 'Eaglercraft ' + n;
+            if (wisp) n += ' Wispcraft';
+            if (OV[file]) n = OV[file];
+            if (!n) n = file.replace(/\.html$/i, '');
+            return { label: n, kind: gc ? 'wasmgc' : wasm ? 'wasm' : js ? 'js' : '' };
+        }
+
+        // ===== バージョン選択（短い名前＋WASM/JSの色付きタグ） =====
+        (function buildVersionPicker() {
+            const sel = document.getElementById('versionSelect'), btn = document.getElementById('vsBtn'), pop = document.getElementById('vsPop'),
+                  list = document.getElementById('vsList'), search = document.getElementById('vsSearch'), label = document.getElementById('vsLabel'), badge = document.getElementById('vsBadge');
+            const KIND = { wasm: 'WASM', wasmgc: 'WASM-GC', js: 'JS' };
+            const entries = Array.from(sel.options).map(o => { const r = prettyVersion(o.value); return { file: o.value, label: r.label, kind: r.kind }; });
+            const cnt = {};
+            entries.forEach(e => { const k = e.label + '|' + e.kind; cnt[k] = (cnt[k] || 0) + 1; if (cnt[k] > 1) e.label += ' (' + cnt[k] + ')'; });
+            const pill = kind => { if (!kind) return null; const p = document.createElement('span'); p.className = 'pill k-' + kind; p.textContent = KIND[kind]; return p; };
+            const close = () => pop.classList.remove('open');
+            function updateBtn() {
+                const e = entries.find(x => x.file === sel.value) || entries[0];
+                label.textContent = e.label; badge.textContent = ''; const p = pill(e.kind); if (p) badge.appendChild(p); btn.title = e.file;
+            }
+            function renderList() {
+                const q = search.value.trim().toLowerCase(); list.textContent = '';
+                entries.forEach(e => {
+                    if (q && !(e.label.toLowerCase().includes(q) || e.file.toLowerCase().includes(q) || (KIND[e.kind] || '').toLowerCase().includes(q))) return;
+                    const row = document.createElement('div'), nm = document.createElement('span'), p = pill(e.kind);
+                    row.className = 'vs-item' + (e.file === sel.value ? ' sel' : ''); row.title = e.file; nm.textContent = e.label; row.appendChild(nm); if (p) row.appendChild(p);
+                    row.addEventListener('click', () => { sel.value = e.file; sel.dispatchEvent(new Event('change')); updateBtn(); close(); });
+                    list.appendChild(row);
+                });
+            }
+            function open() { pop.classList.add('open'); search.value = ''; renderList(); const c = list.querySelector('.sel'); if (c) c.scrollIntoView({ block: 'center' }); }
+            btn.addEventListener('click', () => { if (pop.classList.contains('open')) close(); else open(); });
+            search.addEventListener('input', renderList);
+            document.addEventListener('click', e => { if (!document.getElementById('vs').contains(e.target)) close(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+            sel.addEventListener('change', updateBtn);
+            updateBtn(); setLang(LANG);
         })();
 
         // 起動・名前同期処理
