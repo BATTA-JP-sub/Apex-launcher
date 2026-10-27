@@ -94,6 +94,7 @@
         .k-wasm { background: #2e8b57; } .k-wasmgc { background: #16a085; } .k-js { background: #d68910; }
         .sv-ver { font-size: 11px; color: #aaaaaa; margin-top: 4px; line-height: 1.4; }
         .copy-btn.off { background: #555555; }
+        .list-card.sel { outline: 2px solid #4caf50; }
         .sv-icon { width: 48px; height: 48px; image-rendering: pixelated; border-radius: 4px; flex-shrink: 0; background: #222222; }
         .sv-stat { font-size: 12px; margin-top: 4px; }
         .hint { font-size: 12px; color: #aaaaaa; line-height: 1.5; }
@@ -108,6 +109,7 @@
             <!-- 左側ナビゲーション -->
             <div class="sidebar">
                 <div class="nav-item active" id="tab-home"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span>Apex-Launcher</span></div>
+                <div class="nav-item" id="tab-client"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20.5 7.5v9L12 21l-8.5-4.5v-9z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></svg><span data-i18n="nav_client">クライアント</span></div>
                 <div class="nav-item" id="tab-skin"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.8"/><path d="M4.5 20.5c0-4.1 3.4-7 7.5-7s7.5 2.9 7.5 7"/></svg><span data-i18n="nav_skin">スキン管理</span></div>
                 <div class="nav-item" id="tab-server"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="6.5" rx="1.5"/><rect x="3.5" y="13.5" width="17" height="6.5" rx="1.5"/><path d="M7 7.25h.01M7 16.75h.01" stroke-width="2.6"/></svg><span data-i18n="nav_server">サーバーリスト</span></div>
                 <div class="nav-item" id="tab-download"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 20h15"/></svg><span data-i18n="nav_download">ダウンロード</span></div>
@@ -124,6 +126,15 @@
                     <h2 data-i18n="home_h">Apex-Launcher へようこそ</h2>
                     <p data-i18n="home_p">プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！</p>
                 </div>
+            </div>
+
+            <!-- 中央画面：クライアント -->
+            <div class="content-body" id="page-client" style="display: none; overflow-y: auto; max-height: 100%;">
+                <div class="logo-area">
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="cl_h2">クライアント</h1>
+                    <div class="launcher-sub-title" style="color: #ffffff;" data-i18n="cl_s2">下の選択欄から、クライアントを選んでプレイできます</div>
+                </div>
+                <div class="news-card"><h2 data-i18n="cl_h2">クライアント</h2><p data-i18n="cl_p">下の選択欄には、クライアントだけが並びます。選んで「プレイ」を押してください。</p></div>
             </div>
 
             <!-- 中央画面：スキン管理 -->
@@ -216,7 +227,11 @@
                         <input type="file" id="bgFile" accept="image/*" hidden>
                         <button class="copy-btn" id="bgReset" style="background:#555;" data-i18n="bg_reset">リセット</button>
                     </div>
-                    <p class="hint" data-i18n="bg_hint">色を選ぶか、好きな画像を設定できます（このブラウザに保存されます）。</p>
+                    <div class="bg-row">
+                        <input type="text" id="bgUrl" class="dl-search" style="margin-top: 0; width: 260px;" data-i18n-ph="bg_url_ph" placeholder="画像のURL（https://...）">
+                        <button class="copy-btn" id="bgUrlBtn" data-i18n="bg_url_btn">URLで設定</button>
+                    </div>
+                    <p class="hint" data-i18n="bg_hint">色を選ぶか、画像のファイルやURLを設定できます（このブラウザに保存されます）。</p>
                     <h2 data-i18n="dbg_h">保存データの確認</h2>
                     <p class="hint" data-i18n="dbg_note">ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。</p>
                     <div class="bg-row">
@@ -225,7 +240,7 @@
                     </div>
                     <textarea id="dbgOut" class="dbg-out" readonly rows="8"></textarea>
                 </div>
-                <div class="news-card"><h2 id="appVersion">Version 1.0.9</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
+                <div class="news-card"><h2 id="appVersion">Version 1.1.3</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
             </div>
         </div>
 
@@ -463,7 +478,7 @@
         })();
 
         // タブ切り替えのシステム
-        const tabs = ['home', 'skin', 'server', 'download', 'settings'];
+        const tabs = ['home', 'client', 'skin', 'server', 'download', 'settings'];
         tabs.forEach(tab => {
             const tabBtn = document.getElementById(`tab-${tab}`);
             const page = document.getElementById(`page-${tab}`);
@@ -475,7 +490,8 @@
                     });
                     tabBtn.classList.add('active');
                     page.style.display = 'flex';
-                    document.body.classList.toggle('not-home', tab !== 'home');
+                    document.body.classList.toggle('not-home', tab !== 'home' && tab !== 'client');
+                    if ((tab === 'home' || tab === 'client') && window.setPickerMode) window.setPickerMode(tab);
                 });
             }
         });
@@ -678,12 +694,12 @@
                 sk_h:'スキン管理（50種）', sk_s:'画像をクリックで3D表示。PNGを保存して、ゲーム内のスキン設定からアップロードしてください', btn_download:'ダウンロード', sk_tip:'クリックで3D表示',
                 sv_h:'マルチサーバーリスト (17選)', sv_s:'アドレスをコピーしてゲーム内のMultiplayer設定で追加してください', btn_copy:'アドレスコピー', copied:'コピーしました！', copy_fail:'コピーに失敗しました',
                 set_h:'ランチャー設定', set_s:'システム設定', lang_h:'言語設定', lang_note:'ランチャーの表示言語を切り替えます。ゲーム内の言語はゲーム側の設定で変更してください。',
-                bg_h:'背景設定', bg_upload:'画像を選ぶ', bg_reset:'リセット', bg_hint:'色を選ぶか、好きな画像を設定できます（このブラウザに保存されます）。', bg_fail:'画像が大きすぎて保存できませんでした（今回のみ適用）',
+                bg_h:'背景設定', bg_upload:'画像を選ぶ', bg_reset:'リセット', bg_hint:'色を選ぶか、画像のファイルやURLを設定できます（このブラウザに保存されます）。', bg_url_ph:'画像のURL（https://...）', bg_url_btn:'URLで設定', bg_url_bad:'https:// から始まる画像のURLを入力してください', bg_url_fail:'この画像を読み込めませんでした（URLが違うか、他のサイトからの表示を断られています）', bg_fail:'画像が大きすぎて保存できませんでした（今回のみ適用）',
                 ver_p:'Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。',
                 play:'プレイ', launching:'起動中...', name_ph:'名前を入力...',
                 dbg_h:'保存データの確認', dbg_note:'ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。', dbg_btn:'確認する', dbg_copy:'コピー',
                 nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人', sv_f_connect:'接続できません', sv_f_noresp:'応答がありません', sv_f_format:'形式が違います', sv_s_ok:'取得成功', sv_auto_on:'自動更新（5秒）: ON', sv_auto_off:'自動更新（5秒）: OFF', sv_ver_label:'対応:', sv_ver_unknown:'未確認', sv_note:'ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8（ランチャーの「1.8.8」や「1.8」）が、多くのサーバーで使えます。1.12.2 や 1.5.2 は、サーバーが対応している場合だけ入れます。カード内の「対応」は、公開リストに載っていたサーバー側のバージョンです。',
-                sk_close:'閉じる', btn_3d:'3D表示', sk3d_hint:'ドラッグで回転できます', my_h:'マイスキン（自分で追加）', my_add:'PNGを追加', my_note:'NovaSkinなどのサイトから、自分でダウンロードしたPNG（64×64 または 64×32）を追加できます。このブラウザの中だけに保存され、サイトには公開されません。他の人のスキンは作者の作品なので、各サイトの利用規約に従って、個人で使ってください。', my_bad:'64×64 または 64×32 のPNGだけ追加できます', my_full:'保存容量がいっぱいで保存できませんでした', my_del:'削除',
+                sk_close:'閉じる', btn_select:'選択', cl_h2:'クライアント', cl_s2:'下の選択欄から、クライアントを選んでプレイできます', cl_p:'下の選択欄には、クライアントだけが並びます。選んで「プレイ」を押してください。', btn_3d:'3D表示', sk3d_hint:'ドラッグで回転できます', my_h:'マイスキン（自分で追加）', my_add:'PNGを追加', my_note:'NovaSkinなどのサイトから、自分でダウンロードしたPNG（64×64 または 64×32）を追加できます。このブラウザの中だけに保存され、サイトには公開されません。他の人のスキンは作者の作品なので、各サイトの利用規約に従って、個人で使ってください。', my_bad:'64×64 または 64×32 のPNGだけ追加できます', my_full:'保存容量がいっぱいで保存できませんでした', my_del:'削除',
                 sk_look_h:'ユーザー名でスキンを取得', sk_look_ph:'Minecraftのユーザー名', sk_look_btn:'取得', sk_look_loading:'取得中...', sk_look_fail:'スキンを取得できませんでした（サービスに接続できません）', sk_look_bad:'ユーザー名は英数字とアンダースコアの1〜16文字で入力してください', sk_look_note:'実在するプレイヤーのスキンを、Minotarというサービスから取得します。存在しない名前は初期スキンになります。他の人のスキンはその作者の作品なので、個人で使う範囲にしてください。'
             },
             en: {
@@ -693,12 +709,12 @@
                 sk_h:'Skins (50)', sk_s:'Click a preview to view it in 3D. Save the PNG and upload it from the in-game skin settings.', btn_download:'Download', sk_tip:'Click to view in 3D',
                 sv_h:'Multiplayer Server List (17)', sv_s:'Copy an address and add it in the in-game Multiplayer menu', btn_copy:'Copy address', copied:'Copied!', copy_fail:'Copy failed',
                 set_h:'Launcher Settings', set_s:'System settings', lang_h:'Language', lang_note:'Changes the launcher display language. The in-game language is set inside the game.',
-                bg_h:'Background', bg_upload:'Choose image', bg_reset:'Reset', bg_hint:'Pick a color or set your own image (saved in this browser).', bg_fail:'The image was too large to save (applied for this session only)',
+                bg_h:'Background', bg_upload:'Choose image', bg_reset:'Reset', bg_hint:'Pick a color, or set an image file or URL (saved in this browser).', bg_url_ph:'Image URL (https://...)', bg_url_btn:'Set from URL', bg_url_bad:'Enter an image URL starting with https://', bg_url_fail:'Could not load this image (wrong URL, or the site blocks hotlinking).', bg_fail:'The image was too large to save (applied for this session only)',
                 ver_p:'Apex-Launcher is a personal custom launcher for organizing and quickly playing web-based Minecraft HTML files.',
                 play:'Play', launching:'Launching...', name_ph:'Enter name...',
                 dbg_h:'Saved Data Check', dbg_note:'Press this right after changing your name in the game. Only key names, lengths and the first 60 characters are shown.', dbg_btn:'Check', dbg_copy:'Copy',
                 nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players', sv_f_connect:'Cannot connect', sv_f_noresp:'No response', sv_f_format:'Unknown format', sv_s_ok:'OK', sv_auto_on:'Auto refresh (5s): ON', sv_auto_off:'Auto refresh (5s): OFF', sv_ver_label:'Versions:', sv_ver_unknown:'Unverified', sv_note:'Rule of thumb for the browser (Eaglercraft) client: EaglercraftX 1.8 ("1.8.8" or "1.8" in the launcher) works on most servers. 1.12.2 and 1.5.2 only work if the server supports them. "Versions" on each card is the server-side version from public listings.',
-                sk_close:'Close', btn_3d:'View 3D', sk3d_hint:'Drag to rotate', my_h:'My Skins (add your own)', my_add:'Add PNG', my_note:'Add PNG files (64x64 or 64x32) that you downloaded yourself from sites such as NovaSkin. They are stored only in this browser and are not published on the site. Other people\'s skins are their creators\' work, so follow each site\'s terms and keep it to personal use.', my_bad:'Only 64x64 or 64x32 PNG files can be added', my_full:'Storage is full, could not save', my_del:'Delete',
+                sk_close:'Close', btn_select:'Select', cl_h2:'Clients', cl_s2:'Pick a client from the list below and play', cl_p:'The list below shows clients only. Pick one and press "Play".', btn_3d:'View 3D', sk3d_hint:'Drag to rotate', my_h:'My Skins (add your own)', my_add:'Add PNG', my_note:'Add PNG files (64x64 or 64x32) that you downloaded yourself from sites such as NovaSkin. They are stored only in this browser and are not published on the site. Other people\'s skins are their creators\' work, so follow each site\'s terms and keep it to personal use.', my_bad:'Only 64x64 or 64x32 PNG files can be added', my_full:'Storage is full, could not save', my_del:'Delete',
                 sk_look_h:'Get a skin by username', sk_look_ph:'Minecraft username', sk_look_btn:'Get', sk_look_loading:'Loading...', sk_look_fail:'Could not get the skin (cannot reach the service)', sk_look_bad:'Enter 1-16 letters, digits or underscores', sk_look_note:'Fetches the skin of a real player from a service called Minotar. Unknown names return a default skin. Other people\'s skins are their creators\' work, so keep it to personal use.'
             }
         };
@@ -743,19 +759,35 @@
             d.addEventListener('click', () => setBg({ type: 'preset', id: p.id }));
             swatchBox.appendChild(d);
         });
+        // ★ここに画像のURL（https://...）を入れると、初めて開いたときから、その画像が背景になります
+        const DEFAULT_BG_URL = '';
+        const defaultBg = () => DEFAULT_BG_URL ? { type: 'url', url: DEFAULT_BG_URL } : null;
         function applyBg(b) {
             let css = BG_PRESETS[0].css, sel = 'green';
             if (b && b.type === 'image' && b.data) { css = 'url("' + b.data + '")'; sel = ''; }
+            else if (b && b.type === 'url' && b.url) { css = 'url("' + String(b.url).replace(/"/g, '%22') + '")'; sel = ''; }
             else if (b && b.type === 'preset') { const p = BG_PRESETS.find(x => x.id === b.id); if (p) { css = p.css; sel = p.id; } }
             document.documentElement.style.setProperty('--bg-img', css);
             swatchBox.querySelectorAll('.swatch').forEach(s => s.classList.toggle('sel', s.dataset.id === sel));
+            const ui = document.getElementById('bgUrl'); if (ui && b && b.type === 'url') ui.value = b.url;
         }
         function setBg(b) {
             applyBg(b);
             try { localStorage.setItem('BattaLauncher_Bg', JSON.stringify(b)); }
             catch (e) { alert(t('bg_fail')); }
         }
-        document.getElementById('bgReset').addEventListener('click', () => setBg({ type: 'preset', id: 'green' }));
+        document.getElementById('bgReset').addEventListener('click', () => {
+            try { localStorage.removeItem('BattaLauncher_Bg'); } catch (e) {}
+            document.getElementById('bgUrl').value = ''; applyBg(defaultBg());
+        });
+        document.getElementById('bgUrlBtn').addEventListener('click', () => {
+            const u = document.getElementById('bgUrl').value.trim();
+            if (!/^https:\/\/[^\s"'<>]+$/i.test(u)) { alert(t('bg_url_bad')); return; }
+            const img = new Image();
+            img.onload = () => setBg({ type: 'url', url: u });
+            img.onerror = () => alert(t('bg_url_fail'));
+            img.src = u;
+        });
         document.getElementById('bgFile').addEventListener('change', e => {
             const f = e.target.files[0]; if (!f) return;
             const img = new Image(), url = URL.createObjectURL(f);
@@ -800,11 +832,11 @@
         document.getElementById('dbgCopy').addEventListener('click', () => {
             const v = document.getElementById('dbgOut').value; if (v) copyAddr(v);
         });
-        try { applyBg(JSON.parse(localStorage.getItem('BattaLauncher_Bg'))); } catch (e) { applyBg(null); }
+        { let saved = null; try { saved = JSON.parse(localStorage.getItem('BattaLauncher_Bg')); } catch (e) {} applyBg(saved || defaultBg()); }
         setLang(LANG);
 
         // ゲームのプロフィール（_eaglercraftX.p）の名前部分だけを書き換える
-        const BUILD = '1.0.9';
+        const BUILD = '1.1.3';
         async function patchProfileName(name) {
             const logs = [];
             const save = () => { try { localStorage.setItem('BattaLauncher_PatchLog', logs.join(' / ')); } catch (e) {} };
@@ -1188,7 +1220,10 @@
             const sel = document.getElementById('versionSelect'), btn = document.getElementById('vsBtn'), pop = document.getElementById('vsPop'),
                   list = document.getElementById('vsList'), search = document.getElementById('vsSearch'), label = document.getElementById('vsLabel'), badge = document.getElementById('vsBadge');
             const KIND = { wasm: 'WASM', wasmgc: 'WASM-GC', js: 'JS' };
-            const entries = Array.from(sel.options).map(o => { const r = prettyVersion(o.value); return { file: o.value, label: r.label, kind: r.kind }; });
+            const CLIENTS = new Set(["Aero Client JS.html", "Eclipse Client.html", "PixelClient 1.8.8 JS.html", "Prism-Client.html", "Water Client.html", "Mega Client-JS.html", "EB Client Nextgen CU4.html", "N0VA CLIENT.html", "Tuff_Client_WASM.html", "Myven-Client-WASM.html", "Koneclient-1.8.8.html", "Precision.html"]);
+            const entries = Array.from(sel.options).map(o => { const r = prettyVersion(o.value); return { file: o.value, label: r.label, kind: r.kind, isClient: CLIENTS.has(o.value) }; });
+            let mode = 'home'; const last = {};
+            const visible = () => entries.filter(e => mode === 'client' ? e.isClient : !e.isClient);
             const cnt = {};
             entries.forEach(e => { const k = e.label + '|' + e.kind; cnt[k] = (cnt[k] || 0) + 1; if (cnt[k] > 1) e.label += ' (' + cnt[k] + ')'; });
             const pill = kind => { if (!kind) return null; const p = document.createElement('span'); p.className = 'pill k-' + kind; p.textContent = KIND[kind]; return p; };
@@ -1199,11 +1234,11 @@
             }
             function renderList() {
                 const q = search.value.trim().toLowerCase(); list.textContent = '';
-                entries.forEach(e => {
+                visible().forEach(e => {
                     if (q && !(e.label.toLowerCase().includes(q) || e.file.toLowerCase().includes(q) || (KIND[e.kind] || '').toLowerCase().includes(q))) return;
                     const row = document.createElement('div'), nm = document.createElement('span'), p = pill(e.kind);
                     row.className = 'vs-item' + (e.file === sel.value ? ' sel' : ''); row.title = e.file; nm.textContent = e.label; row.appendChild(nm); if (p) row.appendChild(p);
-                    row.addEventListener('click', () => { sel.value = e.file; sel.dispatchEvent(new Event('change')); updateBtn(); close(); });
+                    row.addEventListener('click', () => { last[mode] = e.file; sel.value = e.file; sel.dispatchEvent(new Event('change')); updateBtn(); close(); });
                     list.appendChild(row);
                 });
             }
@@ -1213,6 +1248,14 @@
             document.addEventListener('click', e => { if (!document.getElementById('vs').contains(e.target)) close(); });
             document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
             sel.addEventListener('change', updateBtn);
+            // タブに合わせて、並べるものを切り替える（ホーム=クライアント以外、クライアント=クライアントだけ）
+            window.setPickerMode = m => {
+                mode = m;
+                const vis = visible();
+                const cur = (last[m] && vis.some(e => e.file === last[m])) ? last[m] : (vis.some(e => e.file === sel.value) ? sel.value : (vis[0] && vis[0].file));
+                if (cur) { sel.value = cur; sel.dispatchEvent(new Event('change')); }
+                close(); updateBtn();
+            };
             updateBtn(); setLang(LANG);
         })();
 
