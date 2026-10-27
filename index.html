@@ -12,6 +12,8 @@
         .sidebar { width: 220px; background-color: #141414; padding: 20px 10px; display: flex; flex-direction: column; gap: 8px; border-top-left-radius: 8px; }
         .nav-item { display: flex; align-items: center; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; color: #aaaaaa; transition: background 0.2s, color 0.2s; }
         .ico { width: 18px; height: 18px; margin-right: 12px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        .launcher-container { position: relative; }
+        .ver-label { position: absolute; left: 14px; bottom: 4px; font-size: 10px; color: #777777; letter-spacing: 0.5px; z-index: 5; pointer-events: none; }
         .nav-item:hover { background-color: #2a2a2a; color: #ffffff; }
         .nav-item.active { background-color: #383838; color: #ffffff; border-left: 4px solid #4caf50; padding-left: 11px; }
         .content-body { flex: 1; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), var(--bg-img) center/cover; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
@@ -93,6 +95,7 @@
 </head>
 <body>
     <div class="launcher-container">
+            <div class="ver-label" id="verLabel"></div>
               <div class="main-content">
             
             <!-- 左側ナビゲーション -->
@@ -215,7 +218,7 @@
                     </div>
                     <textarea id="dbgOut" class="dbg-out" readonly rows="8"></textarea>
                 </div>
-                <div class="news-card"><h2>Version 1.0.0</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
+                <div class="news-card"><h2 id="appVersion">Version 1.0.5</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
             </div>
         </div>
 
@@ -275,6 +278,7 @@
                     <option value="Eaglercraft 1.6.4.html">Eaglercraft 1.6.4.html</option>
                     <option value="Eaglercraft-1.6.4-Forge-WASM.html">Eaglercraft-1.6.4-Forge-WASM.html</option>
                     <option value="Eaglercraft-1.6.4-Forge.html">Eaglercraft-1.6.4-Forge.html</option>
+                    <option value="1.5.2.html">1.5.2.html</option>
                     <option value="Eaglercraft-1.5.2.html">Eaglercraft-1.5.2.html</option>
                     <option value="Eaglercraft-1.5.2-WASM-GC.html">Eaglercraft-1.5.2-WASM-GC.html</option>
                     
@@ -383,7 +387,6 @@
                     <option value="EagletWithNormalResources.html">EagletWithNormalResources.html</option>
                     <option value="EaglyMC.html">EaglyMC.html</option>
                     <option value="Eclipse Client.html">Eclipse Client.html</option>
-                    <option value="Huzzium-Client.html">Huzzium-Client.html</option>
                     <option value="Mega Client-JS.html">Mega Client-JS.html</option>
                     <option value="Minicraft.html">Minicraft.html</option>
                     <option value="Myven-Client-WASM.html">Myven-Client-WASM.html</option>
@@ -392,7 +395,6 @@
                     <option value="Prism-Client.html">Prism-Client.html</option>
                     <option value="Tuff_Client_WASM.html">Tuff_Client_WASM.html</option>
                     <option value="Water Client.html">Water Client.html</option>
-                    <option value="WurstX.html">WurstX.html</option>
                     <option value="eaglercraft-forge-1.0-js.html">eaglercraft-forge-1.0-js.html</option>
                     <option value="eaglercraft-forge-1.0-wasm.html">eaglercraft-forge-1.0-wasm.html</option>
                     <option value="injector.html">injector.html</option>
@@ -431,6 +433,28 @@
     </div>
 
     <script>
+        // ===== エラーが出たとき、画面の下に内容を表示する（原因調べ用） =====
+        (function errorBar() {
+            function show(msg) {
+                let bar = document.getElementById('errBar');
+                if (!bar) {
+                    bar = document.createElement('div'); bar.id = 'errBar';
+                    bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:40vh;overflow:auto;background:#5a1a1a;color:#ffffff;font:12px/1.5 monospace;padding:8px 36px 8px 12px;z-index:200;white-space:pre-wrap;user-select:text;';
+                    const x = document.createElement('button'); x.textContent = '×';
+                    x.style.cssText = 'position:absolute;right:8px;top:4px;background:none;border:none;color:#ffffff;font-size:16px;cursor:pointer;';
+                    x.onclick = () => bar.remove();
+                    const txt = document.createElement('div'); txt.id = 'errBarText';
+                    bar.appendChild(x); bar.appendChild(txt); (document.body || document.documentElement).appendChild(bar);
+                }
+                const t = document.getElementById('errBarText'); t.textContent += (t.textContent ? '\n\n' : '') + msg;
+            }
+            window.addEventListener('error', e => {
+                show('エラー: ' + e.message + '\n場所: ' + String(e.filename || '').split('/').pop() + ':' + e.lineno + ':' + e.colno +
+                    (e.error && e.error.stack ? '\n' + String(e.error.stack).split('\n').slice(0, 5).join('\n') : ''));
+            });
+            window.addEventListener('unhandledrejection', e => { show('エラー(非同期): ' + ((e.reason && (e.reason.stack || e.reason.message)) || e.reason)); });
+        })();
+
         // タブ切り替えのシステム
         const tabs = ['home', 'skin', 'server', 'download', 'settings'];
         tabs.forEach(tab => {
@@ -450,7 +474,8 @@
 
         // プレイヤー名の自動復元
         window.addEventListener('DOMContentLoaded', () => {
-            const savedName = localStorage.getItem('BattaLauncher_LastUsername');
+            let savedName = null;
+            try { savedName = localStorage.getItem('BattaLauncher_LastUsername'); } catch (e) {}
             if (savedName) {
                 document.getElementById('playerNameInput').value = savedName;
             }
@@ -771,7 +796,7 @@
         setLang(LANG);
 
         // ゲームのプロフィール（_eaglercraftX.p）の名前部分だけを書き換える
-        const BUILD = 'b3';
+        const BUILD = '1.0.5';
         async function patchProfileName(name) {
             const logs = [];
             const save = () => { try { localStorage.setItem('BattaLauncher_PatchLog', logs.join(' / ')); } catch (e) {} };
@@ -1147,6 +1172,9 @@
             return { label: n, kind: gc ? 'wasmgc' : wasm ? 'wasm' : js ? 'js' : '' };
         }
 
+        document.getElementById('appVersion').textContent = 'Version ' + BUILD;
+        document.getElementById('verLabel').textContent = 'v' + BUILD;
+
         // ===== バージョン選択（短い名前＋WASM/JSの色付きタグ） =====
         (function buildVersionPicker() {
             const sel = document.getElementById('versionSelect'), btn = document.getElementById('vsBtn'), pop = document.getElementById('vsPop'),
@@ -1188,7 +1216,7 @@
             let username = document.getElementById('playerNameInput').value.trim();
             if (!username) username = "Player";
 
-            localStorage.setItem('BattaLauncher_LastUsername', username);
+            try { localStorage.setItem('BattaLauncher_LastUsername', username); } catch (e) {}
 
             const keys = [
                 'username', 'profile_username', 'eagler_username', 'wispcraft_username',
