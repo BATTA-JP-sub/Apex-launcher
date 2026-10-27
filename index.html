@@ -13,7 +13,7 @@
         .nav-item { display: flex; align-items: center; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; color: #aaaaaa; transition: background 0.2s, color 0.2s; }
         .ico { width: 18px; height: 18px; margin-right: 12px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
         .launcher-container { position: relative; }
-        .ver-label { position: absolute; left: 14px; bottom: 4px; font-size: 10px; color: #777777; letter-spacing: 0.5px; z-index: 5; pointer-events: none; }
+        .ver-label { position: absolute; left: 30px; bottom: 2px; font-size: 10px; color: #777777; letter-spacing: 0.5px; z-index: 5; pointer-events: none; }
         .nav-item:hover { background-color: #2a2a2a; color: #ffffff; }
         .nav-item.active { background-color: #383838; color: #ffffff; border-left: 4px solid #4caf50; padding-left: 11px; }
         .content-body { flex: 1; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), var(--bg-img) center/cover; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
@@ -25,8 +25,8 @@
         .news-card { background-color: rgba(20, 20, 20, 0.85); padding: 20px; border-radius: 6px; max-width: 450px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
         .news-card h2 { font-size: 18px; margin-bottom: 8px; color: #ffffff; }
         .news-card p { font-size: 13px; color: #cccccc; line-height: 1.5; }
-        .play-bar { height: 80px; background-color: #1e1e1e; border-top: 1px solid #2d2d2d; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; display: flex; align-items: center; gap: 20px; padding: 0 30px; }
-        .version-selector-container { flex: 1; min-width: 0; max-width: 350px; }
+        .play-bar { height: 80px; background-color: #1e1e1e; border-top: 1px solid #2d2d2d; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; display: flex; align-items: center; gap: 20px; padding: 0 30px 14px; }
+        .version-selector-container { flex: 1; min-width: 0; max-width: 280px; }
         .version-selector { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 10px 15px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; outline: none; width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
         .play-button { background-color: #3c8527; border: none; border-bottom: 4px solid #275419; color: #ffffff; padding: 12px 50px; font-size: 20px; font-weight: bold; text-transform: uppercase; border-radius: 4px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-shadow: 1px 1px 2px rgba(0,0,0,0.8); flex-shrink: 0; }
         .user-profile { display: flex; align-items: center; gap: 10px; width: 220px; justify-content: flex-end; margin-left: auto; flex-shrink: 0; }
@@ -218,7 +218,7 @@
                     </div>
                     <textarea id="dbgOut" class="dbg-out" readonly rows="8"></textarea>
                 </div>
-                <div class="news-card"><h2 id="appVersion">Version 1.0.5</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
+                <div class="news-card"><h2 id="appVersion">Version 1.0.6</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
             </div>
         </div>
 
@@ -796,7 +796,7 @@
         setLang(LANG);
 
         // ゲームのプロフィール（_eaglercraftX.p）の名前部分だけを書き換える
-        const BUILD = '1.0.5';
+        const BUILD = '1.0.6';
         async function patchProfileName(name) {
             const logs = [];
             const save = () => { try { localStorage.setItem('BattaLauncher_PatchLog', logs.join(' / ')); } catch (e) {} };
