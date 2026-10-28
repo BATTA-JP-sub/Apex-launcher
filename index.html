@@ -101,6 +101,38 @@
         .sv-stat { font-size: 12px; margin-top: 4px; }
         .hint { font-size: 12px; color: #aaaaaa; line-height: 1.5; }
         .news-card { flex-shrink: 0; }
+
+        /* ===== スマートフォンなど、幅の狭い画面向けの表示 ===== */
+        @media (max-width: 760px) {
+            body { height: 100vh; height: 100dvh; align-items: stretch; }
+            .launcher-container { width: 100%; max-width: 100%; height: 100vh; height: 100dvh; max-height: none; border-radius: 0; border: none; }
+            .main-content { flex-direction: column; height: auto; min-height: 0; }
+            .sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 8px; gap: 4px; border-radius: 0; flex-shrink: 0; scrollbar-width: none; }
+            .sidebar::-webkit-scrollbar { display: none; }
+            .nav-item { white-space: nowrap; padding: 9px 12px; flex-shrink: 0; }
+            #tab-settings { margin-top: 0 !important; }
+            .nav-item.active { border-left: none; border-bottom: 3px solid #4caf50; padding-left: 12px; padding-bottom: 6px; }
+            .ico { margin-right: 8px; }
+            .content-body { padding: 16px; overflow-y: auto; min-height: 0; }
+            .logo-text { font-size: 28px; gap: 10px; }
+            .logo-ico { width: 40px; height: 40px; }
+            .launcher-sub-title { font-size: 14px; }
+            .news-card { max-width: 100%; }
+            .play-bar { height: auto; flex-wrap: wrap; gap: 8px; padding: 10px 12px 20px; border-radius: 0; flex-shrink: 0; }
+            .version-selector-container { flex: 1 1 0; min-width: 0; max-width: none; }
+            .play-button { padding: 10px 22px; font-size: 16px; }
+            .user-profile { width: 100%; margin-left: 0; justify-content: flex-start; }
+            .name-input { flex: 1; width: auto; min-width: 0; }
+            .vs-pop { min-width: 0; width: min(92vw, 360px); }
+            .vs-list { max-height: 40vh; }
+            .grid-container { grid-template-columns: minmax(0, 1fr); }
+            .skin-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .setting-card { max-width: 100%; padding: 14px; }
+            .ver-label { left: 12px; }
+            .sk3d-stage { width: min(300px, 86vw); height: 300px; }
+            .dl-search, #skLookName, #bgUrl { width: 100% !important; }
+        }
+        @media (pointer: coarse) { .copy-btn { padding: 10px 14px; } .vs-item { padding: 10px 8px; } }
     </style>
 </head>
 <body>
@@ -251,7 +283,7 @@
                         <button class="copy-btn" style="background:#555555;" onclick="copyAddr('https://github.com/BATTA-JP-sub/Apex-launcher')" data-i18n="btn_copy_url">URLをコピー</button>
                     </div>
                 </div>
-                <div class="news-card"><h2 id="appVersion">Version 1.1.5</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
+                <div class="news-card"><h2 id="appVersion">Version 1.1.6</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
             </div>
         </div>
 
@@ -847,7 +879,7 @@
         setLang(LANG);
 
         // ゲームのプロフィール（_eaglercraftX.p）の名前部分だけを書き換える
-        const BUILD = '1.1.5';
+        const BUILD = '1.1.6';
         async function patchProfileName(name) {
             const logs = [];
             const save = () => { try { localStorage.setItem('BattaLauncher_PatchLog', logs.join(' / ')); } catch (e) {} };
