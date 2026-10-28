@@ -17,6 +17,8 @@
         .ico { width: 18px; height: 18px; margin-right: 12px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
         .launcher-container { position: relative; }
         body.not-home .version-selector-container, body.not-home .play-button { display: none; }
+        .url-box { background-color: #2b2b2b; border: 1px solid #444444; border-radius: 4px; padding: 10px 12px; font-size: 13px; color: #dddddd; word-break: break-all; user-select: text; }
+        .repo-link { text-decoration: none; word-break: break-all; user-select: text; }
         .ver-label { position: absolute; left: 30px; bottom: 2px; font-size: 10px; color: #777777; letter-spacing: 0.5px; z-index: 5; pointer-events: none; }
         .nav-item:hover { background-color: #2a2a2a; color: #ffffff; }
         .nav-item.active { background-color: #383838; color: #ffffff; border-left: 4px solid #4caf50; padding-left: 11px; }
@@ -240,7 +242,16 @@
                     </div>
                     <textarea id="dbgOut" class="dbg-out" readonly rows="8"></textarea>
                 </div>
-                <div class="news-card"><h2 id="appVersion">Version 1.1.3</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
+                <div class="setting-card">
+                    <h2 data-i18n="repo_h">GitHubリポジトリ</h2>
+                    <p class="hint" data-i18n="repo_p">このランチャー（Apex-Launcher）のファイルを管理している、GitHubのリポジトリです。最新のファイルを確認したいときに、開いてください。</p>
+                    <div class="url-box" id="repoUrl">https://github.com/BATTA-JP-sub/Apex-launcher</div>
+                    <div class="bg-row">
+                        <a class="copy-btn repo-link" href="https://github.com/BATTA-JP-sub/Apex-launcher" target="_blank" rel="noopener noreferrer" data-i18n="btn_open">開く</a>
+                        <button class="copy-btn" style="background:#555555;" onclick="copyAddr('https://github.com/BATTA-JP-sub/Apex-launcher')" data-i18n="btn_copy_url">URLをコピー</button>
+                    </div>
+                </div>
+                <div class="news-card"><h2 id="appVersion">Version 1.1.5</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
             </div>
         </div>
 
@@ -699,7 +710,7 @@
                 play:'プレイ', launching:'起動中...', name_ph:'名前を入力...',
                 dbg_h:'保存データの確認', dbg_note:'ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。', dbg_btn:'確認する', dbg_copy:'コピー',
                 nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人', sv_f_connect:'接続できません', sv_f_noresp:'応答がありません', sv_f_format:'形式が違います', sv_s_ok:'取得成功', sv_auto_on:'自動更新（5秒）: ON', sv_auto_off:'自動更新（5秒）: OFF', sv_ver_label:'対応:', sv_ver_unknown:'未確認', sv_note:'ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8（ランチャーの「1.8.8」や「1.8」）が、多くのサーバーで使えます。1.12.2 や 1.5.2 は、サーバーが対応している場合だけ入れます。カード内の「対応」は、公開リストに載っていたサーバー側のバージョンです。',
-                sk_close:'閉じる', btn_select:'選択', cl_h2:'クライアント', cl_s2:'下の選択欄から、クライアントを選んでプレイできます', cl_p:'下の選択欄には、クライアントだけが並びます。選んで「プレイ」を押してください。', btn_3d:'3D表示', sk3d_hint:'ドラッグで回転できます', my_h:'マイスキン（自分で追加）', my_add:'PNGを追加', my_note:'NovaSkinなどのサイトから、自分でダウンロードしたPNG（64×64 または 64×32）を追加できます。このブラウザの中だけに保存され、サイトには公開されません。他の人のスキンは作者の作品なので、各サイトの利用規約に従って、個人で使ってください。', my_bad:'64×64 または 64×32 のPNGだけ追加できます', my_full:'保存容量がいっぱいで保存できませんでした', my_del:'削除',
+                sk_close:'閉じる', btn_select:'選択', cl_h2:'クライアント', cl_s2:'下の選択欄から、クライアントを選んでプレイできます', cl_p:'下の選択欄には、クライアントだけが並びます。選んで「プレイ」を押してください。', btn_3d:'3D表示', sk3d_hint:'ドラッグで回転できます', my_h:'マイスキン（自分で追加）', my_add:'PNGを追加', my_note:'NovaSkinなどのサイトから、自分でダウンロードしたPNG（64×64 または 64×32）を追加できます。このブラウザの中だけに保存され、サイトには公開されません。他の人のスキンは作者の作品なので、各サイトの利用規約に従って、個人で使ってください。', my_bad:'64×64 または 64×32 のPNGだけ追加できます', my_full:'保存容量がいっぱいで保存できませんでした', my_del:'削除', repo_h:'GitHubリポジトリ', repo_p:'このランチャー（Apex-Launcher）のファイルを管理している、GitHubのリポジトリです。最新のファイルを確認したいときに、開いてください。', btn_copy_url:'URLをコピー', btn_open:'開く',
                 sk_look_h:'ユーザー名でスキンを取得', sk_look_ph:'Minecraftのユーザー名', sk_look_btn:'取得', sk_look_loading:'取得中...', sk_look_fail:'スキンを取得できませんでした（サービスに接続できません）', sk_look_bad:'ユーザー名は英数字とアンダースコアの1〜16文字で入力してください', sk_look_note:'実在するプレイヤーのスキンを、Minotarというサービスから取得します。存在しない名前は初期スキンになります。他の人のスキンはその作者の作品なので、個人で使う範囲にしてください。'
             },
             en: {
@@ -714,7 +725,7 @@
                 play:'Play', launching:'Launching...', name_ph:'Enter name...',
                 dbg_h:'Saved Data Check', dbg_note:'Press this right after changing your name in the game. Only key names, lengths and the first 60 characters are shown.', dbg_btn:'Check', dbg_copy:'Copy',
                 nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players', sv_f_connect:'Cannot connect', sv_f_noresp:'No response', sv_f_format:'Unknown format', sv_s_ok:'OK', sv_auto_on:'Auto refresh (5s): ON', sv_auto_off:'Auto refresh (5s): OFF', sv_ver_label:'Versions:', sv_ver_unknown:'Unverified', sv_note:'Rule of thumb for the browser (Eaglercraft) client: EaglercraftX 1.8 ("1.8.8" or "1.8" in the launcher) works on most servers. 1.12.2 and 1.5.2 only work if the server supports them. "Versions" on each card is the server-side version from public listings.',
-                sk_close:'Close', btn_select:'Select', cl_h2:'Clients', cl_s2:'Pick a client from the list below and play', cl_p:'The list below shows clients only. Pick one and press "Play".', btn_3d:'View 3D', sk3d_hint:'Drag to rotate', my_h:'My Skins (add your own)', my_add:'Add PNG', my_note:'Add PNG files (64x64 or 64x32) that you downloaded yourself from sites such as NovaSkin. They are stored only in this browser and are not published on the site. Other people\'s skins are their creators\' work, so follow each site\'s terms and keep it to personal use.', my_bad:'Only 64x64 or 64x32 PNG files can be added', my_full:'Storage is full, could not save', my_del:'Delete',
+                sk_close:'Close', btn_select:'Select', cl_h2:'Clients', cl_s2:'Pick a client from the list below and play', cl_p:'The list below shows clients only. Pick one and press "Play".', btn_3d:'View 3D', sk3d_hint:'Drag to rotate', my_h:'My Skins (add your own)', my_add:'Add PNG', my_note:'Add PNG files (64x64 or 64x32) that you downloaded yourself from sites such as NovaSkin. They are stored only in this browser and are not published on the site. Other people\'s skins are their creators\' work, so follow each site\'s terms and keep it to personal use.', my_bad:'Only 64x64 or 64x32 PNG files can be added', my_full:'Storage is full, could not save', my_del:'Delete', repo_h:'GitHub repository', repo_p:'The GitHub repository that manages the files of this launcher (Apex-Launcher). Open it when you want to check the latest files.', btn_copy_url:'Copy URL', btn_open:'Open',
                 sk_look_h:'Get a skin by username', sk_look_ph:'Minecraft username', sk_look_btn:'Get', sk_look_loading:'Loading...', sk_look_fail:'Could not get the skin (cannot reach the service)', sk_look_bad:'Enter 1-16 letters, digits or underscores', sk_look_note:'Fetches the skin of a real player from a service called Minotar. Unknown names return a default skin. Other people\'s skins are their creators\' work, so keep it to personal use.'
             }
         };
@@ -836,7 +847,7 @@
         setLang(LANG);
 
         // ゲームのプロフィール（_eaglercraftX.p）の名前部分だけを書き換える
-        const BUILD = '1.1.3';
+        const BUILD = '1.1.5';
         async function patchProfileName(name) {
             const logs = [];
             const save = () => { try { localStorage.setItem('BattaLauncher_PatchLog', logs.join(' / ')); } catch (e) {} };
