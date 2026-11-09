@@ -169,7 +169,7 @@ Apex-Launcher は、Minecraftのブラウザ版ゲームやクライアントを
 
 ## ✨ Features
 
-### 🎮 Game Launcher
+### 🎮 Apex-launcher
 - 複数のMinecraft HTMLゲームを選択して起動
 - クライアントと通常ゲームを分けて表示
 - WASM / WASM-GC / JS の種類を識別
@@ -178,7 +178,7 @@ Apex-Launcher は、Minecraftのブラウザ版ゲームやクライアントを
 - プレイヤー名の設定・保存
 - ゲーム起動時のユーザー名同期
 
-### 👤 Skin Manager
+### 👤 スキン管理
 - 50種類のプリセットスキン
 - Minecraftユーザー名からスキンを取得
 - 自分のPNGスキンを複数追加
@@ -187,7 +187,7 @@ Apex-Launcher は、Minecraftのブラウザ版ゲームやクライアントを
 - マウスやタッチ操作で3Dモデルを回転
 - 64×32形式の旧スキンにも対応
 
-### 🌐 Server List
+### 🌐 サーバーリスト
 - 17種類のマルチプレイサーバーを収録
 - サーバーアドレスをワンクリックでコピー
 - サーバーのオンライン人数を確認
@@ -197,13 +197,13 @@ Apex-Launcher は、Minecraftのブラウザ版ゲームやクライアントを
 - 自動ステータス更新機能
 - 手動更新にも対応
 
-### 📥 Download Manager
+### 📥 ダウンロード
 - 収録されたゲーム・クライアントを一覧表示
 - ファイル名による検索
 - HTMLファイルを個別にダウンロード
 - ダウンロード可能なファイル数を表示
 
-### ⚙️ Settings
+### ⚙️ 設定
 - 日本語 / English の切り替え
 - 6種類の背景テーマ
 - オリジナル背景画像のアップロード
@@ -213,9 +213,9 @@ Apex-Launcher は、Minecraftのブラウザ版ゲームやクライアントを
 
 ---
 
-## 🖥️ Interface
+## 🖥️ インターフェース
 
-| Section | Description |
+| セクション | 説明 |
 |---|---|
 | Home | ランチャーのホーム画面 |
 | Client | Minecraftクライアントの選択 |
@@ -226,9 +226,9 @@ Apex-Launcher は、Minecraftのブラウザ版ゲームやクライアントを
 
 ---
 
-## 🚀 Getting Started
+## 🚀 始める
 
-### 1. Download
+### 1. ダウンロード
 
 このリポジトリをダウンロード、または Clone します。
 
@@ -236,24 +236,24 @@ Apex-Launcher は、Minecraftのブラウザ版ゲームやクライアントを
 git clone <repository-url>
 ```
 
-### 2. Open
+### 2. 開く
 
 `index.html` をブラウザで開きます。
 
 ゲームファイルを正常に読み込むため、HTTPサーバー経由での利用を推奨します。
 
-### 3. Play
+### 3. プレイ
 
 1. Apex-Launcher を開く
 2. プレイヤー名を入力
 3. 起動したいゲームまたはクライアントを選択
-4. **PLAY** ボタンを押す
+4. **プレイ** ボタンを押す
 
 これだけでゲームを起動できます！
 
 ---
 
-## 🛠️ Technologies
+## 🛠️ テクノロジー
 
 Apex-Launcher は、以下のWeb技術を使用して構築されています。
 
@@ -269,7 +269,7 @@ Apex-Launcher は、以下のWeb技術を使用して構築されています。
 
 ---
 
-## 📱 Compatibility
+## 📱 コンパチビリティ
 
 - Desktop Browsers
 - Mobile Browsers
@@ -282,7 +282,7 @@ Apex-Launcher は、以下のWeb技術を使用して構築されています。
 
 ---
 
-## 💾 Data Storage
+## 💾 データストレージ
 
 Apex-Launcher は、設定やユーザーデータの保存にブラウザのストレージを使用します。
 
@@ -301,7 +301,7 @@ Apex-Launcher は、設定やユーザーデータの保存にブラウザのス
 
 ---
 
-## ⚠️ Notes
+## ⚠️ メモ
 
 - スキン取得には外部サービス Minotar を使用します。
 - サーバーステータスの取得には、各サーバーのWebSocket接続を使用します。
@@ -312,6 +312,6 @@ Apex-Launcher は、設定やユーザーデータの保存にブラウザのス
 
 ## 💚 Apex-Launcher
 
-**One Launcher. Multiple Experiences.**
+**一つのランチャーで様々な体験を**
 
-Enjoy Minecraft your way.
+自分らしい方法でマインクラフトを楽しもう！
