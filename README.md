@@ -472,5 +472,3 @@ Please note that clearing your browser data or switching to a different browser 
 **One Launcher. Multiple Experiences.**
 
 Enjoy Minecraft your way.
-
----
