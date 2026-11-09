@@ -159,6 +159,8 @@ Apex-Launcher は、設定やユーザーデータの保存にブラウザのス
 
 Enjoy Minecraft your way.
 
+---
+
 # 🟢 Apex-Launcher english
 
 **A modern, lightweight Minecraft web launcher.**
