@@ -155,18 +155,6 @@ Apex-Launcher は、設定やユーザーデータの保存にブラウザのス
 
 ---
 
-## 📜 Disclaimer
-
-Apex-Launcher is an independent fan-made project.
-
-Minecraft は Mojang Studios および Microsoft の商標です。
-
-本プロジェクトは Mojang Studios、Microsoft、Minecraft 公式とは提携・承認されていません。
-
-各ゲーム、クライアント、スキン、サーバーの権利は、それぞれの開発者・制作者・運営者に帰属します。
-
----
-
 ## 💚 Apex-Launcher
 
 **One Launcher. Multiple Experiences.**
