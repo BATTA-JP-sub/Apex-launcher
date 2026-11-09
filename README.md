@@ -1,5 +1,3 @@
----
-
 # 🟢 Apex-Launcher english
 
 **A modern, lightweight Minecraft web launcher.**
