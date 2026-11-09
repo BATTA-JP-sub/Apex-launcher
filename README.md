@@ -170,7 +170,7 @@ Apex-Launcher は、Minecraftのブラウザ版ゲームやクライアントを
 
 ---
 
-## ✨ Features
+## ✨ 特徴
 
 ### 🎮 Apex-launcher
 - 複数のMinecraft HTMLゲームを選択して起動
