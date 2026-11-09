@@ -1273,17 +1273,28 @@
         (function buildServerTags() {
             const TAGS = {
                 pvp: ['PVP', 'PVP'], anarchy: ['アナーキー', 'Anarchy'], semi: ['セミアナーキー', 'Semi-Anarchy'], survival: ['サバイバル', 'Survival'],
-                minigame: ['ミニゲーム', 'Minigames'], large: ['大規模', 'Large'], cross: ['Java・Bedrock対応', 'Java & Bedrock'],
-                lifesteal: ['ライフスティール', 'Lifesteal'], vanilla: ['バニラ', 'Vanilla'], unknown: ['未確認', 'Unverified']
+                 bedwars: ['ベッドウォーズ', 'Bedwars'], skyblock: ['スカイブロック', 'Skyblock'], oneblock: ['ワンブロック', 'Oneblock'], factions: ['ファクション', 'Factions'],  large: ['大規模', 'Large'], cross: ['Java・Bedrock対応', 'Java & Bedrock'],
+                lifesteal: ['ライフスティール', 'Lifesteal'], practice: ['プラクティス', 'Practice'], vanilla: ['バニラ', 'Vanilla'], unknown: ['未確認', 'Unverified']
             };
             const SV_TAGS = {
-                'wss://mc.arch.lol': ['large', 'minigame', 'survival'],
+                'wss://mc.arch.lol': ['large', 'minigame', 'survival', 'pvp', 'bedwars', 'skyblock', 'oneblock'],
                 'wss://zentic.cc': ['pvp', 'minigame'],
                 'wss://8b4t.org': ['anarchy'],
                 'wss://eaglercraft.beaglecraft.online': ['survival', 'pvp', 'cross'],
                 'wss://clever-teaching.com': ['semi', 'survival', 'minigame', 'pvp'],
+                'wss://mc.zyth.me': ['oneblock', 'skyblock', 'bedwars', 'factions'],
+                'wss://play.webmc.fun': ['survival', 'skyblock', 'oneblock'],
+                'wss://asianf4rmer.minecraft.pe': ['survival', 'skyblock'],
+                'wss://sus.shhnowisnottheti.me': ['anarchy'],
+                'wss://aeon-network.net': ['survival', 'pvp'],
+                'wss://adderall.ir': ['survival', 'oneblock', 'lifesteal', 'practice'],
                 'wss://mc.lamplifesteal.xyz': ['lifesteal'],
-                'wss://vanillamc.org': ['vanilla']
+                'wss://vanillamc.org': ['vanilla', 'pvp', 'factions', 'lifesteal'],
+                'wss://mc.voidsent.net': ['practice', 'factions', 'pvp', 'survival'],
+                'wss://mc.dssx.uk': ['anarchy', 'skyblock'],
+                'wss://xena.wtf': ['survival', 'pvp', 'oneblock', 'skyblock', 'bedwars'],
+                'wss://tuff.ws': ['survival', 'oneblock'],
+            
             };
             // サーバー側が受け付けるバージョン（公開サーバーリストの記載。確認できたものだけ）
             const SV_VERS = {
@@ -1291,7 +1302,7 @@
                 'wss://zentic.cc': ['Java 1.7.x〜1.21.x', 'Java 1.7.x-1.21.x'],
                 'wss://8b4t.org': ['1.5.2〜1.21.10（推奨 1.21.10）', '1.5.2-1.21.10 (recommended 1.21.10)'],
                 'wss://eaglercraft.beaglecraft.online': ['Paper 1.21.10', 'Paper 1.21.10'],
-                'wss://clever-teaching.com': ['1.17.1（説明文の記載）', '1.17.1 (from its description)']
+                'wss://clever-teaching.com': ['1.17.1', '1.17.1']
             };
             const items = Array.from(document.querySelectorAll('#page-server .list-card')).map(card => {
                 const btn = card.querySelector('button'), m = btn && /copyAddr\('([^']*)'\)/.exec(btn.getAttribute('onclick') || ''), box = card.querySelector('.tags');
