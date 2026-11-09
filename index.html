@@ -460,6 +460,7 @@
                     <option value="Prism-Client.html">Prism-Client.html</option>
                     <option value="Tuff_Client_WASM.html">Tuff_Client_WASM.html</option>
                     <option value="Water Client.html">Water Client.html</option>
+                    <option value="incari client.html">incari client.html</option>
                     <option value="eaglercraft-forge-1.0-js.html">eaglercraft-forge-1.0-js.html</option>
                     <option value="eaglercraft-forge-1.0-wasm.html">eaglercraft-forge-1.0-wasm.html</option>
                     <option value="injector.html">injector.html</option>
@@ -1263,7 +1264,7 @@
             const sel = document.getElementById('versionSelect'), btn = document.getElementById('vsBtn'), pop = document.getElementById('vsPop'),
                   list = document.getElementById('vsList'), search = document.getElementById('vsSearch'), label = document.getElementById('vsLabel'), badge = document.getElementById('vsBadge');
             const KIND = { wasm: 'WASM', wasmgc: 'WASM-GC', js: 'JS' };
-            const CLIENTS = new Set(["Aero Client JS.html", "Eclipse Client.html", "PixelClient 1.8.8 JS.html", "Prism-Client.html", "Water Client.html", "Mega Client-JS.html", "EB Client Nextgen CU4.html", "N0VA CLIENT.html", "Tuff_Client_WASM.html", "Myven-Client-WASM.html", "Koneclient-1.8.8.html", "Precision.html"]);
+            const CLIENTS = new Set(["Aero Client JS.html", "Eclipse Client.html", "PixelClient 1.8.8 JS.html", "Prism-Client.html", "Water Client.html", "Mega Client-JS.html", "EB Client Nextgen CU4.html", "N0VA CLIENT.html", "Tuff_Client_WASM.html", "Myven-Client-WASM.html", "Koneclient-1.8.8.html", "Precision.html", "incari client.html"]);
             const entries = Array.from(sel.options).map(o => { const r = prettyVersion(o.value); return { file: o.value, label: r.label, kind: r.kind, isClient: CLIENTS.has(o.value) }; });
             let mode = 'home'; const last = {};
             const visible = () => entries.filter(e => mode === 'client' ? e.isClient : !e.isClient);
