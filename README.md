@@ -234,7 +234,6 @@ It features a clean, stylish dark theme and is compatible with both PCs and smar
 
 Download or clone this repository. ```bash
 git clone <repository-url>
-```
 
 ### 2. Open
 
