@@ -6,7 +6,9 @@ Apex-Launcher is a feature-rich web-based launcher that allows you to manage and
 
 From selecting clients and managing skins to checking multiplayer servers and downloading game files—everything can be handled from one screen.
 
-It features a clean, stylish dark theme and is compatible with both PCs and smartphones. ---
+It features a clean, stylish dark theme and is compatible with both PCs and smartphones. 
+
+---
 
 ## ✨ Features
 
