@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2f7d25">
+    <meta name="description" content="Apex-Launcher - Minecraft launcher">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <title>Apex-Launcher</title>
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="./icons/icon-192.png">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; user-select: none; }
+        body { background-color: #1a1a1a; color: #f5f5f5; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .launcher-container { width: 1000px; max-width: 100vw; height: 620px; max-height: 100vh; overflow: hidden; background-color: #2c2c2c; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); display: flex; flex-direction: column; border: 1px solid #3c3c3c; }
+        .main-content { display: flex; flex: 1; height: calc(100% - 80px); }
+        .sidebar { width: 220px; background-color: #141414; padding: 20px 10px; display: flex; flex-direction: column; gap: 8px; border-top-left-radius: 8px; }
+        .nav-item { display: flex; align-items: center; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; color: #aaaaaa; transition: background 0.2s, color 0.2s; }
+        .ico { width: 18px; height: 18px; margin-right: 12px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        .launcher-container { position: relative; }
+        body.not-home .version-selector-container, body.not-home .play-button { display: none; }
+        .url-box { background-color: #2b2b2b; border: 1px solid #444444; border-radius: 4px; padding: 10px 12px; font-size: 13px; color: #dddddd; word-break: break-all; user-select: text; }
+        .repo-link { text-decoration: none; word-break: break-all; user-select: text; }
+        .ver-label { position: absolute; left: 30px; bottom: 2px; font-size: 10px; color: #777777; letter-spacing: 0.5px; z-index: 5; pointer-events: none; }
+        .nav-item:hover { background-color: #2a2a2a; color: #ffffff; }
+        .nav-item.active { background-color: #383838; color: #ffffff; border-left: 4px solid #4caf50; padding-left: 11px; }
+        .content-body { flex: 1; background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.6)), var(--bg-img) center/cover; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .logo-area { display: flex; flex-direction: column; gap: 5px; }
+        .logo-area img { width: 320px; height: auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7)); }
+        .ico2 { width: 18px; height: 18px; margin-right: 12px; flex-shrink: 0; }
+        .logo-ico { width: 52px; height: 52px; flex-shrink: 0; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6)); }
+        .logo-text { display: flex; align-items: center; gap: 14px; }
+        .logo-text { font-size: 44px; letter-spacing: 2px; color: #ffffff; text-shadow: 3px 3px 8px rgba(0,0,0,0.8); }
+        .list-card h2 { font-size: 16px; }
+        .launcher-sub-title { font-size: 16px; font-weight: bold; color: #4caf50; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+        .news-card { background-color: rgba(20, 20, 20, 0.85); padding: 20px; border-radius: 6px; max-width: 450px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+        .news-card h2 { font-size: 18px; margin-bottom: 8px; color: #ffffff; }
+        .news-card p { font-size: 13px; color: #cccccc; line-height: 1.5; }
+        .play-bar { height: 80px; background-color: #1e1e1e; border-top: 1px solid #2d2d2d; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; display: flex; align-items: center; gap: 20px; padding: 0 30px 14px; }
+        .version-selector-container { flex: 1; min-width: 0; max-width: 280px; }
+        .version-selector { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 10px 15px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; outline: none; width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+        .play-button { background-color: #3c8527; border: none; border-bottom: 4px solid #275419; color: #ffffff; padding: 12px 50px; font-size: 20px; font-weight: bold; text-transform: uppercase; border-radius: 4px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-shadow: 1px 1px 2px rgba(0,0,0,0.8); flex-shrink: 0; }
+        .user-profile { display: flex; align-items: center; gap: 10px; width: 220px; justify-content: flex-end; margin-left: auto; flex-shrink: 0; }
+        .name-input { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 8px 12px; border-radius: 4px; font-size: 14px; font-weight: 600; width: 140px; outline: none; user-select: text; }
+        .avatar { width: 32px; height: 32px; background-color: #555555; border-radius: 4px; border: 2px solid #888888; background-size: cover; flex-shrink: 0; }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; padding-bottom: 20px; }
+        .list-card { background-color: rgba(20, 20, 20, 0.85); padding: 15px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 15px; max-width: 100%; }
+        .copy-btn { padding: 6px 12px; background: #3c8527; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; flex-shrink: 0; }
+        .copy-btn:hover { background: #469b2e; }
+        .skin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; padding-bottom: 20px; flex-shrink: 0; }
+        .skin-card { background-color: rgba(20,20,20,0.85); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .skin-card canvas { image-rendering: pixelated; cursor: pointer; }
+        .skin-name { font-size: 13px; font-weight: bold; }
+        :root { --bg-img: radial-gradient(circle at 30% 20%, #2f4f2a, #101810); }
+        .setting-card { background-color: rgba(20,20,20,0.85); padding: 20px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); max-width: 520px; display: flex; flex-direction: column; gap: 10px; margin: 20px 0; flex-shrink: 0; }
+        .setting-card h2 { font-size: 16px; }
+        .setting-select { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 8px 12px; border-radius: 4px; font-size: 14px; width: 200px; outline: none; }
+        .swatches, .bg-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .swatch { width: 40px; height: 40px; border-radius: 6px; border: 2px solid #555555; cursor: pointer; }
+        .swatch.sel { border-color: #4caf50; }
+        .setting-card .copy-btn { display: inline-block; padding: 8px 14px; }
+        .dbg-out { width: 100%; background: #1a1a1a; color: #dddddd; border: 1px solid #444444; border-radius: 4px; padding: 8px; font: 11px monospace; user-select: text; resize: vertical; }
+        .dl-search { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 10px 12px; border-radius: 4px; font-size: 14px; outline: none; margin-top: 16px; user-select: text; flex-shrink: 0; }
+        .dl-list { display: flex; flex-direction: column; gap: 6px; margin: 10px 0 20px; flex-shrink: 0; }
+        .dl-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; background-color: rgba(20,20,20,0.85); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.08); }
+        .dl-name { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .dl-link { display: inline-block; text-decoration: none; padding: 6px 12px; flex-shrink: 0; }
+        .dl-search + .hint { margin-top: 8px; }
+        .grid-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .list-card { min-width: 0; gap: 12px; padding: 12px; }
+        .list-card > div { min-width: 0; }
+        .list-card h2, .list-card p.tr { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .list-card .copy-btn { flex-shrink: 0; white-space: nowrap; padding: 8px 10px; font-size: 12px; }
+        .sk3d-modal { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(0,0,0,0.75); display: none; align-items: center; justify-content: center; z-index: 100; }
+        .sk3d-box { background-color: #1e1e1e; border: 1px solid #444444; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .sk3d-stage { width: 300px; height: 330px; perspective: 900px; cursor: grab; display: flex; align-items: center; justify-content: center; touch-action: none; }
+        .sk3d-model { position: relative; width: 0; height: 0; transform-style: preserve-3d; }
+        .sk3d-part { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
+        .sk3d-face { position: absolute; backface-visibility: hidden; background-image: var(--skin); background-repeat: no-repeat; image-rendering: pixelated; }
+        .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+        .tag { display: inline-block; font-size: 10px; font-weight: bold; line-height: 1; padding: 3px 9px; border-radius: 999px; color: #ffffff; white-space: nowrap; }
+        .t-pvp { background: #c0392b; } .t-anarchy { background: #e67e22; } .t-semi { background: #b9770e; } .t-survival { background: #2e8b57; }
+        .t-bedwars { background: #c0392b; } .t-skyblock { background: #3498db; } .t-oneblock { background: #27ae60; } .t-factions { background: #8e44ad; } .t-practice { background: #e67e22; } .t-large { background: #8e44ad; } .t-cross { background: #16a085; } .t-lifesteal { background: #d6336c; }
+        .t-vanilla { background: #6b8e23; } .t-unknown { background: #666666; }
+        .version-selector-container { position: relative; }
+        #versionSelect { display: none; }
+        .vs-btn { width: 100%; background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 10px 15px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; text-align: left; outline: none; }
+        .vs-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .vs-caret { margin-left: auto; font-size: 10px; color: #aaaaaa; }
+        .vs-pop { display: none; position: absolute; left: 0; bottom: calc(100% + 6px); width: 100%; min-width: 300px; background-color: #1e1e1e; border: 1px solid #444444; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,0.6); z-index: 50; flex-direction: column; padding: 8px; gap: 6px; }
+        .vs-pop.open { display: flex; }
+        .vs-search { background-color: #2b2b2b; border: 1px solid #444444; color: #ffffff; padding: 6px 10px; border-radius: 4px; font-size: 13px; outline: none; user-select: text; }
+        .vs-list { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
+        .vs-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+        .vs-item:hover { background-color: #2f2f2f; }
+
+        .vs-btn .grass-icon {
+            width: 1em;
+            height: 1em;
+            flex: 0 0 1em;
+            display: inline-block;
+            vertical-align: -0.12em;
+            image-rendering: pixelated;
+        }
+        .vs-item .grass-icon {
+            width: 1em;
+            height: 1em;
+            flex: 0 0 1em;
+            display: inline-block;
+            vertical-align: -0.12em;
+            image-rendering: pixelated;
+        }
+        .vs-item .vs-name {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .vs-item.sel { background-color: #2a3d2a; }
+        .pill { display: inline-block; font-size: 10px; font-weight: bold; line-height: 1; padding: 3px 8px; border-radius: 999px; color: #ffffff; flex-shrink: 0; }
+        .k-wasm { background: #2e8b57; } .k-wasmgc { background: #16a085; } .k-js { background: #d68910; }
+        .sv-ver { font-size: 11px; color: #aaaaaa; margin-top: 4px; line-height: 1.4; }
+        .copy-btn.off { background: #555555; }
+        .list-card.sel { outline: 2px solid #4caf50; }
+        .sv-icon { width: 48px; height: 48px; image-rendering: pixelated; border-radius: 4px; flex-shrink: 0; background: #222222; }
+        .sv-stat { font-size: 12px; margin-top: 4px; }
+        .hint { font-size: 12px; color: #aaaaaa; line-height: 1.5; }
+        .news-card { flex-shrink: 0; }
+
+        /* ===== スマートフォンなど、幅の狭い画面向けの表示 ===== */
+        @media (max-width: 760px) {
+            body { height: 100vh; height: 100dvh; align-items: stretch; }
+            .launcher-container { width: 100%; max-width: 100%; height: 100vh; height: 100dvh; max-height: none; border-radius: 0; border: none; }
+            .main-content { flex-direction: column; height: auto; min-height: 0; }
+            .sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 8px; gap: 4px; border-radius: 0; flex-shrink: 0; scrollbar-width: none; }
+            .sidebar::-webkit-scrollbar { display: none; }
+            .nav-item { white-space: nowrap; padding: 9px 12px; flex-shrink: 0; }
+            #tab-settings { margin-top: 0 !important; }
+            .nav-item.active { border-left: none; border-bottom: 3px solid #4caf50; padding-left: 12px; padding-bottom: 6px; }
+            .ico { margin-right: 8px; }
+            .content-body { padding: 16px; overflow-y: auto; min-height: 0; }
+            .logo-text { font-size: 28px; gap: 10px; }
+            .logo-ico { width: 40px; height: 40px; }
+            .launcher-sub-title { font-size: 14px; }
+            .news-card { max-width: 100%; }
+            .play-bar { height: auto; flex-wrap: wrap; gap: 8px; padding: 10px 12px 20px; border-radius: 0; flex-shrink: 0; }
+            .version-selector-container { flex: 1 1 0; min-width: 0; max-width: none; }
+            .play-button { padding: 10px 22px; font-size: 16px; }
+            .user-profile { width: 100%; margin-left: 0; justify-content: flex-start; }
+            .name-input { flex: 1; width: auto; min-width: 0; }
+            .vs-pop { min-width: 0; width: min(92vw, 360px); }
+            .vs-list { max-height: 40vh; }
+            .grid-container { grid-template-columns: minmax(0, 1fr); }
+            .skin-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .setting-card { max-width: 100%; padding: 14px; }
+            .ver-label { left: 12px; }
+            .sk3d-stage { width: min(300px, 86vw); height: 300px; }
+            .dl-search, #skLookName, #bgUrl { width: 100% !important; }
+        }
+        @media (pointer: coarse) { .copy-btn { padding: 10px 14px; } .vs-item { padding: 10px 8px; } }
+
+        /* ===== 選択メニューとプレイバーのサイズ調整 ===== */
+        @media (min-width: 761px) {
+            .version-selector-container {
+                max-width: 280px;
+                flex: 1 1 280px;
+            }
+            .play-button {
+                margin-left: 18px;
+            }
+            .vs-pop {
+                width: 300px;
+                min-width: 0;
+                max-width: min(300px, 80vw);
+                padding: 10px;
+                gap: 8px;
+            }
+            .vs-search {
+                padding: 10px 12px;
+                font-size: 15px;
+            }
+            .vs-list {
+                max-height: 380px;
+                gap: 3px;
+            }
+            .vs-item {
+                padding: 10px 12px;
+                font-size: 15px;
+                gap: 10px;
+            }
+            .pill {
+                font-size: 11px;
+                padding: 4px 9px;
+            }
+        }
+        @media (max-width: 760px) {
+            .play-button {
+                margin-left: 0;
+            }
+            .vs-pop {
+                width: min(92vw, 440px);
+                min-width: 0;
+            }
+            .vs-list {
+                max-height: 50vh;
+            }
+            .vs-item {
+                padding: 11px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="launcher-container">
+            <div class="ver-label" id="verLabel"></div>
+              <div class="main-content">
+            
+            <!-- 左側ナビゲーション -->
+            <div class="sidebar">
+                <div class="nav-item active" id="tab-home"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span>Apex-Launcher</span></div>
+                <div class="nav-item" id="tab-client"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20.5 7.5v9L12 21l-8.5-4.5v-9z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></svg><span data-i18n="nav_client">クライアント</span></div>
+                <div class="nav-item" id="tab-skin"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.8"/><path d="M4.5 20.5c0-4.1 3.4-7 7.5-7s7.5 2.9 7.5 7"/></svg><span data-i18n="nav_skin">スキン管理</span></div>
+                <div class="nav-item" id="tab-server"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="6.5" rx="1.5"/><rect x="3.5" y="13.5" width="17" height="6.5" rx="1.5"/><path d="M7 7.25h.01M7 16.75h.01" stroke-width="2.6"/></svg><span data-i18n="nav_server">サーバーリスト</span></div>
+                <div class="nav-item" id="tab-download"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 20h15"/></svg><span data-i18n="nav_download">ダウンロード</span></div>
+                <div style="margin-top: auto;" class="nav-item" id="tab-settings"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.23 4.92 L10.50 2.52 L13.50 2.52 L13.77 4.92 L15.76 5.74 L17.64 4.23 L19.77 6.36 L18.26 8.24 L19.08 10.23 L21.48 10.50 L21.48 13.50 L19.08 13.77 L18.26 15.76 L19.77 17.64 L17.64 19.77 L15.76 18.26 L13.77 19.08 L13.50 21.48 L10.50 21.48 L10.23 19.08 L8.24 18.26 L6.36 19.77 L4.23 17.64 L5.74 15.76 L4.92 13.77 L2.52 13.50 L2.52 10.50 L4.92 10.23 L5.74 8.24 L4.23 6.36 L6.36 4.23 L8.24 5.74 Z"/><circle cx="12" cy="12" r="3"/></svg><span data-i18n="nav_settings">設定</span></div>
+            </div>
+
+            <!-- 中央画面：ホーム（BATTA-Launcher） -->
+            <div class="content-body" id="page-home">
+                <div class="logo-area">
+                    <h1 class="logo-text"><svg class='logo-ico' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='gl' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#4aa32f'/><stop offset='1' stop-color='#2c6a1c'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(#gl)'/><path d='M14 44 L32 16 L50 44' fill='none' stroke='#ffffff' stroke-width='7.5' stroke-linecap='round' stroke-linejoin='round'/><path d='M24 36 H40' fill='none' stroke='#ffffff' stroke-width='6' stroke-linecap='round'/></svg><span>Apex-Launcher</span></h1>
+                    <div class="launcher-sub-title">Apex-Launcher Edition</div>
+                </div>
+                <div class="news-card">
+                    <h2 data-i18n="home_h">Apex-Launcher へようこそ</h2>
+                    <p data-i18n="home_p">プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！</p>
+                </div>
+            </div>
+
+            <!-- 中央画面：クライアント -->
+            <div class="content-body" id="page-client" style="display: none; overflow-y: auto; max-height: 100%;">
+                <div class="logo-area">
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="cl_h2">クライアント</h1>
+                    <div class="launcher-sub-title" style="color: #ffffff;" data-i18n="cl_s2">下の選択欄から、クライアントを選んでプレイできます</div>
+                </div>
+                <div class="news-card"><h2 data-i18n="cl_h2">クライアント</h2><p data-i18n="cl_p">下の選択欄には、クライアントだけが並びます。選んで「プレイ」を押してください。</p></div>
+            </div>
+
+            <!-- 中央画面：スキン管理 -->
+            <div class="content-body" id="page-skin" style="display: none; overflow-y: auto; max-height: 100%;">
+                <div class="logo-area">
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="sk_h">スキン管理（50種）</h1>
+                    <div class="launcher-sub-title" style="color: #ffffff;" data-i18n="sk_s">画像をクリックで3D表示。PNGを保存して、ゲーム内のスキン設定からアップロードしてください</div>
+                </div>
+                <div class="setting-card" style="margin-bottom: 0;">
+                    <h2 data-i18n="sk_look_h">ユーザー名でスキンを取得</h2>
+                    <div class="bg-row">
+                        <input type="text" id="skLookName" class="dl-search" style="margin-top: 0; width: 200px;" maxlength="16" data-i18n-ph="sk_look_ph" placeholder="Minecraftのユーザー名">
+                        <button class="copy-btn" id="skLookBtn" data-i18n="sk_look_btn">取得</button>
+                    </div>
+                    <div id="skLookResult" style="display: none; align-items: center; gap: 16px;">
+                        <canvas id="skLookCv" width="64" height="128" style="image-rendering: pixelated; cursor: pointer;"></canvas>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div class="skin-name" id="skLookNm"></div>
+                            <button class="copy-btn" id="skLookDl" data-i18n="btn_download">ダウンロード</button>
+                        </div>
+                    </div>
+                    <p class="hint" id="skLookMsg"></p>
+                    <p class="hint" data-i18n="sk_look_note">実在するプレイヤーのスキンを取得します。</p>
+                </div>
+                <div class="setting-card" style="max-width: none; margin-bottom: 0;">
+                    <h2 data-i18n="my_h">マイスキン（自分で追加）</h2>
+                    <div class="bg-row">
+                        <label class="copy-btn" for="mySkinFile" data-i18n="my_add">PNGを追加</label>
+                        <input type="file" id="mySkinFile" accept="image/png" multiple hidden>
+                    </div>
+                    <p class="hint" id="mySkinMsg"></p>
+                    <p class="hint" data-i18n="my_note">自分でダウンロードしたPNGを追加できます。</p>
+                    <div class="skin-grid" id="mySkinGrid" style="margin-top: 6px; padding-bottom: 0;"></div>
+                </div>
+                <div class="skin-grid" id="skinGrid"></div>
+            </div>
+            <!-- 中央画面：サーバーリスト（30大サーバーの正しいアドレスを格納） -->
+            <div class="content-body" id="page-server" style="display: none; overflow-y: auto; max-height: 100%;">
+                <div class="logo-area">
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="sv_h">マルチサーバーリスト (17選)</h1>
+                    <div class="launcher-sub-title" style="color: #4caf50;" data-i18n="sv_s">アドレスをコピーしてゲーム内のMultiplayer設定で追加してください</div>
+                </div>
+                <div class="bg-row" style="margin-top: 14px;"><button class="copy-btn" id="svRefresh" data-i18n="sv_refresh">更新</button>
+                    <button class="copy-btn" id="svAuto"></button></div>
+                <p class="hint" id="svSummary"></p>
+                <p class="hint" data-i18n="sv_note">ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8 が、多くのサーバーで使えます。</p>
+                <div class="grid-container">
+                    <div class="list-card"><div style="flex:1;"><h2>ArchMC</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.arch.lol')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Zentic</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://zentic.cc')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Jonarchy</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://8b4t.org')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Beaglecraft</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://eaglercraft.beaglecraft.online')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Clever Teaching</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://clever-teaching.com')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>mc.zyth.me</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.zyth.me')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>play.webmc.fun</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://play.webmc.fun')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>asianf4rmer</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://asianf4rmer.minecraft.pe')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>shhnowisnottheti</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://sus.shhnowisnottheti.me')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Aeon Network</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://aeon-network.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>adderall.ir</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://adderall.ir')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Lamp Lifesteal</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.lamplifesteal.xyz')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>VanillaMC</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://vanillamc.org')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>Voidsent</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.voidsent.net')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>mc.dssx.uk</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://mc.dssx.uk')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>xena.wtf</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://xena.wtf')" data-i18n="btn_copy">アドレスコピー</button></div>
+                    <div class="list-card"><div style="flex:1;"><h2>tuff.ws</h2><div class="tags"></div></div><button class="copy-btn" onclick="copyAddr('wss://tuff.ws')" data-i18n="btn_copy">アドレスコピー</button></div>
+                </div>
+            </div>
+
+            <!-- 中央画面：ダウンロード -->
+            <div class="content-body" id="page-download" style="display: none; overflow-y: auto; max-height: 100%;">
+                <div class="logo-area">
+                    <h1 style="font-size: 24px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);" data-i18n="dl_h">ファイルダウンロード</h1>
+                    <div class="launcher-sub-title" style="color: #ffffff;" data-i18n="dl_s">ゲーム・クライアントのHTMLファイルを1つずつ保存できます。</div>
+                </div>
+                <input type="text" id="dlSearch" class="dl-search" data-i18n-ph="dl_ph" placeholder="ファイル名で検索...">
+                <div class="hint" id="dlCount"></div>
+                <div class="dl-list" id="dlList"></div>
+            </div>
+
+            <!-- 中央画面：設定 -->
+            <div class="content-body" id="page-settings" style="display: none; overflow-y: auto; max-height: 100%;">
+                <div class="logo-area"><h1 style="font-size:28px;" data-i18n="set_h">ランチャー設定</h1><div class="launcher-sub-title" data-i18n="set_s">システム設定</div></div>
+                <div class="setting-card">
+                    <h2 data-i18n="lang_h">言語設定</h2>
+                    <select id="langSelect" class="setting-select"><option value="ja">日本語</option><option value="en">English</option></select>
+                    <p class="hint" data-i18n="lang_note">ランチャーの表示言語を切り替えます。ゲーム内の言語はゲーム側の設定で変更してください。</p>
+                    <h2 data-i18n="bg_h">背景設定</h2>
+                    <div class="swatches" id="bgSwatches"></div>
+                    <div class="bg-row">
+                        <label class="copy-btn" for="bgFile" data-i18n="bg_upload">画像を選ぶ</label>
+                        <input type="file" id="bgFile" accept="image/*" hidden>
+                        <button class="copy-btn" id="bgReset" style="background:#555;" data-i18n="bg_reset">リセット</button>
+                    </div>
+                    <div class="bg-row">
+                        <input type="text" id="bgUrl" class="dl-search" style="margin-top: 0; width: 260px;" data-i18n-ph="bg_url_ph" placeholder="画像のURL（https://...）">
+                        <button class="copy-btn" id="bgUrlBtn" data-i18n="bg_url_btn">URLで設定</button>
+                    </div>
+                    <p class="hint" data-i18n="bg_hint">色を選ぶか、画像のファイルやURLを設定できます（このブラウザに保存されます）。</p>
+                    <h2 data-i18n="dbg_h">保存データの確認</h2>
+                    <p class="hint" data-i18n="dbg_note">ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。</p>
+                    <div class="bg-row">
+                        <button class="copy-btn" id="dbgBtn" data-i18n="dbg_btn">確認する</button>
+                        <button class="copy-btn" id="dbgCopy" style="background:#555;" data-i18n="dbg_copy">コピー</button>
+                    </div>
+                    <textarea id="dbgOut" class="dbg-out" readonly rows="8"></textarea>
+                </div>
+                <div class="setting-card">
+                    <h2 data-i18n="repo_h">GitHubリポジトリ</h2>
+                    <p class="hint" data-i18n="repo_p">このランチャー（Apex-Launcher）のファイルを管理している、GitHubのリポジトリです。最新のファイルを確認したいときに、開いてください。</p>
+                    <div class="url-box" id="repoUrl">https://github.com/BATTA-JP-sub/Apex-launcher</div>
+                    <div class="bg-row">
+                        <a class="copy-btn repo-link" href="https://github.com/BATTA-JP-sub/Apex-launcher" target="_blank" rel="noopener noreferrer" data-i18n="btn_open">開く</a>
+                        <button class="copy-btn" style="background:#555555;" onclick="copyAddr('https://github.com/BATTA-JP-sub/Apex-launcher')" data-i18n="btn_copy_url">URLをコピー</button>
+                    </div>
+                </div>
+                <div class="news-card"><h2 id="appVersion">Version 1.2.1</h2><p data-i18n="ver_p">Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。</p></div>
+            </div>
+        </div>
+
+        <!-- 下部プレイバーの土台部分 -->
+        <div class="play-bar">
+            <div class="version-selector-container">
+                <select class="version-selector" id="versionSelect">
+                    <!-- 最新: 26.x クライアント -->
+                    <option value="eaglercraft-26.3.html">eaglercraft-26.3.html</option>
+                    <option value="eaglercraft-26.2-wispcraft.html">eaglercraft-26.2-wispcraft.html</option>
+                    <option value="eaglercraft-26.2.html">eaglercraft-26.2.html</option>
+                    <option value="eaglercraft-26.1.2-WASM_Novix.html">eaglercraft-26.1.2-WASM_Novix.html</option>
+                    <option value="Novix_26.1.2.html">Novix_26.1.2.html</option>
+                    
+                    <!-- 1.21.x -->
+                    <option value="Eaglercraft 1.21.11 WASM.html">Eaglercraft 1.21.11 WASM.html</option>
+                    <option value="Eaglercraft-1-21-11_wasm.html">Eaglercraft-1-21-11_wasm.html</option>
+                    
+                    <!-- 1.20.x -->
+                    <option value="Eaglercraft_1.20.6_WASM-GC.html">Eaglercraft_1.20.6_WASM-GC.html</option>
+                    
+                    <!-- 1.17.x -->
+                    <option value="eaglercraft-1.17-wasm_gc.html">eaglercraft-1.17-wasm_gc.html</option>
+                    
+                    <!-- 1.16.x -->
+                    <option value="Eaglercraft 1.16.5 WASM.html">Eaglercraft 1.16.5 WASM.html</option>
+                    <option value="eaglercraft-1.16.5-wasm-gc.html">eaglercraft-1.16.5-wasm-gc.html</option>
+                    
+                    <!-- 1.15.x -->
+                    <option value="Eaglercraft-1.15.2-JS.html">Eaglercraft-1.15.2-JS.html</option>
+                    <option value="Eaglercraft-1.15.2-WASM_GC.html">Eaglercraft-1.15.2-WASM_GC.html</option>
+                    
+                    <!-- 1.14.x -->
+                    <option value="Eaglercraft_1.14.4_WASM-GC.html">Eaglercraft_1.14.4_WASM-GC.html</option>
+                    <option value="Eaglercraft_1.14.4_WASM-GC_U1.html">Eaglercraft_1.14.4_WASM-GC_U1.html</option>
+                    
+                    <!-- 1.13.x -->
+                    <option value="Eaglercraft 1.13.2-WASM.html">Eaglercraft 1.13.2-WASM.html</option>
+                    <option value="Eaglercraft-1.13.2-JS.html">Eaglercraft-1.13.2-JS.html</option>
+                    
+                    <option value="wispcraft-Eaglercraft_1.12.2-WASM-GC.html">wispcraft-Eaglercraft_1.12.2-WASM-GC.html</option>
+                    <option value="Eaglercraft_1.12.2-WASM-GC.html">Eaglercraft_1.12.2-WASM-GC.html</option>
+                    <option value="wispcraft-Eaglercraft-1.12.html">wispcraft-Eaglercraft-1.12.html</option>
+                    <option value="Eaglercraft-1.12.html">Eaglercraft-1.12.html</option>
+                    <option value="Eaglercraft_1.12_Javascript.html">Eaglercraft_1.12_Javascript.html</option>
+                    
+                    <option value="Eaglercraft-1.11.2.html">Eaglercraft-1.11.2.html</option>
+                    
+                    <option value="wispcraft-Eaglercraft 1.8.8 .html">wispcraft-Eaglercraft 1.8.8 .html</option>
+                    <option value="Eaglercraft 1.8.8 .html">Eaglercraft 1.8.8 .html</option>
+                    <option value="wispcraft-EaglercraftX_1.8_WASM-GC.html">wispcraft-EaglercraftX_1.8_WASM-GC.html</option>
+                    <option value="EaglercraftX_1.8_WASM-GC.html">EaglercraftX_1.8_WASM-GC.html</option>
+                    <option value="Koneclient-1.8.8.html">Koneclient-1.8.8.html</option>
+                    <option value="PixelClient 1.8.8 JS.html">PixelClient 1.8.8 JS.html</option>
+                    <option value="Eaglercraft 1.7.10-Javascript.html">Eaglercraft 1.7.10-Javascript.html</option>
+                    <option value="Eaglercraft-1.7-wasm.html">Eaglercraft-1.7-wasm.html</option>
+                    <option value="Eaglercraft 1.6.4.html">Eaglercraft 1.6.4.html</option>
+                    <option value="Eaglercraft-1.6.4-Forge-WASM.html">Eaglercraft-1.6.4-Forge-WASM.html</option>
+                    <option value="Eaglercraft-1.6.4-Forge.html">Eaglercraft-1.6.4-Forge.html</option>
+                    <option value="1.5.2.html">1.5.2.html</option>
+                    <option value="Eaglercraft-1.5.2.html">Eaglercraft-1.5.2.html</option>
+                    <option value="Eaglercraft-1.5.2-WASM-GC.html">Eaglercraft-1.5.2-WASM-GC.html</option>
+                    
+                    <option value="Eaglercraft_1.4.7-JS.html">Eaglercraft_1.4.7-JS.html</option>
+                    <option value="Eaglercraft_1.4.7-WASM.html">Eaglercraft_1.4.7-WASM.html</option>
+                    <option value="Eaglercraft_1_3_2.html">Eaglercraft_1_3_2.html</option>
+                    <option value="Eaglercraft_1.2.5_JS.html">Eaglercraft_1.2.5_JS.html</option>
+                    <option value="Eaglercraft_1.2.5_wasm.html">Eaglercraft_1.2.5_wasm.html</option>
+                    <option value="Eaglercraft_1.2.3_JS.html">Eaglercraft_1.2.3_JS.html</option>
+                    <option value="Eaglercraft_1.2.3_WASM-GC.html">Eaglercraft_1.2.3_WASM-GC.html</option>
+                    <option value="Eaglercraft_1.1.html">Eaglercraft_1.1.html</option>
+                    <option value="Eaglercraft-1.0.html">Eaglercraft-1.0.html</option>
+                    <option value="Eaglercraft-1.0-WASM-GC.html">Eaglercraft-1.0-WASM-GC.html</option>
+                    <option value="Eaglercraft_1_0_0.html">Eaglercraft_1_0_0.html</option>
+                    
+                    <option value="Eaglercraft_Beta_1.9_pre_5.html">Eaglercraft_Beta_1.9_pre_5.html</option>
+                    <option value="Eaglercraft_Beta_1.9_pre_5_WASM.html">Eaglercraft_Beta_1.9_pre_5_WASM.html</option>
+                    <option value="Eaglercraft_beta 1.8.1_WASM.html">Eaglercraft_beta 1.8.1_WASM.html</option>
+                    <option value="Eaglercraft beta 1.8.1.html">Eaglercraft beta 1.8.1.html</option>
+                    <option value="Beta_1.7.3.html">Beta_1.7.3.html</option>
+                    <option value="Beta-1.6.4.html">Beta-1.6.4.html</option>
+                    <option value="Eaglercraft beta 1.6-tb3-wasm.html">Eaglercraft beta 1.6-tb3-wasm.html</option>
+                    <option value="Eaglercraft beta 1.6-tb3.html">Eaglercraft beta 1.6-tb3.html</option>
+                    <option value="Eaglercraft Beta 1.5_01.html">Eaglercraft Beta 1.5_01.html</option>
+                    <option value="Eaglercraft Beta 1.4.html">Eaglercraft Beta 1.4.html</option>
+                    <option value="Eaglercraft_Beta_1.4_01.html">Eaglercraft_Beta_1.4_01.html</option>
+                    <option value="Eaglercraft-Beta-1.3-JS.html">Eaglercraft-Beta-1.3-JS.html</option>
+                    <option value="Eaglercraft-Beta-1.3-WASM.html">Eaglercraft-Beta-1.3-WASM.html</option>
+                    <option value="eaglercraft-beta-1.3.html">eaglercraft-beta-1.3.html</option>
+                    <option value="Eaglercraft_Beta-1.2_02.html">Eaglercraft_Beta-1.2_02.html</option>
+                    <option value="Eaglercraft_Beta_1.1_02-JAVS.html">Eaglercraft_Beta_1.1_02-JAVS.html</option>
+                    <option value="Eaglercraft_Beta_1.0.2.html">Eaglercraft_Beta_1.0.2.html</option>
+                    <option value="Eaglercraft_b1.1.html">Eaglercraft_b1.1.html</option>
+                    <option value="eaglercraft-alpha-1.2.6-WASM.html">eaglercraft-alpha-1.2.6-WASM.html</option>
+                    <option value="eaglercraft-alpha-1.2.6.html">eaglercraft-alpha-1.2.6.html</option>
+                    <option value="Eaglercraft alpha 1.0.16_02-JS.html">Eaglercraft alpha 1.0.16_02-JS.html</option>
+                    <option value="Eaglercraft alpha 1.0.16_02-WASM.html">Eaglercraft alpha 1.0.16_02-WASM.html</option>
+                    <option value="Eaglercraft_Alpha_1.1.2_01.html">Eaglercraft_Alpha_1.1.2_01.html</option>
+                    <option value="Eaglercraft Alpha 1.0.6_03.html">Eaglercraft Alpha 1.0.6_03.html</option>
+                    <option value="Alpha 1.0.4-JS.html">Alpha 1.0.4-JS.html</option>
+                    <option value="Alpha 1.0.1_01-JS.html">Alpha 1.0.1_01-JS.html</option>
+                    
+                    <option value="infdev-wasm-gc.html">infdev-wasm-gc.html</option>
+                    <option value="eagler-indev.html">eagler-indev.html</option>
+                    <option value="Eaglercraft Indev 20100219-JS.html">Eaglercraft Indev 20100219-JS.html</option>
+                    <option value="Eaglercraft Indev 20100219-WASM.html">Eaglercraft Indev 20100219-WASM.html</option>
+                    <option value="Eaglercraft_indev 20100223_JS.html">Eaglercraft_indev 20100223_JS.html</option>
+                    <option value="Eaglercraft_indev 20100223_WASM.html">Eaglercraft_indev 20100223_WASM.html</option>
+                    <option value="Eaglercraft_indev_20100233-wasm.html">Eaglercraft_indev_20100233-wasm.html</option>
+                    <option value="Eaglercraft_indev_20100233.html">Eaglercraft_indev_20100233.html</option>
+                    <option value="Indev_20100214_JS.html">Indev_20100214_JS.html</option>
+                    <option value="Indev_20100214_WASM-GC.html">Indev_20100214_WASM-GC.html</option>
+                    
+                    <option value="Classic 0.30-JS.html">Classic 0.30-JS.html</option>
+                    <option value="classic-0.30_WASM.html">classic-0.30_WASM.html</option>
+                    <option value="Classic 0.25_5-JS.html">Classic 0.25_5-JS.html</option>
+                    <option value="Classic 0.25_5-WASM.html">Classic 0.25_5-WASM.html</option>
+                    <option value="Classic 0.24_3-JS.html">Classic 0.24_3-JS.html</option>
+                    <option value="Classic 0.24_3-WASM.html">Classic 0.24_3-WASM.html</option>
+                    <option value="Classic 0.0.23a_01-JS.html">Classic 0.0.23a_01-JS.html</option>
+                    <option value="Classic 0.0.23a_01-WASM.html">Classic 0.0.23a_01-WASM.html</option>
+                    <option value="Classic 0.0.22a_5-JS.html">Classic 0.0.22a_5-JS.html</option>
+                    <option value="Classic 0.0.22a_5-WASM.html">Classic 0.0.22a_5-WASM.html</option>
+                    <option value="Classic 0.0.21a-JS.html">Classic 0.0.21a-JS.html</option>
+                    <option value="Classic 0.0.21a-WASM.html">Classic 0.0.21a-WASM.html</option>
+                    <option value="Classic 0.0.20_2-JS.html">Classic 0.0.20_2-JS.html</option>
+                    <option value="Classic 0.0.20_2-WASM.html">Classic 0.0.20_2-WASM.html</option>
+                    <option value="Classic 0.0.19a_6-JS.html">Classic 0.0.19a_6-JS.html</option>
+                    <option value="Classic 0.0.19a_6-WASM.html">Classic 0.0.19a_6-WASM.html</option>
+                    <option value="Classic 0.0.18a_2-JS.html">Classic 0.0.18a_2-JS.html</option>
+                    <option value="Classic 0.0.18a_2-WASM.html">Classic 0.0.18a_2-WASM.html</option>
+                    <option value="Classic 0.0.17a-JS.html">Classic 0.0.17a-JS.html</option>
+                    <option value="Classic 0.0.17a-WASM.html">Classic 0.0.17a-WASM.html</option>
+                    <option value="Classic 0.0.16a_2-JS.html">Classic 0.0.16a_2-JS.html</option>
+                    <option value="Classic 0.0.16a_2-WASM.html">Classic 0.0.16a_2-WASM.html</option>
+                    <option value="Classic 0.0.15a-JS.html">Classic 0.0.15a-JS.html</option>
+                    <option value="Classic 0.0.15a-WASM.html">Classic 0.0.15a-WASM.html</option>
+                    <option value="Classic 0.0.14a_8-JS.html">Classic 0.0.14a_8-JS.html</option>
+                    <option value="Classic 0.0.14a_8-WASM.html">Classic 0.0.14a_8-WASM.html</option>
+                    <option value="Classic 0.0.13a_3-JS.html">Classic 0.0.13a_3-JS.html</option>
+                    <option value="Classic 0.0.13a_3-WASM.html">Classic 0.0.13a_3-WASM.html</option>
+                    <option value="Classic 0.0.12a_3-JS.html">Classic 0.0.12a_3-JS.html</option>
+                    <option value="Classic 0.0.12a_3-WASM.html">Classic 0.0.12a_3-WASM.html</option>
+                    <option value="Classic 0.0.11a-JS.html">Classic 0.0.11a-JS.html</option>
+                    <option value="Classic 0.0.11a-WASM.html">Classic 0.0.11a-WASM.html</option>
+                    
+                    <option value="pre-release-160052.html">pre-release-160052.html</option>
+                    <option value="rd-161348-JS.html">rd-161348-JS.html</option>
+                    <option value="rd-161348-WASM.html">rd-161348-WASM.html</option>
+                    <option value="rd-160052-JS.html">rd-160052-JS.html</option>
+                    <option value="rd-132328-JS.html">rd-132328-JS.html</option>
+                    <option value="rd-132328-WASM.html">rd-132328-WASM.html</option>
+                    <option value="rd-132211-JS.html">rd-132211-JS.html</option>
+                    <option value="rd-132211-WASM.html">rd-132211-WASM.html</option>
+                    <option value="rd-131655-JS.html">rd-131655-JS.html</option>
+                    <option value="rd-131655-WASM.html">rd-131655-WASM.html</option>
+                    
+                    <option value="Aero Client JS.html">Aero Client JS.html</option>
+                    <option value="EB Client Nextgen CU4.html">EB Client Nextgen CU4.html</option>
+                    <option value="Eaglercraft Mobile.html">Eaglercraft Mobile.html</option>
+                    <option value="Eaglercraft Scratch.html">Eaglercraft Scratch.html</option>
+                    <option value="Eaglercraft-Scratch.html">Eaglercraft-Scratch.html</option>
+                    <option value="EaglercraftZ.html">EaglercraftZ.html</option>
+                    <option value="eaglercraftx-194.html">eaglercraftx-194.html</option>
+                    <option value="Eaglet.html">Eaglet.html</option>
+                    <option value="EagletWithNormalResources.html">EagletWithNormalResources.html</option>
+                    <option value="EaglyMC.html">EaglyMC.html</option>
+                    <option value="Eclipse Client.html">Eclipse Client.html</option>
+                    <option value="Mega Client-JS.html">Mega Client-JS.html</option>
+                    <option value="Minicraft.html">Minicraft.html</option>
+                    <option value="Myven-Client-WASM.html">Myven-Client-WASM.html</option>
+                    <option value="N0VA CLIENT.html">N0VA CLIENT.html</option>
+                    <option value="Precision.html">Precision.html</option>
+                    <option value="Prism-Client.html">Prism-Client.html</option>
+                    <option value="Tuff_Client_WASM.html">Tuff_Client_WASM.html</option>
+                    <option value="Water Client.html">Water Client.html</option>
+                    <option value="incari client.html">incari client.html </option>
+                    <option value="eaglercraft-forge-1.0-js.html">eaglercraft-forge-1.0-js.html</option>
+                    <option value="eaglercraft-forge-1.0-wasm.html">eaglercraft-forge-1.0-wasm.html</option>
+                    <option value="injector.html">injector.html</option>
+                    <option value="mc4k.html">mc4k.html</option>
+                    <option value="Eaglercraft-4k-JS.html">Eaglercraft-4k-JS.html</option>
+                </select>
+                <div class="vs" id="vs">
+                    <button type="button" class="vs-btn" id="vsBtn"><img class="grass-icon" src="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org/2000/svg%27%20viewBox%3D%270%200%2016%2016%27%20shape-rendering%3D%27crispEdges%27%3E%3Cpath%20fill%3D%27%23754321%27%20d%3D%27M1%204h14v11H1z%27%2F%3E%3Cpath%20fill%3D%27%234b9b35%27%20d%3D%27M1%202h14v4H1z%27%2F%3E%3Cpath%20fill%3D%27%2365b947%27%20d%3D%27M1%201h14v3H1z%27%2F%3E%3Cpath%20fill%3D%27%23347d2b%27%20d%3D%27M1%204h14v2H1z%27%2F%3E%3Cpath%20fill%3D%27%238b5a2b%27%20d%3D%27M2%207h3v2H2zm7%202h2v2H9zm3-2h2v2h-2zM3%2012h2v2H3zm8%201h3v1h-3z%27%2F%3E%3Cpath%20fill%3D%27%23a36a35%27%20d%3D%27M6%207h2v2H6zm5%204h2v2h-2z%27%2F%3E%3C%2Fsvg%3E" alt="" aria-hidden="true"><span class="vs-label" id="vsLabel"></span><span id="vsBadge"></span><span class="vs-caret">▲</span></button>
+                    <div class="vs-pop" id="vsPop">
+                        <input type="text" class="vs-search" id="vsSearch" data-i18n-ph="dl_ph" placeholder="ファイル名で検索...">
+                        <div class="vs-list" id="vsList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="play-button" onclick="launchGame()" data-i18n="play">プレイ</button>
+
+            <div class="user-profile">
+                <div class="avatar"></div>
+                <input type="text" class="name-input" id="playerNameInput" value="Player_name" data-i18n-ph="name_ph" placeholder="名前を入力...">
+            </div>
+        </div>
+    </div>
+
+    <!-- 3Dスキンビューア -->
+    <div id="sk3dModal" class="sk3d-modal">
+        <div class="sk3d-box">
+            <div class="sk3d-stage" id="sk3dStage"><div class="sk3d-model" id="sk3dModel"></div></div>
+            <div class="skin-name" id="sk3dName"></div>
+            <div class="bg-row">
+                <button class="copy-btn" id="sk3dDl" data-i18n="btn_download">ダウンロード</button>
+                <button class="copy-btn" id="sk3dClose" style="background:#555555;" data-i18n="sk_close">閉じる</button>
+            </div>
+            <p class="hint" data-i18n="sk3d_hint">ドラッグで回転できます</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== エラーが出たとき、画面の下に内容を表示する（原因調べ用） =====
+        (function errorBar() {
+            function show(msg) {
+                let bar = document.getElementById('errBar');
+                if (!bar) {
+                    bar = document.createElement('div'); bar.id = 'errBar';
+                    bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;max-height:40vh;overflow:auto;background:#5a1a1a;color:#ffffff;font:12px/1.5 monospace;padding:8px 36px 8px 12px;z-index:200;white-space:pre-wrap;user-select:text;';
+                    const x = document.createElement('button'); x.textContent = '×';
+                    x.style.cssText = 'position:absolute;right:8px;top:4px;background:none;border:none;color:#ffffff;font-size:16px;cursor:pointer;';
+                    x.onclick = () => bar.remove();
+                    const txt = document.createElement('div'); txt.id = 'errBarText';
+                    bar.appendChild(x); bar.appendChild(txt); (document.body || document.documentElement).appendChild(bar);
+                }
+                const t = document.getElementById('errBarText'); t.textContent += (t.textContent ? '\n\n' : '') + msg;
+            }
+            window.addEventListener('error', e => {
+                show('エラー: ' + e.message + '\n場所: ' + String(e.filename || '').split('/').pop() + ':' + e.lineno + ':' + e.colno +
+                    (e.error && e.error.stack ? '\n' + String(e.error.stack).split('\n').slice(0, 5).join('\n') : ''));
+            });
+            window.addEventListener('unhandledrejection', e => { show('エラー(非同期): ' + ((e.reason && (e.reason.stack || e.reason.message)) || e.reason)); });
+        })();
+
+        // タブ切り替えのシステム
+        const tabs = ['home', 'client', 'skin', 'server', 'download', 'settings'];
+        tabs.forEach(tab => {
+            const tabBtn = document.getElementById(`tab-${tab}`);
+            const page = document.getElementById(`page-${tab}`);
+            if (tabBtn && page) {
+                tabBtn.addEventListener('click', () => {
+                    tabs.forEach(t => {
+                        document.getElementById(`tab-${t}`).classList.remove('active');
+                        document.getElementById(`page-${t}`).style.display = 'none';
+                    });
+                    tabBtn.classList.add('active');
+                    page.style.display = 'flex';
+                    document.body.classList.toggle('not-home', tab !== 'home' && tab !== 'client');
+                    if ((tab === 'home' || tab === 'client') && window.setPickerMode) window.setPickerMode(tab);
+                });
+            }
+        });
+
+        // プレイヤー名の自動復元
+        window.addEventListener('DOMContentLoaded', () => {
+            let savedName = null;
+            try { savedName = localStorage.getItem('BattaLauncher_LastUsername'); } catch (e) {}
+            if (savedName) {
+                document.getElementById('playerNameInput').value = savedName;
+            }
+            updateAvatar();
+        });
+
+        // アドレスコピー（成功時のみ通知）
+        function copyAddr(addr) {
+            const done = () => alert(t('copied'));
+            const fallback = () => {
+                const ta = document.createElement('textarea');
+                ta.value = addr; ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy') ? done() : alert(t('copy_fail')); }
+                catch (e) { alert(t('copy_fail')); }
+                document.body.removeChild(ta);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(addr).then(done, fallback);
+            } else { fallback(); }
+        }
+
+        // アバターをプレイヤー名から更新
+        function updateAvatar() {
+            const n = document.getElementById('playerNameInput').value.trim() || 'Steve';
+            document.querySelector('.avatar').style.backgroundImage = "url('https://minotar.net/avatar/" + encodeURIComponent(n) + "/32')";
+        }
+        document.getElementById('playerNameInput').addEventListener('input', updateAvatar);
+
+        // 戻るボタンで戻ってきたときにプレイボタンを復元
+        window.addEventListener('pageshow', () => {
+            const btn = document.querySelector('.play-button');
+            btn.innerText = t('play');
+            btn.style.backgroundColor = '';
+            btn.style.borderBottomColor = '';
+            btn.disabled = false;
+        });
+
+        // ===== スキン生成（オリジナル50種・64x64 PNG） =====
+        const T1='#f1c9a5',T2='#e0ac84',T3='#c58c5f';
+        // [名前, 肌, 髪色, 髪型(0なし/1短/2長/3ツンツン/4モヒカン), 服, 差し色, ズボン, 靴, 長袖, アクセサリー]
+        const SKINS=[
+        ['騎士',T1,'#5a3a22',1,'#8a94a3','#c9a227','#5d6672','#3b3f46',1,'helm:#aab3c0'],
+        ['忍者',T2,'',0,'#1d1f27','#a02323','#1d1f27','#111111',1,'ninja:#1d1f27'],
+        ['ロボット','#aab4c0','',0,'#7d8896','#3fd0ff','#5b6573','#3a424d',1,'visor:#3fd0ff'],
+        ['海賊',T3,'#2b1a10',2,'#f2eadb','#b02a2a','#2a2f4a','#4a2f1a',1,'band:#b02a2a'],
+        ['魔法使い',T1,'#cfcfcf',2,'#4b2a7a','#e6c34a','#33205a','#251a40',1,'cap:#4b2a7a,beard:#e8e8e8'],
+        ['農家',T2,'#a9742f',1,'#c24a3a','#f0e0b0','#3f6aa8','#5a3a1f',0,'cap:#d8b86a'],
+        ['宇宙飛行士',T1,'#3a2a1a',1,'#f2f2f2','#e0662b','#e6e6e6','#b8bcc4',1,'astro:#f2f2f2'],
+        ['ゾンビ','#6a9e5a','#2f3b2a',3,'#3f8aa8','#2a5f78','#3b3a7a','#2a2a2a',1,''],
+        ['スケルトン','#d9d9d9','',0,'#cfcfcf','#9a9a9a','#bdbdbd','#9a9a9a',1,''],
+        ['医者',T1,'#222222',1,'#f4f4f4','#3fa86b','#2f5f8f','#dddddd',0,'glass:#444444'],
+        ['料理人',T2,'#3a2a1a',1,'#fafafa','#c9c9c9','#3a3a44','#222222',1,'cap:#fafafa'],
+        ['探検家',T3,'#4a2f1a',3,'#b89a5a','#6b4a22','#6b5a3a','#4a3a22',0,'cap:#9a7a3a'],
+        ['サイバー',T2,'#e84aa8',4,'#1e1e3a','#2ef0e0','#2a2a50','#111111',1,'visor:#2ef0e0'],
+        ['ドラゴン戦士',T3,'#7a1f1f',3,'#9a2a2a','#e6a82a','#4a1f1f','#2a1010',1,'horns:#e6d9b0'],
+        ['ネコ',T1,'#e8a860',1,'#e8a860','#ffffff','#c9843a','#ffffff',0,'ears:#e8a860'],
+        ['パンダ','#fafafa','#111111',0,'#111111','#fafafa','#111111','#111111',1,'ears:#111111'],
+        ['サンタ',T1,'#f4f4f4',2,'#c92a2a','#f4f4f4','#c92a2a','#222222',1,'cap:#c92a2a,beard:#f4f4f4'],
+        ['王様',T1,'#6a4a2a',2,'#7a1f4a','#e6c34a','#4a1f30','#2a1a10',1,'crown:#e6c34a'],
+        ['吸血鬼','#f4ddd0','#111111',1,'#1a1a1a','#a01a2a','#1a1a1a','#000000',1,''],
+        ['幽霊','#e8f0ff','',0,'#e8f0ff','#c0d0f0','#e8f0ff','#e8f0ff',1,''],
+        ['警察官',T2,'#222222',1,'#2a4a8a','#e6c34a','#1f2f5a','#111111',1,'cap:#1f2f5a'],
+        ['消防士',T3,'#222222',1,'#c9422a','#f0d030','#2a2a2a','#111111',1,'helm:#e6c030'],
+        ['パイロット',T1,'#6a4a2a',1,'#6a7a5a','#c9a227','#4a5a3a','#3a2a1a',1,'cap:#4a5a3a,glass:#222222'],
+        ['サムライ',T2,'#111111',2,'#b82a2a','#e6c34a','#222222','#3a2a1a',1,'band:#f4f4f4'],
+        ['エルフ',T1,'#e6d890',2,'#3a7a4a','#d8c070','#5a4a2a','#3a2a1a',1,''],
+        ['ドワーフ',T3,'#b8601a',1,'#8a5a2a','#d8a030','#4a3a2a','#2a2a2a',1,'helm:#8a8a8a,beard:#b8601a'],
+        ['魔女',T1,'#6a2a8a',2,'#2a1a4a','#b84ad8','#2a1a3a','#111111',1,'cap:#2a1a4a'],
+        ['狩人',T2,'#4a3a1a',1,'#3a6a2a','#8a6a2a','#5a4a2a','#3a2a1a',0,'hood:#3a6a2a'],
+        ['氷の戦士','#cfe8ff','#ffffff',3,'#6ab0e8','#ffffff','#3a6aa8','#2a4a78',1,'helm:#bfe6ff'],
+        ['炎の戦士',T3,'#ff7a1a',3,'#c9302a','#ffcf30','#4a1a1a','#2a1010',1,''],
+        ['白忍者',T2,'',0,'#e8e8e8','#3a3a3a','#e8e8e8','#aaaaaa',1,'ninja:#e8e8e8'],
+        ['赤ロボット','#b8a8a8','',0,'#a82a2a','#ffd02a','#6a2a2a','#3a1a1a',1,'visor:#ffd02a'],
+        ['学生',T1,'#222222',1,'#f4f4f4','#2a3a7a','#2a3a7a','#222222',0,''],
+        ['サッカー選手',T3,'#111111',1,'#2a6ad8','#ffffff','#ffffff','#111111',0,''],
+        ['ダイバー',T2,'#222222',1,'#1a1a2a','#e6d030','#1a1a2a','#e6d030',1,'glass:#30c0e0'],
+        ['ミュージシャン',T3,'#e8c030',3,'#1a1a1a','#e84a8a','#6a2a8a','#111111',0,'glass:#111111'],
+        ['カウボーイ',T2,'#4a2f1a',1,'#c9a06a','#8a5a2a','#3a5a8a','#5a3a1f',1,'cap:#7a4a22,beard:#4a2f1a'],
+        ['戦士',T3,'#222222',0,'#a8322a','#e6c34a','#a8322a','#8a6a2a',0,'helm:#c9a227'],
+        ['ミイラ','#e8dcc0','',0,'#e8dcc0','#c0b090','#e8dcc0','#e8dcc0',1,'mask:#e8dcc0'],
+        ['エイリアン','#7ad07a','',0,'#3a3a5a','#7ad07a','#2a2a4a','#7ad07a',1,'visor:#111111'],
+        ['科学者',T1,'#cfcfcf',3,'#f4f4f4','#3a8ad8','#4a4a5a','#222222',1,'glass:#222222'],
+        ['大工',T2,'#6a4a2a',1,'#d8a030','#6a4a22','#4a5a8a','#4a3a22',0,'cap:#e6c030'],
+        ['王子',T1,'#e8c060',1,'#2a5aa8','#e6c34a','#f4f4f4','#3a2a1a',1,''],
+        ['雪だるま','#fafafa','',0,'#fafafa','#e87a1a','#fafafa','#fafafa',1,'cap:#222222'],
+        ['かぼちゃ',T1,'#3a2a1a',1,'#e87a1a','#2a1a10','#2a1a10','#111111',1,'cap:#e87a1a'],
+        ['アイドル',T1,'#ff8ac8',2,'#ff8ac8','#ffffff','#ffffff','#ff8ac8',0,'band:#ffffff'],
+        ['レーサー',T2,'#222222',1,'#f4f4f4','#d82a2a','#d82a2a','#111111',1,'helm:#d82a2a'],
+        ['迷彩',T3,'#222222',1,'#5a6a3a','#3a4a2a','#4a5a2a','#2a2a1a',1,'helm:#4a5a2a'],
+        ['ステルス',T2,'#111111',3,'#2a2a2a','#8a8a8a','#1a1a1a','#111111',1,'hood:#2a2a2a'],
+        ['ゴールド','#f0d060','',0,'#e6b830','#fff0a0','#c9982a','#a87a1a',1,'crown:#fff0a0']
+        ];
+
+        function shade(hex, d) {
+            if (hex[0] !== '#') return hex;
+            const n = parseInt(hex.slice(1), 16), f = v => Math.max(0, Math.min(255, v + d));
+            return 'rgb(' + f(n >> 16) + ',' + f((n >> 8) & 255) + ',' + f(n & 255) + ')';
+        }
+
+        function makeSkin(s) {
+            const [name, tone, hair, hs, shirt, trim, pants, boots, sl, acc] = s;
+            const c = document.createElement('canvas'); c.width = 64; c.height = 64;
+            const g = c.getContext('2d');
+            const F = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(x, y, w, h); };
+            const dk = col => shade(col, -35);
+            // 頭・髪・顔
+            F(0, 8, 32, 8, tone); F(8, 0, 16, 8, tone);
+            if (hs == 4) { F(11, 0, 2, 8, hair); F(11, 8, 2, 2, hair); F(27, 8, 2, 6, hair); }
+            else if (hs) {
+                F(8, 0, 8, 8, hair); F(8, 8, 8, 2, hair); F(0, 8, 8, 3, hair); F(16, 8, 8, 3, hair); F(24, 8, 8, hs == 2 ? 8 : 6, hair);
+                if (hs == 2) { F(0, 8, 5, 8, hair); F(19, 8, 5, 8, hair); }
+                if (hs == 3) [8, 10, 12, 14].forEach(x => F(x, 10, 1, 1, hair));
+            }
+            F(9, 12, 1, 1, '#ffffff'); F(14, 12, 1, 1, '#ffffff'); F(10, 12, 1, 1, '#2b3a67'); F(13, 12, 1, 1, '#2b3a67'); F(11, 14, 2, 1, '#a8524a');
+            // 胴体
+            F(16, 20, 24, 12, shirt); F(20, 16, 8, 4, shirt); F(28, 16, 8, 4, pants);
+            F(16, 30, 24, 1, trim); F(16, 31, 24, 1, pants); F(20, 20, 8, 1, trim); F(23, 22, 2, 2, trim);
+            // 腕（右腕 40,16 / 左腕 32,48）
+            const arm = (x, y) => {
+                const r = sl ? 10 : 4;
+                F(x, y + 4, 16, 12, tone); F(x + 8, y, 4, 4, tone);
+                F(x + 4, y, 4, 4, shirt); F(x, y + 4, 16, r, shirt); F(x, y + 3 + r, 16, 1, trim);
+            };
+            arm(40, 16); arm(32, 48);
+            // 脚（右脚 0,16 / 左脚 16,48）
+            const leg = (x, y) => { F(x, y + 4, 16, 12, pants); F(x + 4, y, 4, 4, pants); F(x + 8, y, 4, 4, boots); F(x, y + 12, 16, 4, boots); };
+            leg(0, 16); leg(16, 48);
+            // 帽子レイヤー
+            const H = {
+                cap: k => { F(40, 0, 8, 8, k); F(32, 8, 32, 2, k); F(40, 10, 8, 1, dk(k)); },
+                helm: k => { F(40, 0, 8, 8, k); F(32, 8, 8, 8, k); F(48, 8, 16, 8, k); F(40, 8, 8, 4, k); F(43, 12, 2, 3, k); },
+                hood: k => { F(40, 0, 8, 8, k); F(32, 8, 8, 8, k); F(48, 8, 16, 8, k); F(40, 8, 8, 2, k); F(40, 10, 1, 6, k); F(47, 10, 1, 6, k); },
+                ninja: k => { F(40, 0, 8, 8, k); F(32, 8, 32, 8, k); g.clearRect(40, 12, 8, 2); },
+                band: k => F(32, 9, 32, 1, k),
+                horns: k => { F(40, 8, 1, 3, k); F(47, 8, 1, 3, k); F(40, 0, 1, 2, k); F(47, 0, 1, 2, k); },
+                ears: k => { F(40, 0, 2, 2, k); F(46, 0, 2, 2, k); F(40, 8, 2, 1, k); F(46, 8, 2, 1, k); },
+                mask: k => { F(40, 13, 8, 3, k); F(36, 13, 4, 3, k); F(48, 13, 4, 3, k); },
+                glass: k => { F(40, 11, 8, 1, k); F(40, 13, 8, 1, k); F(40, 12, 1, 1, k); F(43, 12, 2, 1, k); F(47, 12, 1, 1, k); F(36, 12, 4, 1, k); F(48, 12, 4, 1, k); },
+                beard: k => { F(40, 14, 8, 2, k); F(40, 13, 1, 1, k); F(47, 13, 1, 1, k); F(36, 13, 4, 3, k); F(48, 13, 4, 3, k); },
+                visor: k => { F(40, 11, 8, 2, k); F(36, 11, 4, 2, k); F(48, 11, 4, 2, k); },
+                crown: k => { F(40, 0, 8, 8, k); F(32, 8, 32, 1, k); [0, 2, 4, 6].forEach(i => F(40 + i, 9, 1, 1, k)); },
+                astro: k => { F(40, 0, 8, 8, k); F(32, 8, 32, 8, k); g.clearRect(41, 9, 6, 6); g.fillStyle = 'rgba(120,180,255,0.35)'; g.fillRect(41, 9, 6, 6); }
+            };
+            acc.split(',').filter(Boolean).forEach(p => { const [k, col] = p.split(':'); if (H[k]) H[k](col); });
+            return c;
+        }
+
+        function drawPreview(tex, cv, back) {
+            const g = cv.getContext('2d'); g.imageSmoothingEnabled = false; g.clearRect(0, 0, cv.width, cv.height);
+            const legacy = (tex.height || 64) < 64;
+            const P = back
+                ? { h: [24, 8], t: [56, 8], b: [32, 20], al: [44, 52], ar: [52, 20], ll: [28, 52], lr: [12, 20] }
+                : { h: [8, 8], t: [40, 8], b: [20, 20], al: [44, 20], ar: [36, 52], ll: [4, 20], lr: [20, 52] };
+            const s = (p, w, h, dx, dy, flip) => {
+                if (!flip) { g.drawImage(tex, p[0], p[1], w, h, dx * 4, dy * 4, w * 4, h * 4); return; }
+                g.save(); g.translate((dx + w) * 4, dy * 4); g.scale(-1, 1);
+                g.drawImage(tex, p[0], p[1], w, h, 0, 0, w * 4, h * 4); g.restore();
+            };
+            // 旧形式(64x32)は左右の手足が共通なので、反転して使う
+            const lb = legacy && back, lf = legacy && !back;
+            s(P.h, 8, 8, 4, 0); s(P.t, 8, 8, 4, 0); s(P.b, 8, 12, 4, 8);
+            s(lb ? [52, 20] : P.al, 4, 12, 0, 8, lb); s(lf ? [44, 20] : P.ar, 4, 12, 12, 8, lf);
+            s(lb ? [12, 20] : P.ll, 4, 12, 4, 20, lb); s(lf ? [4, 20] : P.lr, 4, 12, 8, 20, lf);
+        }
+
+        (function buildSkinPage() {
+            const grid = document.getElementById('skinGrid');
+            SKINS.forEach((sk, i) => {
+                const tex = makeSkin(sk), card = document.createElement('div'), cv = document.createElement('canvas');
+                card.className = 'skin-card'; cv.width = 64; cv.height = 128; cv.setAttribute('data-i18n-title', 'sk_tip');
+                let back = false; drawPreview(tex, cv, back);
+                cv.addEventListener('click', () => window.open3D(nm.textContent, tex, () => bt.click()));
+                const nm = document.createElement('div'); nm.className = 'skin-name'; nm.dataset.skin = i; nm.textContent = sk[0];
+                const bt = document.createElement('button'); bt.className = 'copy-btn'; bt.setAttribute('data-i18n', 'btn_download'); bt.textContent = 'ダウンロード';
+                bt.addEventListener('click', () => tex.toBlob(b => {
+                    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = (LANG === 'en' ? SKIN_EN[i] : sk[0]) + '.png'; a.click();
+                    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+                }));
+                const b3 = document.createElement('button'); b3.className = 'copy-btn'; b3.setAttribute('data-i18n', 'btn_3d'); b3.textContent = '3D表示';
+                b3.addEventListener('click', () => window.open3D(nm.textContent, tex, () => bt.click()));
+                card.append(cv, nm, b3, bt); grid.appendChild(card);
+            });
+        })();
+
+        // ===== 言語・背景設定 =====
+        const I18N = {
+            ja: {
+                nav_client:'クライアント', nav_skin:'スキン管理', nav_server:'サーバーリスト', nav_settings:'設定',
+                home_h:'Apex-Launcher へようこそ', home_p:'プレイヤー名を入力し、リストからファイルを選択したら「プレイ」を押してください！',
+                cl_h:'カスタムクライアント', cl_s:'専用のPVP・軽量化・高機能クライアントを直接起動できます', btn_launch:'起動する',
+                sk_h:'スキン管理（50種）', sk_s:'画像をクリックで3D表示。PNGを保存して、ゲーム内のスキン設定からアップロードしてください', btn_download:'ダウンロード', sk_tip:'クリックで3D表示',
+                sv_h:'マルチサーバーリスト (17選)', sv_s:'アドレスをコピーしてゲーム内のMultiplayer設定で追加してください', btn_copy:'アドレスコピー', copied:'コピーしました！', copy_fail:'コピーに失敗しました',
+                set_h:'ランチャー設定', set_s:'システム設定', lang_h:'言語設定', lang_note:'ランチャーの表示言語を切り替えます。ゲーム内の言語はゲーム側の設定で変更してください。',
+                bg_h:'背景設定', bg_upload:'画像を選ぶ', bg_reset:'リセット', bg_hint:'色を選ぶか、画像のファイルやURLを設定できます（このブラウザに保存されます）。', bg_url_ph:'画像のURL（https://...）', bg_url_btn:'URLで設定', bg_url_bad:'https:// から始まる画像のURLを入力してください', bg_url_fail:'この画像を読み込めませんでした（URLが違うか、他のサイトからの表示を断られています）', bg_fail:'画像が大きすぎて保存できませんでした（今回のみ適用）',
+                ver_p:'Apex-Launcher は、WebベースのマインクラフトHTMLファイルを素早く整理して快適に遊ぶための個人用カスタムランチャーです。',
+                play:'プレイ', launching:'起動中...', name_ph:'名前を入力...',
+                dbg_h:'保存データの確認', dbg_note:'ゲーム内で名前を変更した直後に押してください。キー名・長さ・先頭60文字だけが表示されます。', dbg_btn:'確認する', dbg_copy:'コピー',
+                nav_download:'ダウンロード', dl_h:'ファイルダウンロード', dl_s:'ゲーム・クライアントのHTMLファイルを1つずつ保存できます。', dl_ph:'ファイル名で検索...', dl_unit:'件', sv_refresh:'更新', sv_checking:'確認中...', sv_unavail:'取得できません', sv_people:'人', sv_f_connect:'接続できません', sv_f_noresp:'応答がありません', sv_f_format:'形式が違います', sv_s_ok:'取得成功', sv_auto_on:'自動更新（5秒）: ON', sv_auto_off:'自動更新（5秒）: OFF', sv_ver_label:'対応:', sv_ver_unknown:'未確認', sv_note:'ブラウザ版（Eaglercraft）で入るときの目安：EaglercraftX 1.8（ランチャーの「1.8.8」や「1.8」）が、多くのサーバーで使えます。1.12.2 や 1.5.2 は、サーバーが対応している場合だけ入れます。カード内の「対応」は、公開リストに載っていたサーバー側のバージョンです。',
+                sk_close:'閉じる', btn_select:'選択', cl_h2:'クライアント', cl_s2:'下の選択欄から、クライアントを選んでプレイできます', cl_p:'下の選択欄には、クライアントだけが並びます。選んで「プレイ」を押してください。', btn_3d:'3D表示', sk3d_hint:'ドラッグで回転できます', my_h:'マイスキン（自分で追加）', my_add:'PNGを追加', my_note:'NovaSkinなどのサイトから、自分でダウンロードしたPNG（64×64 または 64×32）を追加できます。このブラウザの中だけに保存され、サイトには公開されません。他の人のスキンは作者の作品なので、各サイトの利用規約に従って、個人で使ってください。', my_bad:'64×64 または 64×32 のPNGだけ追加できます', my_full:'保存容量がいっぱいで保存できませんでした', my_del:'削除', repo_h:'GitHubリポジトリ', repo_p:'このランチャー（Apex-Launcher）のファイルを管理している、GitHubのリポジトリです。最新のファイルを確認したいときに、開いてください。', btn_copy_url:'URLをコピー', btn_open:'開く',
+                sk_look_h:'ユーザー名でスキンを取得', sk_look_ph:'Minecraftのユーザー名', sk_look_btn:'取得', sk_look_loading:'取得中...', sk_look_fail:'スキンを取得できませんでした（サービスに接続できません）', sk_look_bad:'ユーザー名は英数字とアンダースコアの1〜16文字で入力してください', sk_look_note:'実在するプレイヤーのスキンを、Minotarというサービスから取得します。存在しない名前は初期スキンになります。他の人のスキンはその作者の作品なので、個人で使う範囲にしてください。'
+            },
+            en: {
+                nav_client:'Clients', nav_skin:'Skins', nav_server:'Server List', nav_settings:'Settings',
+                home_h:'Welcome to Apex-Launcher', home_p:'Enter your player name, pick a file from the list, then press "Play"!',
+                cl_h:'Custom Clients', cl_s:'Launch PVP, lightweight and feature-rich clients directly', btn_launch:'Launch',
+                sk_h:'Skins (50)', sk_s:'Click a preview to view it in 3D. Save the PNG and upload it from the in-game skin settings.', btn_download:'Download', sk_tip:'Click to view in 3D',
+                sv_h:'Multiplayer Server List (17)', sv_s:'Copy an address and add it in the in-game Multiplayer menu', btn_copy:'Copy address', copied:'Copied!', copy_fail:'Copy failed',
+                set_h:'Launcher Settings', set_s:'System settings', lang_h:'Language', lang_note:'Changes the launcher display language. The in-game language is set inside the game.',
+                bg_h:'Background', bg_upload:'Choose image', bg_reset:'Reset', bg_hint:'Pick a color, or set an image file or URL (saved in this browser).', bg_url_ph:'Image URL (https://...)', bg_url_btn:'Set from URL', bg_url_bad:'Enter an image URL starting with https://', bg_url_fail:'Could not load this image (wrong URL, or the site blocks hotlinking).', bg_fail:'The image was too large to save (applied for this session only)',
+                ver_p:'Apex-Launcher is a personal custom launcher for organizing and quickly playing web-based Minecraft HTML files.',
+                play:'Play', launching:'Launching...', name_ph:'Enter name...',
+                dbg_h:'Saved Data Check', dbg_note:'Press this right after changing your name in the game. Only key names, lengths and the first 60 characters are shown.', dbg_btn:'Check', dbg_copy:'Copy',
+                nav_download:'Downloads', dl_h:'File Downloads', dl_s:'Save the game and client HTML files one by one.', dl_ph:'Search files...', dl_unit:'files', sv_refresh:'Refresh', sv_checking:'Checking...', sv_unavail:'Unavailable', sv_people:'players', sv_f_connect:'Cannot connect', sv_f_noresp:'No response', sv_f_format:'Unknown format', sv_s_ok:'OK', sv_auto_on:'Auto refresh (5s): ON', sv_auto_off:'Auto refresh (5s): OFF', sv_ver_label:'Versions:', sv_ver_unknown:'Unverified', sv_note:'Rule of thumb for the browser (Eaglercraft) client: EaglercraftX 1.8 ("1.8.8" or "1.8" in the launcher) works on most servers. 1.12.2 and 1.5.2 only work if the server supports them. "Versions" on each card is the server-side version from public listings.',
+                sk_close:'Close', btn_select:'Select', cl_h2:'Clients', cl_s2:'Pick a client from the list below and play', cl_p:'The list below shows clients only. Pick one and press "Play".', btn_3d:'View 3D', sk3d_hint:'Drag to rotate', my_h:'My Skins (add your own)', my_add:'Add PNG', my_note:'Add PNG files (64x64 or 64x32) that you downloaded yourself from sites such as NovaSkin. They are stored only in this browser and are not published on the site. Other people\'s skins are their creators\' work, so follow each site\'s terms and keep it to personal use.', my_bad:'Only 64x64 or 64x32 PNG files can be added', my_full:'Storage is full, could not save', my_del:'Delete', repo_h:'GitHub repository', repo_p:'The GitHub repository that manages the files of this launcher (Apex-Launcher). Open it when you want to check the latest files.', btn_copy_url:'Copy URL', btn_open:'Open',
+                sk_look_h:'Get a skin by username', sk_look_ph:'Minecraft username', sk_look_btn:'Get', sk_look_loading:'Loading...', sk_look_fail:'Could not get the skin (cannot reach the service)', sk_look_bad:'Enter 1-16 letters, digits or underscores', sk_look_note:'Fetches the skin of a real player from a service called Minotar. Unknown names return a default skin. Other people\'s skins are their creators\' work, so keep it to personal use.'
+            }
+        };
+        const SKIN_EN = ["Knight", "Ninja", "Robot", "Pirate", "Wizard", "Farmer", "Astronaut", "Zombie", "Skeleton", "Doctor", "Chef", "Explorer", "Cyber", "Dragon Warrior", "Cat", "Panda", "Santa", "King", "Vampire", "Ghost", "Police Officer", "Firefighter", "Pilot", "Samurai", "Elf", "Dwarf", "Witch", "Hunter", "Ice Warrior", "Fire Warrior", "White Ninja", "Red Robot", "Student", "Soccer Player", "Diver", "Musician", "Cowboy", "Warrior", "Mummy", "Alien", "Scientist", "Carpenter", "Prince", "Snowman", "Pumpkin", "Idol", "Racer", "Camo", "Stealth", "Gold"];
+        const TR_EN = {"PVP・軽量化クライアント": "PVP / lightweight client", "高機能・ハッククライアント": "Feature-rich / hacked client", "PVP向け軽量カスタム": "Lightweight PVP custom", "定番PVPクライアント": "Popular PVP client", "スタイリッシュUI": "Stylish UI", "FPSブースト・軽量化": "FPS boost & lightweight", "各種設定拡張版": "Extended settings edition", "チート・ユーティリティ": "Cheats & utilities", "次世代型多機能仕様": "Next-gen multi-feature build", "鮮やかなエフェクト": "Vivid effects", "WASM動作・安定化版": "WASM, stability build", "低スペックPC向け": "For low-spec PCs", "最新ベースカスタム": "Latest-base custom", "PVPコンボ特化": "Combo-PVP focused", "ズーム・ヒットボックス微調整": "Zoom & hitbox tweaks", "定番ミニゲーム鯖": "Classic minigames server", "生活・サバイバル": "Life & survival", "経済・トレード鯖": "Economy & trading", "24時間ミニゲーム": "24/7 minigames", "ルール無用無法地帯": "Lawless, no rules", "純バニラサバイバル": "Pure vanilla survival", "巨大ロビーサーバー": "Huge lobby server", "BedWars特化鯖": "BedWars specialist", "PVP練習・対戦": "PVP practice & matches", "クリエイティブ建築": "Creative building", "1v1ガチ対戦鯖": "Serious 1v1 duels", "専用アリーナ": "Dedicated arenas", "KBエイム練習鯖": "KB & aim practice", "スカイブロック": "Skyblock", "大会向け競技PVP": "Competitive tournament PVP", "ド派手ミニゲーム鯖": "Flashy minigames", "特製カスタムゲーム": "Custom-made games", "派閥争い拠点破壊": "Faction wars & base raiding", "カジュアル戦闘鯖": "Casual combat", "マイクラ銃撃戦鯖": "Gunfight server", "公式無法アナーキー": "Official anarchy", "建築中心の生活鯖": "Building-focused survival", "まったり農業街開拓": "Relaxed farming & towns", "貿易システム経済鯖": "Trade-system economy", "初心者歓迎生活鯖": "Beginner-friendly survival", "完全チート不問破壊": "Cheats allowed, total chaos", "天空サバイバル": "Sky survival", "無法開拓サバイバル": "Lawless frontier survival", "建国システム経済鯖": "Nation-building economy", "古き良き生活鯖": "Old-school survival", "大規模サーバー": "Large server", "公開サーバー": "Public server", "アナーキー系": "Anarchy", "Java・Bedrockも対応": "Java & Bedrock supported", "サバイバル・ミニゲーム": "Survival & minigames"};
+        let LANG = 'ja';
+        try { LANG = localStorage.getItem('BattaLauncher_Lang') || 'ja'; } catch (e) {}
+        if (!I18N[LANG]) LANG = 'ja';
+        function t(k) { return I18N[LANG][k] || I18N.ja[k] || k; }
+        function setLang(l) {
+            LANG = I18N[l] ? l : 'ja';
+            try { localStorage.setItem('BattaLauncher_Lang', LANG); } catch (e) {}
+            document.documentElement.lang = LANG;
+            document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+            document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+            document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.dataset.i18nTitle); });
+            document.querySelectorAll('.skin-name[data-skin]').forEach(el => { const i = el.dataset.skin; el.textContent = LANG === 'en' ? SKIN_EN[i] : SKINS[i][0]; });
+            document.querySelectorAll('.tr').forEach(el => {
+                if (!el.dataset.ja) el.dataset.ja = el.textContent;
+                const ja = el.dataset.ja, k = ja.indexOf(' ');
+                el.textContent = LANG === 'en' && TR_EN[ja.slice(k + 1)] ? ja.slice(0, k) + ' ' + TR_EN[ja.slice(k + 1)] : ja;
+            });
+            if (window.updateDlCount) window.updateDlCount();
+            if (window.updateSvStat) window.updateSvStat();
+            if (window.updateSvTags) window.updateSvTags();
+            document.getElementById('langSelect').value = LANG;
+        }
+        document.getElementById('langSelect').addEventListener('change', e => setLang(e.target.value));
+
+        const BG_PRESETS = [
+            { id: 'green',  css: 'radial-gradient(circle at 30% 20%, #2f4f2a, #101810)' },
+            { id: 'blue',   css: 'radial-gradient(circle at 30% 20%, #264a7a, #0c1424)' },
+            { id: 'purple', css: 'radial-gradient(circle at 30% 20%, #3d2a6a, #140c24)' },
+            { id: 'red',    css: 'radial-gradient(circle at 30% 20%, #7a2a2a, #240c0c)' },
+            { id: 'sunset', css: 'linear-gradient(135deg, #ff7e5f, #6a2a5a, #1a1030)' },
+            { id: 'dark',   css: 'linear-gradient(#2a2a2a, #0e0e0e)' }
+        ];
+        const swatchBox = document.getElementById('bgSwatches');
+        BG_PRESETS.forEach(p => {
+            const d = document.createElement('div');
+            d.className = 'swatch'; d.dataset.id = p.id; d.style.background = p.css;
+            d.addEventListener('click', () => setBg({ type: 'preset', id: p.id }));
+            swatchBox.appendChild(d);
+        });
+        // ★ここに画像のURL（https://...）を入れると、初めて開いたときから、その画像が背景になります
+        const DEFAULT_BG_URL = '';
+        const defaultBg = () => DEFAULT_BG_URL ? { type: 'url', url: DEFAULT_BG_URL } : null;
+        function applyBg(b) {
+            let css = BG_PRESETS[0].css, sel = 'green';
+            if (b && b.type === 'image' && b.data) { css = 'url("' + b.data + '")'; sel = ''; }
+            else if (b && b.type === 'url' && b.url) { css = 'url("' + String(b.url).replace(/"/g, '%22') + '")'; sel = ''; }
+            else if (b && b.type === 'preset') { const p = BG_PRESETS.find(x => x.id === b.id); if (p) { css = p.css; sel = p.id; } }
+            document.documentElement.style.setProperty('--bg-img', css);
+            swatchBox.querySelectorAll('.swatch').forEach(s => s.classList.toggle('sel', s.dataset.id === sel));
+            const ui = document.getElementById('bgUrl'); if (ui && b && b.type === 'url') ui.value = b.url;
+        }
+        function setBg(b) {
+            applyBg(b);
+            try { localStorage.setItem('BattaLauncher_Bg', JSON.stringify(b)); }
+            catch (e) { alert(t('bg_fail')); }
+        }
+        document.getElementById('bgReset').addEventListener('click', () => {
+            try { localStorage.removeItem('BattaLauncher_Bg'); } catch (e) {}
+            document.getElementById('bgUrl').value = ''; applyBg(defaultBg());
+        });
+        document.getElementById('bgUrlBtn').addEventListener('click', () => {
+            const u = document.getElementById('bgUrl').value.trim();
+            if (!/^https:\/\/[^\s"'<>]+$/i.test(u)) { alert(t('bg_url_bad')); return; }
+            const img = new Image();
+            img.onload = () => setBg({ type: 'url', url: u });
+            img.onerror = () => alert(t('bg_url_fail'));
+            img.src = u;
+        });
+        document.getElementById('bgFile').addEventListener('change', e => {
+            const f = e.target.files[0]; if (!f) return;
+            const img = new Image(), url = URL.createObjectURL(f);
+            img.onload = () => {
+                const sc = Math.min(1, 1280 / img.width), c = document.createElement('canvas');
+                c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+                c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                URL.revokeObjectURL(url);
+                setBg({ type: 'image', data: c.toDataURL('image/jpeg', 0.8) });
+            };
+            img.src = url; e.target.value = '';
+        });
+        // 圧縮保存されたプロフィールの中身を表示（調査用）
+        async function decodeKey(k) {
+            const v = localStorage.getItem(k);
+            if (!v) return k + ': (none)';
+            try {
+                const bin = Uint8Array.from(atob(v), c => c.charCodeAt(0));
+                const buf = await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+                const u = new Uint8Array(buf);
+                return k + ' full=' + v + '\n hex=' + Array.from(u).map(b => b.toString(16).padStart(2, '0')).join(' ') +
+                    '\n txt=' + Array.from(u).map(b => (b >= 32 && b < 127) ? String.fromCharCode(b) : '.').join('');
+            } catch (e) { return k + ': decode error ' + e; }
+        }
+        // 保存データの確認（名前保存キーの調査用）
+        document.getElementById('dbgBtn').addEventListener('click', () => {
+            const box = document.getElementById('dbgOut'), out = ['origin: ' + location.origin, 'build: ' + BUILD, 'patchLog: ' + (localStorage.getItem('BattaLauncher_PatchLog') || '(none)')];
+            [['localStorage', localStorage], ['sessionStorage', sessionStorage]].forEach(([nm, st]) => {
+                try {
+                    out.push('--- ' + nm + ' (' + st.length + ') ---');
+                    for (let i = 0; i < st.length; i++) {
+                        const k = st.key(i), v = st.getItem(k) || '';
+                        out.push(k + ' | len=' + v.length + ' | ' + v.slice(0, 60).replace(/\s+/g, ' '));
+                    }
+                } catch (e) { out.push(nm + ': error'); }
+            });
+            const done = () => { decodeKey('_eaglercraftX.p').then(r => { out.push('--- decode ---'); out.push(r); box.value = out.join('\n'); }); };
+            if (indexedDB.databases) {
+                indexedDB.databases().then(l => { out.push('--- IndexedDB ---'); l.forEach(d => out.push(d.name + ' v' + d.version)); done(); }).catch(done);
+            } else { done(); }
+        });
+        document.getElementById('dbgCopy').addEventListener('click', () => {
+            const v = document.getElementById('dbgOut').value; if (v) copyAddr(v);
+        });
+        { let saved = null; try { saved = JSON.parse(localStorage.getItem('BattaLauncher_Bg')); } catch (e) {} applyBg(saved || defaultBg()); }
+        setLang(LANG);
+
+        // ゲームのプロフィール（_eaglercraftX.p）の名前部分だけを書き換える
+        const BUILD = '1.2.1';
+        async function patchProfileName(name) {
+            const logs = [];
+            const save = () => { try { localStorage.setItem('BattaLauncher_PatchLog', logs.join(' / ')); } catch (e) {} };
+            try {
+                const clean = name.replace(/[^A-Za-z0-9_]/g, '').slice(0, 16);
+                if (clean.length < 3) { logs.push('name invalid: ' + name); return; }
+                const keys = [];
+                for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+                const targets = keys.filter(k => /^_eaglercraft.*\.p$/.test(k));
+                logs.push('name=' + clean + ' targets=' + targets.length);
+                for (const k of targets) {
+                    try {
+                        const orig = localStorage.getItem(k);
+                        const bin = Uint8Array.from(atob(orig), c => c.charCodeAt(0));
+                        const u = new Uint8Array(await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+                        const key = [0x08, 0x00, 0x08].concat(Array.from('username').map(c => c.charCodeAt(0)));
+                        let at = -1;
+                        for (let j = 0; j + key.length + 2 <= u.length && at < 0; j++) if (key.every((b, n) => u[j + n] === b)) at = j;
+                        if (u[0] !== 0x0a || at < 0) { logs.push('skip ' + k + ' (format)'); continue; }
+                        const p = at + key.length, oldLen = (u[p] << 8) | u[p + 1];
+                        const nb = Array.from(clean).map(c => c.charCodeAt(0));
+                        const out = new Uint8Array(p + 2 + nb.length + (u.length - p - 2 - oldLen));
+                        out.set(u.subarray(0, p));
+                        out[p] = nb.length >> 8; out[p + 1] = nb.length & 255;
+                        out.set(nb, p + 2);
+                        out.set(u.subarray(p + 2 + oldLen), p + 2 + nb.length);
+                        const gz = new Uint8Array(await new Response(new Blob([out]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+                        let str = ''; gz.forEach(b => { str += String.fromCharCode(b); });
+                        if (!localStorage.getItem('BattaLauncher_ProfileBackup')) localStorage.setItem('BattaLauncher_ProfileBackup', orig);
+                        localStorage.setItem(k, btoa(str));
+                        logs.push('ok ' + k);
+                    } catch (e) { logs.push('error ' + k + ': ' + e); }
+                }
+            } catch (e) { logs.push('fatal: ' + e); }
+            finally { save(); }
+        }
+
+        // ===== ダウンロードページ（バージョン選択の一覧から生成） =====
+        (function buildDownloadPage() {
+            const list = document.getElementById('dlList'), search = document.getElementById('dlSearch'), seen = new Set();
+            Array.from(document.getElementById('versionSelect').options).forEach(o => {
+                if (seen.has(o.value)) return; seen.add(o.value);
+                const row = document.createElement('div'), nm = document.createElement('span'), a = document.createElement('a');
+                row.className = 'dl-row'; row.dataset.n = o.value.toLowerCase();
+                nm.className = 'dl-name'; nm.textContent = o.value; nm.title = o.value;
+                a.className = 'copy-btn dl-link'; a.setAttribute('data-i18n', 'btn_download');
+                a.href = 'game/' + encodeURIComponent(o.value); a.download = o.value; a.textContent = 'ダウンロード';
+                row.append(nm, a); list.appendChild(row);
+            });
+            window.updateDlCount = () => {
+                const q = search.value.trim().toLowerCase(); let n = 0;
+                list.childNodes.forEach(r => { const show = !q || r.dataset.n.includes(q); r.style.display = show ? 'flex' : 'none'; if (show) n++; });
+                document.getElementById('dlCount').textContent = n + ' ' + t('dl_unit');
+            };
+            search.addEventListener('input', window.updateDlCount);
+            setLang(LANG);
+        })();
+
+        // ===== サーバーの人数・アイコン取得（Eaglerの "Accept: MOTD" クエリ） =====
+        function pingServer(addr, timeout) {
+            return new Promise(resolve => {
+                let ws, done = false, info = null, opened = false, raw = null, timer;
+                const fin = () => {
+                    if (done) return; done = true; clearTimeout(timer); try { ws.close(); } catch (e) {}
+                    resolve(info ? { info: info } : { fail: !opened ? 'connect' : (raw !== null ? 'format' : 'noresp'), raw: raw });
+                };
+                try { ws = new WebSocket(addr); } catch (e) { return resolve({ fail: 'connect', raw: String(e) }); }
+                ws.binaryType = 'arraybuffer';
+                timer = setTimeout(fin, timeout || 7000);
+                ws.onopen = () => { opened = true; try { ws.send('Accept: MOTD'); } catch (e) { fin(); } };
+                ws.onerror = fin; ws.onclose = fin;
+                ws.onmessage = ev => {
+                    if (typeof ev.data === 'string') {
+                        if (raw === null) raw = ev.data.slice(0, 300);
+                        try {
+                            const d = (JSON.parse(ev.data).data) || {};
+                            if (typeof d.online !== 'undefined') {
+                                info = { online: d.online, max: d.max, icon: null };
+                                if (d.icon) setTimeout(fin, 2500); else fin();
+                            }
+                        } catch (e) {}
+                    } else {
+                        if (raw === null) raw = '(binary ' + ev.data.byteLength + ' bytes)';
+                        if (info && ev.data.byteLength === 16384) { info.icon = new Uint8ClampedArray(ev.data); fin(); }
+                    }
+                };
+            });
+        }
+
+        (function buildServerStatus() {
+            const cards = Array.from(document.querySelectorAll('#page-server .list-card'));
+            const items = cards.map(card => {
+                const btn = card.querySelector('button'), m = btn && /copyAddr\('([^']*)'\)/.exec(btn.getAttribute('onclick') || '');
+                if (!m) return null;
+                const cv = document.createElement('canvas'), stat = document.createElement('div');
+                cv.width = 64; cv.height = 64; cv.className = 'sv-icon'; stat.className = 'sv-stat'; stat.dataset.state = 'loading';
+                const g = cv.getContext('2d'); g.fillStyle = '#333333'; g.fillRect(0, 0, 64, 64);
+                g.fillStyle = '#ffffff'; g.font = 'bold 32px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+                g.fillText((card.querySelector('h2').textContent || '?').charAt(0).toUpperCase(), 32, 34);
+                card.insertBefore(cv, card.firstChild); card.firstElementChild.nextElementSibling.appendChild(stat);
+                return { addr: m[1], cv, stat };
+            }).filter(Boolean);
+            const KEYS = { connect: 'sv_f_connect', noresp: 'sv_f_noresp', format: 'sv_f_format' };
+            const render = el => {
+                const st = el.dataset.state;
+                if (st === 'ok') { el.textContent = '● ' + el.dataset.on + ' / ' + el.dataset.max + ' ' + t('sv_people'); el.style.color = '#4caf50'; }
+                else if (st === 'fail') { el.textContent = '● ' + t(KEYS[el.dataset.reason] || 'sv_unavail'); el.style.color = '#888888'; }
+                else { el.textContent = '… ' + t('sv_checking'); el.style.color = '#aaaaaa'; }
+            };
+            let last = null;
+            const showSummary = () => {
+                const el = document.getElementById('svSummary');
+                if (!last) { el.textContent = ''; return; }
+                const c = last.c;
+                el.textContent = last.time + '  ' + [t('sv_s_ok') + ' ' + c.ok, t('sv_f_connect') + ' ' + c.connect, t('sv_f_noresp') + ' ' + c.noresp, t('sv_f_format') + ' ' + c.format].join(' / ') +
+                    (last.sample ? ' | ' + last.sample.slice(0, 150) : '');
+            };
+            let autoOn = true;
+            try { autoOn = localStorage.getItem('BattaLauncher_SvAuto') !== '0'; } catch (e) {}
+            window.updateSvStat = () => {
+                items.forEach(it => render(it.stat)); showSummary();
+                const b = document.getElementById('svAuto'); b.textContent = t(autoOn ? 'sv_auto_on' : 'sv_auto_off'); b.classList.toggle('off', !autoOn);
+            };
+            let busy = false;
+            const pad = n => String(n).padStart(2, '0');
+            // auto=true のときは「確認中...」に戻さず、前の表示を残したまま静かに更新する
+            const refresh = auto => {
+                if (busy) return;
+                busy = true;
+                if (!auto) { last = null; showSummary(); }
+                const c = { ok: 0, connect: 0, noresp: 0, format: 0 }; let sample = '';
+                Promise.all(items.map(it => {
+                    if (!auto) { it.stat.dataset.state = 'loading'; render(it.stat); }
+                    return pingServer(it.addr, auto ? 4500 : 7000).then(r => {
+                        if (r.info) {
+                            c.ok++; it.stat.dataset.state = 'ok'; it.stat.dataset.on = r.info.online; it.stat.dataset.max = r.info.max;
+                            if (r.info.icon) it.cv.getContext('2d').putImageData(new ImageData(r.info.icon, 64, 64), 0, 0);
+                        } else {
+                            c[r.fail]++; it.stat.dataset.state = 'fail'; it.stat.dataset.reason = r.fail; it.stat.title = r.raw || '';
+                            if (r.fail === 'format' && !sample) sample = r.raw || '';
+                        }
+                        render(it.stat);
+                    });
+                })).then(() => {
+                    const d = new Date();
+                    last = { c: c, sample: sample, time: pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()) };
+                    showSummary(); busy = false;
+                });
+            };
+            let loaded = false;
+            document.getElementById('tab-server').addEventListener('click', () => { if (!loaded) { loaded = true; refresh(false); } });
+            document.getElementById('svRefresh').addEventListener('click', () => { loaded = true; refresh(false); });
+            document.getElementById('svAuto').addEventListener('click', () => {
+                autoOn = !autoOn;
+                try { localStorage.setItem('BattaLauncher_SvAuto', autoOn ? '1' : '0'); } catch (e) {}
+                window.updateSvStat();
+            });
+            // 5秒ごとに更新（サーバータブを開いていて、画面が見えているときだけ）
+            setInterval(() => {
+                if (autoOn && !document.hidden && document.getElementById('tab-server').classList.contains('active')) refresh(true);
+            }, 5000);
+            window.updateSvStat();
+            setLang(LANG);
+        })();
+
+        // ===== ユーザー名からスキン取得（Minotar） =====
+        (function skinLookup() {
+            const inp = document.getElementById('skLookName'), btn = document.getElementById('skLookBtn'), res = document.getElementById('skLookResult'),
+                  cv = document.getElementById('skLookCv'), msg = document.getElementById('skLookMsg'), dl = document.getElementById('skLookDl');
+            let cur = null, back = false;
+            const url = n => 'https://minotar.net/skin/' + encodeURIComponent(n);
+            function load() {
+                const n = inp.value.trim();
+                if (!/^[A-Za-z0-9_]{1,16}$/.test(n)) { msg.textContent = t('sk_look_bad'); return; }
+                msg.textContent = t('sk_look_loading'); res.style.display = 'none';
+                const img = new Image();
+                img.onload = () => {
+                    cur = { name: n }; back = false; drawPreview(img, cv, false); cv._img = img;
+                    document.getElementById('skLookNm').textContent = n; res.style.display = 'flex'; msg.textContent = '';
+                };
+                img.onerror = () => { msg.textContent = t('sk_look_fail'); };
+                fetch(url(n)).then(r => { if (!r.ok) throw new Error('http'); return r.blob(); }).then(b => { img.src = URL.createObjectURL(b); }).catch(() => { img.src = url(n); });
+            }
+            btn.addEventListener('click', load);
+            inp.addEventListener('keydown', e => { if (e.key === 'Enter') load(); });
+            cv.addEventListener('click', () => { if (cv._img && cur) window.open3D(cur.name, cv._img, () => dl.click()); });
+            dl.addEventListener('click', () => {
+                if (!cur) return;
+                fetch(url(cur.name)).then(r => { if (!r.ok) throw new Error('http'); return r.blob(); }).then(b => {
+                    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = cur.name + '.png'; a.click();
+                    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+                }).catch(() => { window.open('https://minotar.net/download/' + encodeURIComponent(cur.name), '_blank'); });
+            });
+            setLang(LANG);
+        })();
+
+        // ===== 3Dスキンビューア（CSS 3D・ライブラリ不要） =====
+        (function skin3D() {
+            const K = 8, modal = document.getElementById('sk3dModal'), model = document.getElementById('sk3dModel'),
+                  stage = document.getElementById('sk3dStage'), nameEl = document.getElementById('sk3dName');
+            // [幅,高さ,奥行, 中心x,y,z, 本体UV x,y, 外側レイヤーUV x,y, 外側の拡大率]
+            const PARTS = [
+                [8, 8, 8, 0, -12, 0, 0, 0, 32, 0, 1.125],
+                [8, 12, 4, 0, -2, 0, 16, 16, 16, 32, 1.06],
+                [4, 12, 4, -6, -2, 0, 40, 16, 40, 32, 1.06],
+                [4, 12, 4, 6, -2, 0, 32, 48, 48, 48, 1.06],
+                [4, 12, 4, -2, 10, 0, 0, 16, 0, 32, 1.06],
+                [4, 12, 4, 2, 10, 0, 16, 48, 0, 48, 1.06]
+            ];
+            function face(sx, sy, sw, sh, tr, s) {
+                const d = document.createElement('div'), fw = sw * K * s, fh = sh * K * s;
+                d.className = 'sk3d-face';
+                d.style.cssText = 'width:' + fw + 'px;height:' + fh + 'px;left:' + (-fw / 2) + 'px;top:' + (-fh / 2) + 'px;' +
+                    'background-size:' + (64 * K * s) + 'px ' + (64 * K * s) + 'px;background-position:' + (-sx * K * s) + 'px ' + (-sy * K * s) + 'px;transform:' + tr;
+                return d;
+            }
+            function box(w, h, d, cx, cy, cz, ux, uy, s) {
+                const p = document.createElement('div'), z = d * K * s / 2, x = w * K * s / 2, y = h * K * s / 2;
+                p.className = 'sk3d-part'; p.style.transform = 'translate3d(' + cx * K + 'px,' + cy * K + 'px,' + cz * K + 'px)';
+                p.append(
+                    face(ux + d, uy + d, w, h, 'translateZ(' + z + 'px)', s),
+                    face(ux + 2 * d + w, uy + d, w, h, 'rotateY(180deg) translateZ(' + z + 'px)', s),
+                    face(ux, uy + d, d, h, 'rotateY(-90deg) translateZ(' + x + 'px)', s),
+                    face(ux + d + w, uy + d, d, h, 'rotateY(90deg) translateZ(' + x + 'px)', s),
+                    face(ux + d, uy, w, d, 'rotateX(90deg) translateZ(' + y + 'px)', s),
+                    face(ux + d + w, uy, w, d, 'rotateX(-90deg) translateZ(' + y + 'px)', s));
+                return p;
+            }
+            PARTS.forEach(q => { model.append(box(q[0], q[1], q[2], q[3], q[4], q[5], q[6], q[7], 1), box(q[0], q[1], q[2], q[3], q[4], q[5], q[8], q[9], q[10])); });
+
+            // 旧形式(64x32)を64x64に変換（右の手足を左右反転して左側にコピー）
+            window.normSkin = function (src) {
+                const c = document.createElement('canvas'); c.width = c.height = 64;
+                const g = c.getContext('2d'); g.imageSmoothingEnabled = false; g.drawImage(src, 0, 0);
+                if ((src.height || src.naturalHeight) < 64) {
+                    const fl = (sx, sy, w, h, dx, dy) => { g.save(); g.translate(dx + w, dy); g.scale(-1, 1); g.drawImage(c, sx, sy, w, h, 0, 0, w, h); g.restore(); };
+                    [[0, 16, 16, 48], [40, 16, 32, 48]].forEach(a => {
+                        const sx = a[0], sy = a[1], dx = a[2], dy = a[3];
+                        fl(sx + 4, sy, 4, 4, dx + 4, dy); fl(sx + 8, sy, 4, 4, dx + 8, dy);
+                        fl(sx + 4, sy + 4, 4, 12, dx + 4, dy + 4); fl(sx + 12, sy + 4, 4, 12, dx + 12, dy + 4);
+                        fl(sx + 8, sy + 4, 4, 12, dx, dy + 4); fl(sx, sy + 4, 4, 12, dx + 8, dy + 4);
+                    });
+                }
+                return c;
+            };
+
+            let ang = { x: -12, y: 30 }, auto = true, cur = null;
+            const render = () => { model.style.transform = 'rotateX(' + ang.x + 'deg) rotateY(' + ang.y + 'deg)'; };
+            window.open3D = function (name, src, dlFn) {
+                let url;
+                try { url = window.normSkin(src).toDataURL('image/png'); } catch (e) { url = src.src; }
+                model.style.setProperty('--skin', 'url("' + url + '")');
+                nameEl.textContent = name; cur = { dlFn: dlFn };
+                ang = { x: -12, y: 30 }; auto = true; render(); modal.style.display = 'flex';
+            };
+            const close = () => { modal.style.display = 'none'; };
+            document.getElementById('sk3dClose').addEventListener('click', close);
+            document.getElementById('sk3dDl').addEventListener('click', () => { if (cur && cur.dlFn) cur.dlFn(); });
+            modal.addEventListener('click', e => { if (e.target === modal) close(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+            let drag = null;
+            stage.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY }; auto = false; stage.setPointerCapture(e.pointerId); });
+            stage.addEventListener('pointermove', e => {
+                if (!drag) return;
+                ang.y += (e.clientX - drag.x) * 0.6; ang.x = Math.max(-80, Math.min(80, ang.x - (e.clientY - drag.y) * 0.6));
+                drag = { x: e.clientX, y: e.clientY }; render();
+            });
+            ['pointerup', 'pointercancel'].forEach(ev => stage.addEventListener(ev, () => { drag = null; }));
+            (function tick() { if (modal.style.display === 'flex' && auto) { ang.y += 0.6; render(); } requestAnimationFrame(tick); })();
+        })();
+
+        // ===== マイスキン（自分でダウンロードしたPNGを、このブラウザだけに保存） =====
+        (function mySkins() {
+            const grid = document.getElementById('mySkinGrid'), file = document.getElementById('mySkinFile'), msg = document.getElementById('mySkinMsg');
+            let list = [];
+            try { list = JSON.parse(localStorage.getItem('BattaLauncher_MySkins') || '[]'); } catch (e) { list = []; }
+            const save = () => { try { localStorage.setItem('BattaLauncher_MySkins', JSON.stringify(list)); } catch (e) { msg.textContent = t('my_full'); } };
+            function render() {
+                grid.textContent = '';
+                list.forEach((it, i) => {
+                    const card = document.createElement('div'), cv = document.createElement('canvas'), nm = document.createElement('div'),
+                          dl = document.createElement('button'), del = document.createElement('button'), img = new Image();
+                    card.className = 'skin-card'; cv.width = 64; cv.height = 128; nm.className = 'skin-name'; nm.textContent = it.n;
+                    dl.className = 'copy-btn'; dl.setAttribute('data-i18n', 'btn_download'); dl.textContent = 'ダウンロード';
+                    del.className = 'copy-btn'; del.style.background = '#555555'; del.setAttribute('data-i18n', 'my_del'); del.textContent = '削除';
+                    img.onload = () => drawPreview(img, cv, false); img.src = it.d;
+                    const download = () => { const a = document.createElement('a'); a.href = it.d; a.download = it.n + '.png'; a.click(); };
+                    cv.addEventListener('click', () => window.open3D(it.n, img, download));
+                    dl.addEventListener('click', download);
+                    del.addEventListener('click', () => { list.splice(i, 1); save(); render(); });
+                    card.append(cv, nm, dl, del); grid.appendChild(card);
+                });
+                setLang(LANG);
+            }
+            file.addEventListener('change', () => {
+                const files = Array.from(file.files); let pending = files.length, bad = 0; msg.textContent = '';
+                const done = () => { if (--pending === 0) { save(); render(); if (bad) msg.textContent = t('my_bad'); } };
+                files.forEach(f => {
+                    const u = URL.createObjectURL(f), img = new Image();
+                    img.onload = () => {
+                        URL.revokeObjectURL(u);
+                        if (img.width === 64 && (img.height === 64 || img.height === 32)) list.push({ n: f.name.replace(/\.[^.]+$/, '').slice(0, 24), d: window.normSkin(img).toDataURL('image/png') });
+                        else bad++;
+                        done();
+                    };
+                    img.onerror = () => { URL.revokeObjectURL(u); bad++; done(); };
+                    img.src = u;
+                });
+                file.value = '';
+            });
+            render();
+        })();
+
+        // ===== サーバーの種類タグ（ここを書き換えると表示が変わります） =====
+        (function buildServerTags() {
+            const TAGS = {
+                pvp: ['PVP', 'PVP'], anarchy: ['アナーキー', 'Anarchy'], semi: ['セミアナーキー', 'Semi-Anarchy'], survival: ['サバイバル', 'Survival'],
+                 bedwars: ['ベッドウォーズ', 'Bedwars'], skyblock: ['スカイブロック', 'Skyblock'], oneblock: ['ワンブロック', 'Oneblock'], factions: ['ファクション', 'Factions'],  large: ['大規模', 'Large'], cross: ['Java・Bedrock対応', 'Java & Bedrock'],
+                lifesteal: ['ライフスティール', 'Lifesteal'], practice: ['プラクティス', 'Practice'], vanilla: ['バニラ', 'Vanilla'], unknown: ['未確認', 'Unverified']
+            };
+            const SV_TAGS = {
+                'wss://mc.arch.lol': ['large', 'survival', 'pvp', 'bedwars', 'skyblock', 'oneblock'],
+                'wss://zentic.cc': ['pvp'],
+                'wss://8b4t.org': ['anarchy'],
+                'wss://eaglercraft.beaglecraft.online': ['survival', 'pvp', 'cross'],
+                'wss://clever-teaching.com': ['semi', 'survival', 'pvp'],
+                'wss://mc.zyth.me': ['oneblock', 'skyblock', 'bedwars', 'factions'],
+                'wss://play.webmc.fun': ['survival', 'skyblock', 'oneblock'],
+                'wss://asianf4rmer.minecraft.pe': ['survival', 'skyblock'],
+                'wss://sus.shhnowisnottheti.me': ['anarchy'],
+                'wss://aeon-network.net': ['survival', 'pvp'],
+                'wss://adderall.ir': ['survival', 'oneblock', 'lifesteal', 'practice'],
+                'wss://mc.lamplifesteal.xyz': ['lifesteal'],
+                'wss://vanillamc.org': ['vanilla', 'pvp', 'factions', 'lifesteal'],
+                'wss://mc.voidsent.net': ['practice', 'factions', 'pvp', 'survival'],
+                'wss://mc.dssx.uk': ['anarchy', 'skyblock'],
+                'wss://xena.wtf': ['survival', 'pvp', 'oneblock', 'skyblock', 'bedwars'],
+                'wss://tuff.ws': ['survival', 'oneblock'],
+            
+            };
+            // サーバー側が受け付けるバージョン（公開サーバーリストの記載。確認できたものだけ）
+            const SV_VERS = {
+                'wss://mc.arch.lol': ['Java 1.8.8〜1.21.4', 'Java 1.8.8-1.21.4'],
+                'wss://zentic.cc': ['Java 1.7.x〜1.21.x', 'Java 1.7.x-1.21.x'],
+                'wss://8b4t.org': ['1.5.2〜1.21.10（推奨 1.21.10）', '1.5.2-1.21.10 (recommended 1.21.10)'],
+                'wss://eaglercraft.beaglecraft.online': ['Paper 1.21.10', 'Paper 1.21.10'],
+                'wss://clever-teaching.com': ['1.17.1', '1.17.1']
+            };
+            const items = Array.from(document.querySelectorAll('#page-server .list-card')).map(card => {
+                const btn = card.querySelector('button'), m = btn && /copyAddr\('([^']*)'\)/.exec(btn.getAttribute('onclick') || ''), box = card.querySelector('.tags');
+                return m && box ? { addr: m[1], box: box } : null;
+            }).filter(Boolean);
+            window.updateSvTags = () => items.forEach(it => {
+                it.box.textContent = '';
+                (SV_TAGS[it.addr] || ['unknown']).forEach(k => {
+                    const sp = document.createElement('span'); sp.className = 'tag t-' + k; sp.textContent = TAGS[k][LANG === 'en' ? 1 : 0]; it.box.appendChild(sp);
+                });
+                let ver = it.box.nextElementSibling;
+                if (!ver || !ver.classList.contains('sv-ver')) { ver = document.createElement('div'); ver.className = 'sv-ver'; it.box.parentNode.insertBefore(ver, it.box.nextSibling); }
+                const v = SV_VERS[it.addr];
+                ver.textContent = t('sv_ver_label') + ' ' + (v ? v[LANG === 'en' ? 1 : 0] : t('sv_ver_unknown'));
+            });
+            window.updateSvTags();
+        })();
+
+        // ファイル名を短い表示名に直す（例: eaglercraft-26.3.html → 26.3）
+        function prettyVersion(file) {
+            const OV = { 'eaglercraftx-194.html': 'EaglercraftX 194', 'eagler-indev.html': 'Eagler Indev', 'Eaglercraft-4k-JS.html': 'Eaglercraft 4k' };
+            let n = file.replace(/\.html$/i, '').trim();
+            const sep = '(^|[\\s_\\-])', end = '(?=$|[\\s_\\-])';
+            const wasm = /wasm/i.test(n), gc = wasm && /wasm[\s_\-]?gc|[\s_\-]gc(?=$|[\s_\-])/i.test(n);
+            const js = !wasm && new RegExp(sep + '(js|javascript|javs)' + end, 'i').test(n);
+            const wisp = /wispcraft/i.test(n), eagler = /eaglercraft/i.test(n);
+            n = n.replace(/\d+(?:[_-]\d+){2,}/g, m => m.replace(/[_-]/g, '.'));
+            n = n.replace(new RegExp(sep + '(wasm[\\s_\\-]?gc|wasm|gc|js|javascript|javs)' + end, 'gi'), '$1');
+            n = n.replace(new RegExp(sep + '(eaglercraftx|eaglercraft|wispcraft)' + end, 'gi'), '$1');
+            n = n.replace(/(\d[a-z]?)_(\d)/gi, '$1\u0001$2').replace(/[_\s\-]+/g, ' ').replace(/\u0001/g, '_').trim();
+            n = n.replace(/\b(beta|alpha|indev|infdev|classic|forge|pre|release|mobile|scratch|client)\b/g, w => w[0].toUpperCase() + w.slice(1));
+            n = n.replace(/^rd (\d)/, 'rd-$1');
+            if (n && !/\d/.test(n) && eagler && !/^Eaglercraft/i.test(n)) n = 'Eaglercraft ' + n;
+            if (wisp) n += ' Wispcraft';
+            if (OV[file]) n = OV[file];
+            if (!n) n = file.replace(/\.html$/i, '');
+            return { label: n, kind: gc ? 'wasmgc' : wasm ? 'wasm' : js ? 'js' : '' };
+        }
+
+        document.getElementById('appVersion').textContent = 'Version ' + BUILD;
+        document.getElementById('verLabel').textContent = 'v' + BUILD;
+
+        // ===== バージョン選択（短い名前＋WASM/JSの色付きタグ） =====
+        (function buildVersionPicker() {
+            const sel = document.getElementById('versionSelect'), btn = document.getElementById('vsBtn'), pop = document.getElementById('vsPop'),
+                  list = document.getElementById('vsList'), search = document.getElementById('vsSearch'), label = document.getElementById('vsLabel'), badge = document.getElementById('vsBadge');
+            const KIND = { wasm: 'WASM', wasmgc: 'WASM-GC', js: 'JS' };
+            const CLIENTS = new Set(["Aero Client JS.html", "Eclipse Client.html", "PixelClient 1.8.8 JS.html", "Prism-Client.html", "Water Client.html", "Mega Client-JS.html", "EB Client Nextgen CU4.html", "N0VA CLIENT.html", "Tuff_Client_WASM.html", "Myven-Client-WASM.html", "Koneclient-1.8.8.html", "Precision.html"]);
+            const entries = Array.from(sel.options).map(o => { const r = prettyVersion(o.value); return { file: o.value, label: r.label, kind: r.kind, isClient: CLIENTS.has(o.value) }; });
+            let mode = 'home'; const last = {};
+            const visible = () => entries.filter(e => mode === 'client' ? e.isClient : !e.isClient);
+            const cnt = {};
+            entries.forEach(e => { const k = e.label + '|' + e.kind; cnt[k] = (cnt[k] || 0) + 1; if (cnt[k] > 1) e.label += ' (' + cnt[k] + ')'; });
+            const pill = kind => { if (!kind) return null; const p = document.createElement('span'); p.className = 'pill k-' + kind; p.textContent = KIND[kind]; return p; };
+            const close = () => pop.classList.remove('open');
+            function updateBtn() {
+                const e = entries.find(x => x.file === sel.value) || entries[0];
+                label.textContent = e.label; badge.textContent = ''; const p = pill(e.kind); if (p) badge.appendChild(p); btn.title = e.file;
+            }
+            function renderList() {
+                const q = search.value.trim().toLowerCase(); list.textContent = '';
+                visible().forEach(e => {
+                    if (q && !(e.label.toLowerCase().includes(q) || e.file.toLowerCase().includes(q) || (KIND[e.kind] || '').toLowerCase().includes(q))) return;
+                    const row = document.createElement('div'), icon = document.createElement('img'), nm = document.createElement('span'), p = pill(e.kind);
+                    row.className = 'vs-item' + (e.file === sel.value ? ' sel' : ''); row.title = e.file;
+                    icon.className = 'grass-icon'; icon.alt = ''; icon.setAttribute('aria-hidden', 'true'); icon.src = 'data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2016%2016%27%20shape-rendering%3D%27crispEdges%27%3E%3Cpath%20fill%3D%27%23754321%27%20d%3D%27M1%204h14v11H1z%27%2F%3E%3Cpath%20fill%3D%27%234b9b35%27%20d%3D%27M1%202h14v4H1z%27%2F%3E%3Cpath%20fill%3D%27%2365b947%27%20d%3D%27M1%201h14v3H1z%27%2F%3E%3Cpath%20fill%3D%27%23347d2b%27%20d%3D%27M1%204h14v2H1z%27%2F%3E%3Cpath%20fill%3D%27%238b5a2b%27%20d%3D%27M2%207h3v2H2zm7%202h2v2H9zm3-2h2v2h-2zM3%2012h2v2H3zm8%201h3v1h-3z%27%2F%3E%3Cpath%20fill%3D%27%23a36a35%27%20d%3D%27M6%207h2v2H6zm5%204h2v2h-2z%27%2F%3E%3C%2Fsvg%3E';
+                    nm.className = 'vs-name'; nm.textContent = e.label; row.appendChild(icon); row.appendChild(nm); if (p) row.appendChild(p);
+                    row.addEventListener('click', () => { last[mode] = e.file; sel.value = e.file; sel.dispatchEvent(new Event('change')); updateBtn(); close(); });
+                    list.appendChild(row);
+                });
+            }
+            function open() { pop.classList.add('open'); search.value = ''; renderList(); const c = list.querySelector('.sel'); if (c) c.scrollIntoView({ block: 'center' }); }
+            btn.addEventListener('click', () => { if (pop.classList.contains('open')) close(); else open(); });
+            search.addEventListener('input', renderList);
+            document.addEventListener('click', e => { if (!document.getElementById('vs').contains(e.target)) close(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+            sel.addEventListener('change', updateBtn);
+            // タブに合わせて、並べるものを切り替える（ホーム=クライアント以外、クライアント=クライアントだけ）
+            window.setPickerMode = m => {
+                mode = m;
+                const vis = visible();
+                const cur = (last[m] && vis.some(e => e.file === last[m])) ? last[m] : (vis.some(e => e.file === sel.value) ? sel.value : (vis[0] && vis[0].file));
+                if (cur) { sel.value = cur; sel.dispatchEvent(new Event('change')); }
+                close(); updateBtn();
+            };
+            updateBtn(); setLang(LANG);
+        })();
+
+        // 起動・名前同期処理
+        function launchGame() {
+            const selectEl = document.getElementById('versionSelect');
+            const targetHtml = selectEl.value;
+
+            let username = document.getElementById('playerNameInput').value.trim();
+            if (!username) username = "Player";
+
+            try { localStorage.setItem('BattaLauncher_LastUsername', username); } catch (e) {}
+
+            const keys = [
+                'username', 'profile_username', 'eagler_username', 'wispcraft_username',
+                'player_username', 'playerName', 'player', 'name', 'nick', 'nickname',
+                'mcl_username', 'user', 'saved_username', 'cached_username'
+            ];
+            
+            keys.forEach(key => {
+                try {
+                    localStorage.setItem(key, username);
+                    sessionStorage.setItem(key, username);
+                } catch(e) {}
+            });
+
+            const btn = document.querySelector('.play-button');
+            btn.innerText = t('launching');
+            btn.style.backgroundColor = '#666';
+            btn.style.borderBottomColor = '#444';
+            btn.disabled = true;
+
+            patchProfileName(username).finally(() => {
+                setTimeout(() => { window.location.href = 'game/' + encodeURIComponent(targetHtml); }, 1000);
+            });
+        }
+    </script>
+
+    <script>
+      // PWA: HTTPS または localhost で開いた場合に Service Worker を登録
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch((error) => {
+            console.warn('Service Worker registration failed:', error);
+          });
+        });
+      }
+    </script>
+
+</body>
+</html>
